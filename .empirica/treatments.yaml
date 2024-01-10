@@ -1,0 +1,37 @@
+treatments:
+  - desc: Standard one-shot prisoner's dilemma
+    factors:
+      playerCount: 2
+      numRounds: 1
+      chatEnabled: false
+    name: baseline
+  - desc: A short iterated prisoner's dilemma
+    factors:
+      playerCount: 2
+      numRounds: 3
+      chatEnabled: false
+    name: short_iterated
+  - desc: A long iterated prisoner's dilemma
+    factors:
+      playerCount: 2
+      numRounds: 7
+      chatEnabled: false
+    name: long_iterated
+  - desc: Standard one-shot prisoner's dilemma with chat
+    factors:
+      playerCount: 2
+      numRounds: 1
+      chatEnabled: true
+    name: baseline_chat
+  - desc: A short iterated prisoner's dilemma with chat
+    factors:
+      playerCount: 2
+      numRounds: 3
+      chatEnabled: true
+    name: short_iterated_chat
+  - desc: A long iterated prisoner's dilemma with chat
+    factors:
+      playerCount: 2
+      numRounds: 7
+      chatEnabled: true
+    name: long_iterated_chat
