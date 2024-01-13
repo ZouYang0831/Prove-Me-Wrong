@@ -28,14 +28,6 @@ export function Stage() {
     );
   }
 
-  // switch (round.get("task")) {
-  //   case "jellybeans":
-  //     return <JellyBeans />;
-  //   case "minesweeper":
-  //     return <MineSweeper />;
-  //   default:
-  //     return <div>Unknown task</div>;
-  // }
   switch (stage.get("name")) {
     case "choice":
       return <Choice />;
