@@ -3,29 +3,11 @@ import { Button } from "../components/Button";
 import { usePlayer, usePlayers } from "@empirica/core/player/classic/react";
 
 export function Choice() {
-  const players = usePlayers();
-  function generateLeaderBoard() {
-    // Assuming 'players' is an array of player objects with a 'get' method
-    const playerScores = players.map((player) => player.get("score") || 0);
-
-    // Sorting the scores in descending order
-    const sortedScores = playerScores.sort((a, b) => b - a);
-
-    // Generating the table content
-    const tableContent = sortedScores.map((score, index) => (
-      <tr key={index} className="border-b">
-        <td className="py-2">Player {index + 1}</td>
-        <td className="py-2">{score}</td>
-      </tr>
-    ));
-
-    return tableContent;
-  }
-
   return (
     <div className="flex">
       <Introduction />
       <Questions />
+      <LeaderBoard />
     </div>
   );
 }
@@ -225,5 +207,38 @@ function Questions() {
         </Button>
       </div>
     </div>
+  );
+}
+
+function LeaderBoard() {
+  const players = usePlayers();
+
+  // Assuming 'players' is an array of player objects with a 'get' method
+  const playerScores = players.map((player) => player.get("score") || 0);
+
+  // Sorting the scores in descending order
+  const sortedScores = playerScores.sort((a, b) => b - a);
+
+  // Generating the table content
+  const tableContent = sortedScores.map((score, index) => (
+    <tr key={index} className="border-b">
+      <td className="py-2">Player {index + 1}</td>
+      <td className="py-2">{score}</td>
+    </tr>
+  ));
+
+  return (
+    <div className="max-w-lg mx-auto my-8 p-4 bg-white rounded-lg shadow-lg">
+    <h2 className="text-2xl font-semibold mb-4">Leaderboard</h2>
+    <table className="w-full">
+      <thead>
+        <tr>
+          <th className="py-2">Player</th>
+          <th className="py-2">Score</th>
+        </tr>
+      </thead>
+      <tbody>{tableContent}</tbody>
+    </table>
+  </div>
   );
 }
