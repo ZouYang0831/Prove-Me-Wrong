@@ -18,30 +18,28 @@ Empirica.onRoundStart(({ round }) => {});
 Empirica.onStageStart(({ stage }) => {});
 
 Empirica.onStageEnded(({ stage }) => {
-  if (stage.get("name") !== "choice") return;
-  console.log("End of choice stage");
+  if (stage.get("name") !== "choice") {
+    return;
+  }
 
   const players = stage.currentGame.players;
-  
-  for (const player of players) {
-    console.log("computing score for player ", player.id);
-    const partner = players.filter((p) => p.id !== player.id)[0];
-    const playerChoice = player.round.get("decision");
-    const partnerChoice = partner.round.get("decision");
 
-    let score;
-    if (playerChoice === "testify" && partnerChoice === "testify") {
-      score = 6;
-    } else if (playerChoice === "testify" && partnerChoice === "silent") {
-      score = 1;
-    } else if (playerChoice === "silent" && partnerChoice === "testify") {
-      score = 12;
-    } else {
-      score = 2;
-    }
-    player.round.set("score", score);
-    const currentScore = player.get("score") || 0;
-    player.set("score", score + currentScore);
+  for (const player of players) {
+    const priceOfProduct = player.round.get("priceOfProduct");
+    const productionCost = player.round.get("productionCost");
+    const amountOfWarrant = player.round.get("amountOfWarrant");
+
+    const score = player.get("score") || 0; // , adQuality, points, salesCount, numBuyers
+
+    const min = 10;
+    const max = 90;
+
+    const numBuyers = Math.floor(Math.random() * (max - min) + min);
+
+    const salesCount =
+      numBuyers * (priceOfProduct - productionCost) - amountOfWarrant;
+
+    player.set("score", score + salesCount);
   }
 });
 
