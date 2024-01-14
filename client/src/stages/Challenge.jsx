@@ -7,14 +7,14 @@ export function Challenge() {
   const player = usePlayer();
 
   // Assuming 'players' is an array of player objects with a 'get' method
-  const playerScores = players.map((player) => ({
-    id: player.id || "Unknown", // Default to "Unknown" if id is not present
-    score: player.get("score") || 0,
-    salesCount: player.round.get("salesCount"),
-    productionQuality: player.round.get("productionQuality"),
-    advertisementQuality: player.round.get("advertisementQuality"),
-    priceOfProduct: player.round.get("priceOfProduct"),
-    amountOfWarrant: player.round.get("amountOfWarrant"),
+  const playerScores = players.map((p) => ({
+    id: p.id || "Unknown", // Default to "Unknown" if id is not present
+    score: p.get("score") || 0,
+    salesCount: p.round.get("salesCount") || 0,
+    productionQuality: p.round.get("productionQuality"),
+    advertisementQuality: p.round.get("advertisementQuality"),
+    priceOfProduct: p.round.get("priceOfProduct"),
+    amountOfWarrant: p.round.get("amountOfWarrant"),
   }));
 
   // Sorting the scores in descending order
@@ -28,7 +28,7 @@ export function Challenge() {
     const challengePlayerId = player.get("challengePlayerId");
     if (challengePlayerId) {
       const challengePlayer = players.find(
-        (player) => player.id === challengePlayerId
+        (p) => p.id === challengePlayerId
       );
       const numChallenges = challengePlayer.round.get("numChallenges") || 0;
       challengePlayer.round.set("numChallenges", numChallenges + 1);
@@ -38,23 +38,23 @@ export function Challenge() {
   }
 
   // Generating the table content
-  const tableContent = sortedPlayers.map((player, index) => (
+  const tableContent = sortedPlayers.map((p, index) => (
     <tr key={index}>
-      <td className="p-2">{player.id}</td>
-      <td className="p-2">{player.score}</td>
-      <td className="p-2">{player.salesCount}</td>
-      <td className="p-2">{player.productionQuality}</td>
-      <td className="p-2">{player.advertisementQuality}</td>
-      <td className="p-2">{player.priceOfProduct}</td>
-      <td className="p-2">{player.amountOfWarrant}</td>
+      <td className="p-2">{p.id}</td>
+      <td className="p-2">{p.score}</td>
+      <td className="p-2">{p.salesCount}</td>
+      <td className="p-2">{p.productionQuality}</td>
+      <td className="p-2">{p.advertisementQuality}</td>
+      <td className="p-2">{p.priceOfProduct}</td>
+      <td className="p-2">{p.amountOfWarrant}</td>
 
       <td className="p-2">
         <input
           type="radio"
           name="player"
-          value={player.id}
+          value={p.id}
           className="ml-4"
-          onChange={() => handlePlayerSelection(player.id)}
+          onChange={() => handlePlayerSelection(p.id)}
         />
       </td>
     </tr>

@@ -17,9 +17,10 @@ export function Result() {
   const score = player.get("score");
 
   function handleSubmit() {
-    productionQuality == "low" &&
-      advertisementQuality == "high" &&
+    if (productionQuality == "low" && advertisementQuality == "high") {
       player.set("score", score - amountOfWarrant * numChallenges);
+    }
+
     player.stage.set("submit", true);
   }
 

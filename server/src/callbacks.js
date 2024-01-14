@@ -19,7 +19,7 @@ Empirica.onRoundStart(({ round }) => {});
 Empirica.onStageStart(({ stage }) => {});
 
 Empirica.onStageEnded(({ stage }) => {
-  if (stage.get("name") == "Advertisements") {
+  if (stage.get("name") !== "Advertisements") {
     return;
   }
 
@@ -41,6 +41,7 @@ Empirica.onStageEnded(({ stage }) => {
 
     player.round.set("numBuyers", numBuyers);
     player.round.set("salesCount", salesCount);
+    console.log(salesCount);
 
     player.set("score", score + salesCount);
   }
