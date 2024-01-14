@@ -1,37 +1,46 @@
+factors:
+  - desc: playerCount determines the number of Players are in a Game.
+    name: playerCount
+    values:
+      - value: 1
+      - value: 2
+      - value: 3
+      - value: 5
+      - value: 8
+      - value: 13  
+      
+  - desc: numRounds determine the number of rounds a game has
+    name: numRounds
+    values:
+      - value: 1
+      - value: 2
+      - value: 4
+      - value: 8
+      - value: 13
+      
+  - desc: chatEnabled determines whether the chat box is enabled
+    name: chatEnabled
+    values:
+      - value: true
+      - value: 2=false
+
+
 treatments:
-  - desc: Standard one-shot prisoner's dilemma
+  - desc: "Single-player Game"
     factors:
-      playerCount: 2
-      numRounds: 1
+      playerCount: 1
+      numRounds: 4
       chatEnabled: false
-    name: baseline
-  - desc: A short iterated prisoner's dilemma
+    name: Solo
+  - desc: "Two-player Game"
     factors:
       playerCount: 2
-      numRounds: 3
+      numRounds: 4
       chatEnabled: false
-    name: short_iterated
-  - desc: A long iterated prisoner's dilemma
+    name: Two Players
+  - desc: "Three-player Game"
     factors:
-      playerCount: 2
-      numRounds: 7
+      playerCount: 3
+      numRounds: 4
       chatEnabled: false
-    name: long_iterated
-  - desc: Standard one-shot prisoner's dilemma with chat
-    factors:
-      playerCount: 2
-      numRounds: 1
-      chatEnabled: true
-    name: baseline_chat
-  - desc: A short iterated prisoner's dilemma with chat
-    factors:
-      playerCount: 2
-      numRounds: 3
-      chatEnabled: true
-    name: short_iterated_chat
-  - desc: A long iterated prisoner's dilemma with chat
-    factors:
-      playerCount: 2
-      numRounds: 7
-      chatEnabled: true
-    name: long_iterated_chat
+    name: Three Players

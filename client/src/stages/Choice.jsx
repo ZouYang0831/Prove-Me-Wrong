@@ -199,7 +199,13 @@ function Questions() {
             No Warrant
           </label>
 
-          <label className={`items-center mb-1 ${player.get("score") < 200 ? 'text-gray-500 cursor-not-allowed' : ''}`}>
+          <label
+            className={`items-center mb-1 ${
+              player.get("score") < 20 || !player.get("score")
+                ? "text-gray-500 cursor-not-allowed"
+                : ""
+            }`}
+          >
             <input
               type="radio"
               name="warrent"
@@ -211,7 +217,13 @@ function Questions() {
             Low Warrant
           </label>
 
-          <label className={`items-center mb-1 ${player.get("score") < 100 ? 'text-gray-500 cursor-not-allowed' : ''}`}>
+          <label
+            className={`items-center mb-1 ${
+              player.get("score") < 100 || !player.get("score")
+                ? "text-gray-500 cursor-not-allowed"
+                : ""
+            }`}
+          >
             <input
               type="radio"
               name="warrent"
