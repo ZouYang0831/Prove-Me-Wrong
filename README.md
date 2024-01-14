@@ -28,33 +28,38 @@ The project predominantly utilizes **React** and **Tailwind CSS**.
 
 ##  Questions about Warrant Feature
 
-**1. Discuss how you would plan the feature including any designs, references, links to resources you’ve used to determine the best way to develop such a feature.**
+### **1. Discuss how you would plan the feature including any designs, references, links to resources you’ve used to determine the best way to develop such a feature.**
 
 The introduction of the "Warrant" feature in the Virtual Marketplace Experiment adds a layer of complexity to the producer-consumer dynamic, allowing producers to assert the truthfulness of their advertisements and consumers to make informed decisions. In this essay, we will discuss the planning and design considerations for implementing this feature, considering the empowerment of producers, the types of warrants available, and the challenging system.
 
 **Empowered Producers:**
+
 Producers are now empowered with the ability to attach a warrant to their advertisements. This commitment involves a certain amount of money and aims to ensure the truthfulness of the advertisement for a wider audience. To plan this feature, it's crucial to define the parameters of empowerment, ensuring that producers have the flexibility to make meaningful choices regarding the warrant amount.
 
 Designing a user-friendly interface for producers to seamlessly incorporate the warrant into their advertising process is essential. This involves creating a clear and intuitive flow within the advertisement stage where producers can set the warrant amount and choose the type of warrant they want to associate with their product.
 
 **Types of Warrants:**
+
 Producers can now choose from "No Warrant," "Low Warrant," or "High Warrant" for their products. To plan this aspect, it's important to consider the implications of each warrant type on both producers and consumers. "No Warrant" might attract more consumers initially, but it comes with the risk of facing challenges without any financial commitment.
 
 The design should reflect the balance between attracting consumers and mitigating risks. Clear tooltips or information panels can guide producers in understanding the potential impact of each warrant type on their overall performance.
 
 **Challenging System:**
+
 The challenging system is a pivotal component of the "Warrant" feature, allowing interactive challenges from competitors and other players. The resolution of challenges is based on the alignment between the production and advertising choices. Planning this system involves creating a fair and transparent process for challenges and resolutions.
 
 Designing an intuitive interface for players to submit challenges during the challenge stage is crucial. Clear guidelines on the criteria for a valid challenge, such as discrepancies between advertised and actual product quality, should be communicated to ensure a fair gameplay experience.
 
 **Post-Challenge Assessment:**
+
 After selecting a producer to challenge, players enter the post-challenge assessment stage. Designing this stage involves providing a platform for players to submit their challenges, accompanied by any evidence or reasoning. A user-friendly interface with options for uploading relevant information enhances the transparency of the challenge process.
 
 **Score Computation:**
+
 Scores are computed based on various factors, including product price, production cost, warrant, and deductions from challenges. The design should include a robust scoring algorithm that accurately reflects the impact of each factor on the overall score. Clear visualization of scores in the result stage helps participants understand the outcomes of their decisions.
 
 
-**2. Discuss why this feature is reflective of a real-world marketplace and what kind of trade-offs you would want to consider to make this feature easy for users to employ.**
+### **2. Discuss why this feature is reflective of a real-world marketplace and what kind of trade-offs you would want to consider to make this feature easy for users to employ.**
 
 **Reflecting Real-world Marketplace Dynamics:**
 
