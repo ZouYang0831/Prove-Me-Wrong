@@ -8,7 +8,7 @@ Empirica.onGameStart(({ game }) => {
     const round = game.addRound({
       name: `Round ${i}`,
     });
-    round.addStage({ name: "choice", duration: 10000 });
+    round.addStage({ name: "Advertisements", duration: 10000 });
     round.addStage({ name: "challenge", duration: 10000 });
     round.addStage({ name: "result", duration: 10000 });
   }
@@ -19,7 +19,7 @@ Empirica.onRoundStart(({ round }) => {});
 Empirica.onStageStart(({ stage }) => {});
 
 Empirica.onStageEnded(({ stage }) => {
-  if (stage.get("name") == "choice") {
+  if (stage.get("name") == "Advertisements") {
     return;
   }
 

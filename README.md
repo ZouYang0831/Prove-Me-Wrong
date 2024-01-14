@@ -26,8 +26,6 @@ The project predominantly utilizes **React** and **Tailwind CSS**.
 
     - **Deductions System:** If a producer is found to have falsely advertised a product, deductions will be **the number of challenges multiplied by the amount of warrant**.
 
-
-
 ## Bonus Features
 
 ### 1. UI Reorganization

@@ -6,7 +6,7 @@ import {
 } from "@empirica/core/player/classic/react";
 import { Loading } from "@empirica/core/player/react";
 import React from "react";
-import { Choice } from "./stages/Choice";
+import { Advertisements } from "./stages/Advertisements";
 import { Result } from "./stages/Result";
 import { Challenge } from "./stages/Challenge";
 
@@ -29,8 +29,8 @@ export function Stage() {
   }
 
   switch (stage.get("name")) {
-    case "choice":
-      return <Choice />;
+    case "Advertisements":
+      return <Advertisements />;
     case "challenge":
         return <Challenge />;
     case "result":

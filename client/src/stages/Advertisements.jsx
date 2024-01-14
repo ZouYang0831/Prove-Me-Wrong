@@ -272,7 +272,7 @@ function LeaderBoard() {
   );
 }
 
-export function Choice() {
+export function Advertisements() {
   return (
     <div className="flex">
       <Description />
