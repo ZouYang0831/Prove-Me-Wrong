@@ -9,6 +9,7 @@ Empirica.onGameStart(({ game }) => {
       name: `Round ${i}`,
     });
     round.addStage({ name: "choice", duration: 10000 });
+    round.addStage({ name: "challenge", duration: 10000 });
     round.addStage({ name: "result", duration: 10000 });
   }
 });
@@ -18,7 +19,7 @@ Empirica.onRoundStart(({ round }) => {});
 Empirica.onStageStart(({ stage }) => {});
 
 Empirica.onStageEnded(({ stage }) => {
-  if (stage.get("name") !== "choice") {
+  if (stage.get("name") == "choice") {
     return;
   }
 
@@ -27,22 +28,21 @@ Empirica.onStageEnded(({ stage }) => {
   for (const player of players) {
     const priceOfProduct = player.round.get("priceOfProduct");
     const productionCost = player.round.get("productionCost");
-    const amountOfWarrant = player.round.get("amountOfWarrant");
+    const amountOfWarrant = player.round.get("amountOfWarrant") || 0;
 
-    const currentScore = player.get("score") || 0; // , adQuality, points, salesCount, numBuyers
+    const score = player.get("score") || 0; // , adQuality, points, salesCount, numBuyers
 
-    const min = 10;
-    const max = 90;
+    const min = 0;
+    const max = 100;
 
     const numBuyers = Math.floor(Math.random() * (max - min) + min);
     const salesCount =
       numBuyers * (priceOfProduct - productionCost) - amountOfWarrant;
 
-      player.round.set("numBuyers", numBuyers)
-      player.round.set("salesCount", salesCount)
-      player.round.set("currentScore", currentScore)
+    player.round.set("numBuyers", numBuyers);
+    player.round.set("salesCount", salesCount);
 
-    player.set("score", currentScore + salesCount);
+    player.set("score", score + salesCount);
   }
 });
 

@@ -8,12 +8,12 @@ import { Loading } from "@empirica/core/player/react";
 import React from "react";
 import { Choice } from "./stages/Choice";
 import { Result } from "./stages/Result";
+import { Challenge } from "./stages/Challenge";
 
 
 export function Stage() {
   const player = usePlayer();
   const players = usePlayers();
-  const round = useRound();
   const stage = useStage();
 
   if (player.stage.get("submit")) {
@@ -31,6 +31,8 @@ export function Stage() {
   switch (stage.get("name")) {
     case "choice":
       return <Choice />;
+    case "challenge":
+        return <Challenge />;
     case "result":
       return <Result />;
     default:

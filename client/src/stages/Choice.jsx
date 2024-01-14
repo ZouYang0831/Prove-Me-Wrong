@@ -2,16 +2,6 @@ import React from "react";
 import { Button } from "../components/Button";
 import { usePlayer, usePlayers } from "@empirica/core/player/classic/react";
 
-export function Choice() {
-  return (
-    <div className="flex">
-      <Introduction />
-      <Questions />
-      <LeaderBoard />
-    </div>
-  );
-}
-
 function Introduction() {
   return (
     <div className="w-128 ml-20 mr-10 mt-10 mb-10">
@@ -212,7 +202,7 @@ function Questions() {
               value="Low Warrent"
               className="ml-8 mr-3"
               onChange={() => handleWarrantChoice(20)}
-              disabled={player.get("score") < 100}
+              disabled={player.get("score") < 100 | !player.get("score")}
             />
             Low Warrant
           </label>
@@ -230,7 +220,7 @@ function Questions() {
               value="High Warrent"
               className="ml-8 mr-3"
               onChange={() => handleWarrantChoice(100)}
-              disabled={player.get("score") < 100}
+              disabled={player.get("score") < 100 | !player.get("score")}
             />
             High Warrant
           </label>
@@ -278,6 +268,16 @@ function LeaderBoard() {
         </thead>
         <tbody>{tableContent}</tbody>
       </table>
+    </div>
+  );
+}
+
+export function Choice() {
+  return (
+    <div className="flex">
+      <Introduction />
+      <Questions />
+      <LeaderBoard />
     </div>
   );
 }

@@ -12,49 +12,84 @@ export function Result() {
   const amountOfWarrant = player.round.get("amountOfWarrant") || 0;
   const numBuyers = player.round.get("numBuyers");
   const salesCount = player.round.get("salesCount");
-  const currentScore = player.round.get("currentScore");
+  const numChallenges = player.round.get("numChallenges") || 0;
+
+  const score = player.get("score");
 
   function handleSubmit() {
+    productionQuality == "low" &&
+      advertisementQuality == "high" &&
+      player.set("score", score - amountOfWarrant * numChallenges);
     player.stage.set("submit", true);
   }
 
   return (
-    <div className="mt-3 sm:mt-5 p-20">
-      <h1 className="text-lg leading-6 font-medium text-gray-900">Sales</h1>
-      
-      <div className="text-lg mt-2 mb-6">
+    <div className="w-3/5 min-w-220 mx-auto my-8 p-12 bg-white rounded-lg shadow-lg">
+      <h1 className="text-3xl font-medium text-center mb-8">Sales Result</h1>
+
+      <div className="text-lg mt-2 mb-6 indent-6">
         <p>
-          You chose to produce a <b>{productionQuality}</b>-quality product.
+          You chose to produce <b>{productionQuality}</b>-quality product,
+          advertise as <b>{advertisementQuality}</b>-quality product, sold it at
+          a price of <b>${priceOfProduct}</b>, put a warrant at{" "}
+          <b>${amountOfWarrant || 0}</b>.
         </p>
-        
-        <p>
-          You chose to advertise it as a <b>{advertisementQuality}</b>-quality product.
-          You sold it at a price of <b>${priceOfProduct}</b>. Your warrant is at <b>${amountOfWarrant || 0}</b>.
-        </p>
-        
-        <p>
-          It was advertised to an audience of <b>100</b> users, and <b>{numBuyers}</b> users bought your product.
-        </p>
-        
-        <p>
-          You earned $<b>{priceOfProduct - productionCost}</b> per product x <b>{numBuyers}</b> units sold - <b>{amountOfWarrant || 0}</b> warrant = <b>{salesCount}</b> points in sales.
-        </p>
-        
-        <br />
-        
-        <p>Your score for this round is: <b>{salesCount}</b></p>
 
         <br />
-        <p className="text-2xl">Your total score is: <b>{salesCount + currentScore}</b></p>
-        
+        <p>
+          It was advertised to an audience of <b>100</b> users, and{" "}
+          <b>{numBuyers}</b> users bought your product. You earned $
+          <b>{priceOfProduct - productionCost}</b> per unit x <b>{numBuyers}</b>{" "}
+          buyers - <b>{amountOfWarrant || 0}</b> warrant = <b>{salesCount}</b>{" "}
+          points in sales.
+        </p>
+
         <br />
-        
-   
+        {(productionQuality == advertisementQuality ||
+          (productionQuality == "high" && advertisementQuality == "low")) && (
+          <>
+            <p>
+              Since you did not fake advertise your product, Your score for this
+              round is: <b>{salesCount}</b>
+            </p>
+            <br />
+            <p className="text-xl text-center">
+              Your total score is:
+              <b>{score}</b>
+            </p>
+          </>
+        )}
+
+        {productionQuality == "low" && advertisementQuality == "high" && (
+          <>
+            <p>
+              Since you falsely advertised your product's quality as high, set a{" "}
+              <b>{amountOfWarrant}</b> for the product, and{" "}
+              <b>{numChallenges}</b> producers have challenged your warranty,
+              your sales will be deducted by <b>{amountOfWarrant}</b> *{" "}
+              <b>{numChallenges}</b> = <b>{amountOfWarrant * numChallenges}</b>{" "}
+              points.
+            </p>
+
+            <p>
+              Your score for this round is{" "}
+              <b>{salesCount - amountOfWarrant * numChallenges}</b>
+            </p>
+
+            <br />
+            <p className="text-xl text-center">
+              Your total score is:{" "}
+              <b>{score - amountOfWarrant * numChallenges}</b>
+            </p>
+          </>
+        )}
       </div>
-      
-      <Button handleClick={handleSubmit} primary>
-        I'm done!
-      </Button>
+
+      <div className="flex justify-center">
+        <Button handleClick={handleSubmit} primary>
+          I'm done!
+        </Button>
+      </div>
     </div>
   );
 }
