@@ -237,7 +237,7 @@ function Questions() {
         </div>
       </div>
 
-      <div className="flex ml-50 mt-5">
+      <div className="flex ml-10 mt-5">
         <Button type="submit" handleClick={handleSubmit}>
           Submit
         </Button>
@@ -250,16 +250,19 @@ function LeaderBoard() {
   const players = usePlayers();
 
   // Assuming 'players' is an array of player objects with a 'get' method
-  const playerScores = players.map((player) => player.get("score") || 0);
+  const playerScores = players.map((player) => ({
+    score: player.get("score") || 0,
+    id: player.id || "Unknown", // Default to "Unknown" if id is not present
+  }));
 
   // Sorting the scores in descending order
-  const sortedScores = playerScores.sort((a, b) => b - a);
+  const sortedPlayers = playerScores.sort((a, b) => b.score - a.score);
 
   // Generating the table content
-  const tableContent = sortedScores.map((score, index) => (
+  const tableContent = sortedPlayers.map((player, index) => (
     <tr key={index} className="border-b">
-      <td className="py-2">Player {index + 1}</td>
-      <td className="py-2">{score}</td>
+      <td className="p-2">{player.id}</td>
+      <td className="p-2">{player.score}</td>
     </tr>
   ));
 
