@@ -98,10 +98,6 @@ Scores are computed based on various factors, including product price, productio
 <img src="images/leaderboard.png" alt="Leaderboard" width="300">
 
 
-### 3. Result Page
-- **Post-Challenge Assessment:** After selecting a producer to challenge, players can submit and view the result page.
-- **Score Computation:** Scores are calculated based on product price, production cost, warrant, and deductions from challenges.
-
 ## Factors
 
 - **Player Count:** The variable `playerCount` determines the number of players in a game.
