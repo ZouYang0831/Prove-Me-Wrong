@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "../components/Button";
 import { usePlayer, usePlayers } from "@empirica/core/player/classic/react";
 
-function Introduction() {
+function Description() {
   return (
     <div className="w-128 ml-20 mr-10 mt-10 mb-10">
       <h2 className="text-2xl font-bold mb-6 text-center">
@@ -202,7 +202,7 @@ function Questions() {
               value="Low Warrent"
               className="ml-8 mr-3"
               onChange={() => handleWarrantChoice(20)}
-              disabled={player.get("score") < 100 | !player.get("score")}
+              disabled={(player.get("score") < 100) | !player.get("score")}
             />
             Low Warrant
           </label>
@@ -220,7 +220,7 @@ function Questions() {
               value="High Warrent"
               className="ml-8 mr-3"
               onChange={() => handleWarrantChoice(100)}
-              disabled={player.get("score") < 100 | !player.get("score")}
+              disabled={(player.get("score") < 100) | !player.get("score")}
             />
             High Warrant
           </label>
@@ -275,7 +275,7 @@ function LeaderBoard() {
 export function Choice() {
   return (
     <div className="flex">
-      <Introduction />
+      <Description />
       <Questions />
       <LeaderBoard />
     </div>

@@ -66,7 +66,7 @@ export function Challenge() {
         Challenge the Producer's Warrant
       </h2>
 
-      <p className="indent-6 m-4 text-justify" >
+      <p className="indent-6 m-4 text-justify">
         If the producer you challenge advertises a low-quality product as high
         quality, their sales will be deducted by the amount of warranty they
         specified, multiplied by the number of producers who challenged them.
@@ -74,9 +74,7 @@ export function Challenge() {
         challenge any producers.
       </p>
 
-      <p className="m-4 text-xl font-semibold">
-        Select the Producer:
-      </p>
+      <p className="m-4 text-xl font-semibold">Select the Producer:</p>
 
       <table className="w-full text-left p-4">
         <thead>

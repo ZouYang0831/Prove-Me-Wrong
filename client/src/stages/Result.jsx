@@ -40,7 +40,7 @@ export function Result() {
           It was advertised to an audience of <b>100</b> users, and{" "}
           <b>{numBuyers}</b> users bought your product. You earned $
           <b>{priceOfProduct - productionCost}</b> per unit x <b>{numBuyers}</b>{" "}
-          buyers - <b>{amountOfWarrant || 0}</b> warrant = <b>{salesCount}</b>{" "}
+          buyers - $<b>{amountOfWarrant || 0}</b> warrant = <b>{salesCount}</b>{" "}
           points in sales.
         </p>
 
@@ -54,8 +54,7 @@ export function Result() {
             </p>
             <br />
             <p className="text-xl text-center">
-              Your total score is:
-              <b>{score}</b>
+              Your total score is: <b>{score}</b>
             </p>
           </>
         )}
@@ -63,21 +62,22 @@ export function Result() {
         {productionQuality == "low" && advertisementQuality == "high" && (
           <>
             <p>
-              Since you falsely advertised your product's quality as high, set a{" "}
-              <b>{amountOfWarrant}</b> for the product, and{" "}
-              <b>{numChallenges}</b> producers have challenged your warranty,
-              your sales will be deducted by <b>{amountOfWarrant}</b> *{" "}
+              Since you falsely advertised your product's quality as high, set
+              warrant at $<b>{amountOfWarrant}</b> for the product, and{" "}
+              <b>{numChallenges}</b> producers have challenged your warrant,
+              your sales will be deducted by $<b>{amountOfWarrant}</b> *{" "}
               <b>{numChallenges}</b> = <b>{amountOfWarrant * numChallenges}</b>{" "}
               points.
             </p>
 
+            <br />
             <p>
               Your score for this round is{" "}
               <b>{salesCount - amountOfWarrant * numChallenges}</b>
             </p>
 
             <br />
-            <p className="text-xl text-center">
+            <p className="text-2xl text-center font-medium">
               Your total score is:{" "}
               <b>{score - amountOfWarrant * numChallenges}</b>
             </p>
