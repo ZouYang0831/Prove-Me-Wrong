@@ -98,7 +98,7 @@ function Questions() {
               className="ml-8 mr-3"
               onChange={() => handleProductionChoice("low")}
             />
-            Low Quality
+            Low Quality (Cost: $5)
           </label>
 
           <label className="items-center mb-1">
@@ -109,7 +109,7 @@ function Questions() {
               className="ml-8 mr-3"
               onChange={() => handleProductionChoice("high")}
             />
-            High Quality
+            High Quality (Cost: $9)
           </label>
         </div>
       </div>
@@ -128,7 +128,7 @@ function Questions() {
               className="ml-8 mr-3"
               onChange={() => handleAdverisementChoice("low")}
             />
-            Low Advertisement
+            Low Advertisement (Standard Toothpaste)
           </label>
 
           <label className="items-center mb-1">
@@ -139,7 +139,7 @@ function Questions() {
               className="ml-8 mr-3"
               onChange={() => handleAdverisementChoice("high")}
             />
-            High Advertisement
+            High Advertisement (Amazing Toothpaste)
           </label>
         </div>
       </div>
@@ -156,7 +156,7 @@ function Questions() {
               className="ml-8 mr-3"
               onChange={() => handlePriceChoice(10)}
             />
-            Low Price
+            Low Price ($10)
           </label>
 
           <label className="items-center mb-1">
@@ -167,7 +167,7 @@ function Questions() {
               className="ml-8 mr-3"
               onChange={() => handlePriceChoice(15)}
             />
-            High Price
+            High Price ($15)
           </label>
         </div>
       </div>
@@ -186,7 +186,7 @@ function Questions() {
               className="ml-8 mr-3"
               onChange={() => handleWarrantChoice(0)}
             />
-            No Warrant
+            No Warrant ($0)
           </label>
 
           <label
@@ -204,7 +204,7 @@ function Questions() {
               onChange={() => handleWarrantChoice(20)}
               disabled={(player.get("score") < 100) | !player.get("score")}
             />
-            Low Warrant
+            Low Warrant ($20)
           </label>
 
           <label
@@ -222,7 +222,7 @@ function Questions() {
               onChange={() => handleWarrantChoice(100)}
               disabled={(player.get("score") < 100) | !player.get("score")}
             />
-            High Warrant
+            High Warrant ($100)
           </label>
         </div>
       </div>
