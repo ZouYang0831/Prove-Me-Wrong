@@ -13,7 +13,7 @@ export function Button({
   className = "",
   primary = false,
   type = "button",
-  autoFocus = false,
+  autoFocus = false
 }) {
   return (
     <button

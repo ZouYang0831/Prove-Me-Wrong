@@ -55,16 +55,12 @@ function Introduction() {
 function Questions() {
   const player = usePlayer();
 
-  function handleSubmit() {
-    player.stage.set("submit", true);
-  }
-
   function handleProductionChoice(productionQuality) {
     player.round.set("productionQuality", productionQuality);
-    if (player.round.get("productionQuality") === "low") {
+    if (productionQuality === "low") {
       player.round.set("productionCost", 5);
     }
-    if (player.round.get("productionQuality") === "high") {
+    if (productionQuality === "high") {
       player.round.set("productionCost", 9);
     }
   }
@@ -81,6 +77,21 @@ function Questions() {
     player.round.set("amountOfWarrant", amountOfWarrant);
   }
 
+  function handleSubmit() {
+    // Check if all radio inputs are selected
+
+    const allSelected =
+      player.round.get("productionQuality") &&
+      player.round.get("advertisementQuality") &&
+      player.round.get("priceOfProduct");
+
+    if (allSelected) {
+      player.stage.set("submit", true);
+    } else {
+      alert("Not all questions are answered.");
+    }
+  }
+
   return (
     <div className="m-10 w-128">
       <h2 className="text-3xl font-bold mb-6 text-center">Make Your Choice</h2>
@@ -89,17 +100,6 @@ function Questions() {
         <h3 className="text-xl mb-2">1. Choose what quality to produce.</h3>
 
         <div className="flex flex-col">
-          <label className="items-center mb-2">
-            <input
-              type="radio"
-              name="quality"
-              value="High Quality"
-              className="ml-8 mr-3"
-              onChange={() => handleProductionChoice("high")}
-            />
-            High Quality
-          </label>
-
           <label className="items-center">
             <input
               type="radio"
@@ -110,6 +110,17 @@ function Questions() {
             />
             Low Quality
           </label>
+
+          <label className="items-center mb-2">
+            <input
+              type="radio"
+              name="quality"
+              value="High Quality"
+              className="ml-8 mr-3"
+              onChange={() => handleProductionChoice("high")}
+            />
+            High Quality
+          </label>
         </div>
       </div>
 
@@ -119,17 +130,6 @@ function Questions() {
         </h3>
 
         <div className="flex flex-col">
-          <label className="items-center mb-2">
-            <input
-              type="radio"
-              name="advertisement"
-              value="High advertisement"
-              className="ml-8 mr-3"
-              onChange={() => handleAdverisementChoice("high")}
-            />
-            High Advertisement
-          </label>
-
           <label className="items-center">
             <input
               type="radio"
@@ -140,6 +140,17 @@ function Questions() {
             />
             Low Advertisement
           </label>
+
+          <label className="items-center mb-2">
+            <input
+              type="radio"
+              name="advertisement"
+              value="High advertisement"
+              className="ml-8 mr-3"
+              onChange={() => handleAdverisementChoice("high")}
+            />
+            High Advertisement
+          </label>
         </div>
       </div>
 
@@ -147,26 +158,26 @@ function Questions() {
         <h3 className="text-xl mb-2">3. Choose the price for your product.</h3>
 
         <div className="flex flex-col">
-          <label className="items-center mb-2">
-            <input
-              type="radio"
-              name="price"
-              value="High Price"
-              className="ml-8 mr-3"
-              onChange={handlePriceChoice(15)}
-            />
-            High Price
-          </label>
-
           <label className="items-center">
             <input
               type="radio"
               name="price"
               value="Low Price"
               className="ml-8 mr-3"
-              onChange={handlePriceChoice(10)}
+              onChange={() => handlePriceChoice(10)}
             />
             Low Price
+          </label>
+
+          <label className="items-center mb-2">
+            <input
+              type="radio"
+              name="price"
+              value="High Price"
+              className="ml-8 mr-3"
+              onChange={() => handlePriceChoice(15)}
+            />
+            High Price
           </label>
         </div>
       </div>
@@ -177,15 +188,15 @@ function Questions() {
         </h3>
 
         <div className="flex flex-col">
-          <label className="items-center mb-2">
+          <label className="items-center">
             <input
               type="radio"
               name="warrent"
-              value="High Warrent"
+              value="No Warrent"
               className="ml-8 mr-3"
-              onChange={handleWarrantChoice(100)}
+              onChange={() => handleWarrantChoice(0)}
             />
-            High Warrant
+            No Warrant
           </label>
 
           <label className="items-center">
@@ -194,15 +205,26 @@ function Questions() {
               name="warrent"
               value="Low Warrent"
               className="ml-8 mr-3"
-              onChange={handleWarrantChoice(20)}
+              onChange={() => handleWarrantChoice(20)}
             />
             Low Warrant
+          </label>
+
+          <label className="items-center mb-2">
+            <input
+              type="radio"
+              name="warrent"
+              value="High Warrent"
+              className="ml-8 mr-3"
+              onChange={() => handleWarrantChoice(100)}
+            />
+            High Warrant
           </label>
         </div>
       </div>
 
       <div className="flex ml-50 mt-5">
-        <Button type="submit" onChange={handleSubmit}>
+        <Button type="submit" handleClick={handleSubmit}>
           Submit
         </Button>
       </div>
@@ -229,16 +251,16 @@ function LeaderBoard() {
 
   return (
     <div className="max-w-lg mx-auto my-8 p-4 bg-white rounded-lg shadow-lg">
-    <h2 className="text-2xl font-semibold mb-4">Leaderboard</h2>
-    <table className="w-full">
-      <thead>
-        <tr>
-          <th className="py-2">Player</th>
-          <th className="py-2">Score</th>
-        </tr>
-      </thead>
-      <tbody>{tableContent}</tbody>
-    </table>
-  </div>
+      <h2 className="text-2xl font-semibold mb-4">Leaderboard</h2>
+      <table className="w-full">
+        <thead>
+          <tr>
+            <th className="py-2">Player</th>
+            <th className="py-2">Score</th>
+          </tr>
+        </thead>
+        <tbody>{tableContent}</tbody>
+      </table>
+    </div>
   );
 }

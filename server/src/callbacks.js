@@ -29,17 +29,20 @@ Empirica.onStageEnded(({ stage }) => {
     const productionCost = player.round.get("productionCost");
     const amountOfWarrant = player.round.get("amountOfWarrant");
 
-    const score = player.get("score") || 0; // , adQuality, points, salesCount, numBuyers
+    const currentScore = player.get("score") || 0; // , adQuality, points, salesCount, numBuyers
 
     const min = 10;
     const max = 90;
 
     const numBuyers = Math.floor(Math.random() * (max - min) + min);
-
     const salesCount =
       numBuyers * (priceOfProduct - productionCost) - amountOfWarrant;
 
-    player.set("score", score + salesCount);
+      player.round.set("numBuyers", numBuyers)
+      player.round.set("salesCount", salesCount)
+      player.round.set("currentScore", currentScore)
+
+    player.set("score", currentScore + salesCount);
   }
 });
 
