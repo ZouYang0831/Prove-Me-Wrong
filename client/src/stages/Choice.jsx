@@ -100,7 +100,7 @@ function Questions() {
         <h3 className="text-xl mb-2">1. Choose what quality to produce.</h3>
 
         <div className="flex flex-col">
-          <label className="items-center">
+          <label className="items-center mb-1">
             <input
               type="radio"
               name="quality"
@@ -111,7 +111,7 @@ function Questions() {
             Low Quality
           </label>
 
-          <label className="items-center mb-2">
+          <label className="items-center mb-1">
             <input
               type="radio"
               name="quality"
@@ -130,7 +130,7 @@ function Questions() {
         </h3>
 
         <div className="flex flex-col">
-          <label className="items-center">
+          <label className="items-cente mb-1">
             <input
               type="radio"
               name="advertisement"
@@ -141,7 +141,7 @@ function Questions() {
             Low Advertisement
           </label>
 
-          <label className="items-center mb-2">
+          <label className="items-center mb-1">
             <input
               type="radio"
               name="advertisement"
@@ -158,7 +158,7 @@ function Questions() {
         <h3 className="text-xl mb-2">3. Choose the price for your product.</h3>
 
         <div className="flex flex-col">
-          <label className="items-center">
+          <label className="items-center mb-1">
             <input
               type="radio"
               name="price"
@@ -169,7 +169,7 @@ function Questions() {
             Low Price
           </label>
 
-          <label className="items-center mb-2">
+          <label className="items-center mb-1">
             <input
               type="radio"
               name="price"
@@ -188,7 +188,7 @@ function Questions() {
         </h3>
 
         <div className="flex flex-col">
-          <label className="items-center">
+          <label className="items-center mb-1 ">
             <input
               type="radio"
               name="warrent"
@@ -199,24 +199,26 @@ function Questions() {
             No Warrant
           </label>
 
-          <label className="items-center">
+          <label className={`items-center mb-1 ${player.get("score") < 200 ? 'text-gray-500 cursor-not-allowed' : ''}`}>
             <input
               type="radio"
               name="warrent"
               value="Low Warrent"
               className="ml-8 mr-3"
               onChange={() => handleWarrantChoice(20)}
+              disabled={player.get("score") < 100}
             />
             Low Warrant
           </label>
 
-          <label className="items-center mb-2">
+          <label className={`items-center mb-1 ${player.get("score") < 100 ? 'text-gray-500 cursor-not-allowed' : ''}`}>
             <input
               type="radio"
               name="warrent"
               value="High Warrent"
               className="ml-8 mr-3"
               onChange={() => handleWarrantChoice(100)}
+              disabled={player.get("score") < 100}
             />
             High Warrant
           </label>
