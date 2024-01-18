@@ -1,4 +1,4 @@
-# Virtual Marketplace Experiment Readme
+# Virtual Marketplace Experiment
 
 ## Overview
 
