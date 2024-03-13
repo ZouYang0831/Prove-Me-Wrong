@@ -6,9 +6,11 @@ import {
 } from "@empirica/core/player/classic/react";
 import { Loading } from "@empirica/core/player/react";
 import React from "react";
-import { Advertisements } from "./stages/Advertisements";
-import { Result } from "./stages/Result";
-import { Challenge } from "./stages/Challenge";
+import { SelectRoles } from "./stages/SelectRoles";
+import { ConsumerChoice } from "./stages/ConsumerChoice";
+import { ProducerChoice } from "./stages/ProducerChoice";
+// import { Feedback } from "./stages/Feedback";
+// import { FinalResult } from "./stages/FinalResult";
 
 
 export function Stage() {
@@ -29,12 +31,16 @@ export function Stage() {
   }
 
   switch (stage.get("name")) {
-    case "Advertisements":
-      return <Advertisements />;
-    case "challenge":
-        return <Challenge />;
-    case "result":
-      return <Result />;
+    case "SelectRoles":
+      return <SelectRoles />;
+    case "ConsumerChoice":
+      return <ConsumerChoice />;
+    case "ProducerChoice":
+      return <ProducerChoice />;
+    case "Feedback":
+      return <Feedback />;
+    case "FinalResult":
+      return <FinalResult />
     default:
       return <Loading />;
   }
