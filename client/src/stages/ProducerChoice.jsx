@@ -1,8 +1,8 @@
 /*
  * Filename: ProducerChoice.jsx
  * Description: This file contains components related to the producer's choices in the game.
- * Main Components include Instruction, Choices, and LeaderBoard.
- * Component Choices BrandChoice, ProductionQualityChoice, AdvertisementQualityChoice, WarrantChoice, ProductImages
+ * Main Components include "Instruction, Choices, and LeaderBoard".
+ * Component "Choices" include "BrandChoice, ProductionQualityChoice, AdvertisementQualityChoice, WarrantChoice, ProductImages"
  * Author: Changxuan Fan
  * Date: 3/12/2024
  */
@@ -35,7 +35,7 @@ function Instruction() {
 }
 
 // Component for choosing a brand
-function BrandChoice({ brand, onShow }) {
+function BrandChoice({ brand, onShow, randomBrands }) {
   return (
     <div className="mb-2">
       <div className="flex">
@@ -49,10 +49,14 @@ function BrandChoice({ brand, onShow }) {
             onChange={onShow}
             className="border border-gray-300 ml-2 mb-2 rounded-md px-8 py-1"
           >
-            <option value="">Select</option>
-            <option value="a">Option A</option>
-            <option value="b">Option B</option>
-            <option value="c">Option C</option>
+            <option disabled value="">
+              Select
+            </option>
+            {randomBrands?.map((brand) => (
+              <option key={brand} value={brand}>
+                {brand}
+              </option> /* key is required */
+            ))}
           </select>
         </label>
       </div>
@@ -193,33 +197,44 @@ function Choices() {
   const player = usePlayer();
   const game = useGame();
 
-  const treatment = game.get("treatment");
+  // Destructuring treatment options
   const { accuracyNudgeEnabled, reputationSystemEnabled, warrantEnabled } =
-    treatment;
+    game.get("treatment");
 
-  const [brand, setBrand] = useState("");
-  const [productionQuality, setProductionQuality] = useState("");
-  const [advertisementQuality, setAdvertisementQuality] = useState("");
-  const [warrant, setWarrant] = useState(0);
+  // State variables
+  const [brand, setBrand] = useState(""); // "a random brand name"
+  const [productionQuality, setProductionQuality] = useState(""); // "low" or "high"
+  const [advertisementQuality, setAdvertisementQuality] = useState(""); // "low" or "high"
+  const [warrant, setWarrant] = useState(0); // $0 - $4
+  const [confirmWindowEnabled, setConfirmWindowEnabled] = useState(false);
+  const [allSelected, setAllSelected] = useState(true);
+
+  const randomBrands = player.get("randomBrands");
 
   // Handle form submission
   const handleSubmit = () => {
-    // Check if all radio inputs are selected
-    let allSelected = productionQuality && advertisementQuality;
+    // Check if all required inputs are selected
+    let isAllSelected = productionQuality && advertisementQuality;
 
     if (reputationSystemEnabled) {
-      // Check if brand is selected if reputation system is enabled
-      allSelected = allSelected && brand;
-    } else if (warrantEnabled) {
-      // Check if warrant is selected if warrant system is enabled
-      allSelected = allSelected && warrant;
+      isAllSelected = isAllSelected && brand;
     }
+    setAllSelected(isAllSelected);
 
-    if (allSelected) {
-      player.stage.set("submit", true);
-    } else {
-      alert("Not all questions are answered.");
-    }
+    if (isAllSelected) {
+      // Check if the confirm window needs to pop up
+      if (
+        accuracyNudgeEnabled &&
+        !confirmWindowEnabled &&
+        productionQuality === "low" &&
+        advertisementQuality === "high"
+      ) {
+        setConfirmWindowEnabled(true);
+      } // else just submit it
+      else {
+        // player.stage.set("submit", true);
+      }
+    } // If not all selected, alert players
   };
 
   return (
@@ -231,6 +246,7 @@ function Choices() {
           onShow={(e) => {
             setBrand(e.target.value);
           }}
+          randomBrands={randomBrands}
         />
       )}
 
@@ -240,14 +256,14 @@ function Choices() {
           setProductionQuality("low");
         }}
         setHigh={() => {
-          setAdvertisementQuality("high");
+          setProductionQuality("high");
         }}
       />
 
       {/* Advertisement Quality */}
       <AdvertisementQualityChoice
         setLow={() => {
-          setProductionQuality("low");
+          setAdvertisementQuality("low");
         }}
         setHigh={() => {
           setAdvertisementQuality("high");
@@ -267,13 +283,57 @@ function Choices() {
       {/* Product images */}
       <ProductImages />
 
+      {/* Confirm Window */}
+      <ConfirmWindow
+        confirmWindowEnabled={confirmWindowEnabled}
+        handleCancel={() => {
+          setConfirmWindowEnabled(false);
+        }}
+        handleSubmit={handleSubmit}
+      />
+
       {/* Submit Button */}
       <div className="flex justify-center mt-5">
         <Button type="submit" handleClick={handleSubmit}>
           Submit
         </Button>
+        {!allSelected && (
+          <p className="text-red-600 ml-4 p-2">Please select all options!</p>
+        )}
       </div>
     </div>
+  );
+}
+
+function ConfirmWindow({ confirmWindowEnabled, handleCancel, handleSubmit }) {
+  return (
+    <>
+      {confirmWindowEnabled && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
+          <div className="bg-white p-8 rounded-lg">
+            <p className="mb-4">Reminder:</p>
+            <p>
+              Your choice to exaggerate the product quality in your
+              advertisement
+            </p>
+            <div className="flex justify-end mt-5">
+              <button
+                className="mr-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                onClick={handleCancel}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+                onClick={handleSubmit}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

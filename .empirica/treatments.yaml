@@ -1,79 +1,77 @@
 factors:
-  - name: playerCount
-    desc: playerCount determines the number of Players are in a Game.
-    values:
-      - value: 4
-
-  - name: roundCount
-    desc: roundCount determines the number of rounds a game has
-    values:
-      - value: 2
-      - value: 5
-      - value: 10
-      - value: 20
-      
-  - name: chatEnabled
-    desc: chatEnabled determines whether the chat box is enabled
-    values:
-      - value: true
-      - value: false
-
-  - name: accuracyNudgeEnabled
-    desc: accuracyNudgeEnabled determines whether reminder of players' choice is enabled
-    values:
-      - value: true
-      - value: false
-
-  - name: reputationSystemEnabled
-    desc: reputatonSystemEnabled determines whether brand name is enabled
-    values:
-      - value: true
-      - value: false
-    
-  - name: warrantEnabled
-    desc: warrantEnabled determines whether warrant is enabled
-    values:
-      - value: true
-      - value: false   
-
-
+    - name: playerCount
+      desc: playerCount determines the number of Players are in a Game.
+      values:
+        - value: 4
+    - name: roundCount
+      desc: roundCount determines the number of rounds a game has
+      values:
+        - value: 2
+        - value: 5
+        - value: 10
+        - value: 20
+    - name: chatEnabled
+      desc: chatEnabled determines whether the chat box is enabled
+      values:
+        - value: true
+        - value: false
+    - name: accuracyNudgeEnabled
+      desc: accuracyNudgeEnabled determines whether reminder of players' choice is enabled
+      values:
+        - value: true
+        - value: false
+    - name: reputationSystemEnabled
+      desc: reputatonSystemEnabled determines whether brand name is enabled
+      values:
+        - value: true
+        - value: false
+    - name: warrantEnabled
+      desc: warrantEnabled determines whether warrant is enabled
+      values:
+        - value: true
+        - value: false
 treatments:
-  - name: "Baseline"
-    desc: "The basic marketplace"
-    factors:
-      playerCount: 4
-      roundCount: 5
-      chatEnabled: false
-      accuracyNudgeEnabled: false
-      reputationSystemEnabled: false
-      warrantEnabled: false
-
-  - name: "Accuracy Nudge"
-    desc: "market place with accuracy nudge"
-    factors:
-      playerCount: 4
-      roundCount: 5
-      chatEnabled: false
-      accuracyNudgeEnabled: true
-      reputationSystemEnabled: false
-      warrantEnabled: false
-
-  - name: "Reputation System"
-    desc: "market place with reputation system"
-    factors:
-      playerCount: 4
-      roundCount: 5
-      chatEnabled: false
-      accuracyNudgeEnabled: false
-      reputationSystemEnabled: true
-      warrantEnabled: false
-
-  - name: "Prove Me Wrong"
-    desc: "market place with warrant"
-    factors:
-      playerCount: 4
-      roundCount: 5
-      chatEnabled: false
-      accuracyNudgeEnabled: false
-      reputationSystemEnabled: false
-      warrantEnabled: true
+    - name: Baseline
+      desc: The basic marketplace
+      factors:
+        accuracyNudgeEnabled: false
+        chatEnabled: false
+        playerCount: 4
+        reputationSystemEnabled: false
+        roundCount: 5
+        warrantEnabled: false
+    - name: Accuracy Nudge
+      desc: market place with accuracy nudge
+      factors:
+        accuracyNudgeEnabled: true
+        chatEnabled: false
+        playerCount: 4
+        reputationSystemEnabled: false
+        roundCount: 5
+        warrantEnabled: false
+    - name: Reputation System
+      desc: market place with reputation system
+      factors:
+        accuracyNudgeEnabled: false
+        chatEnabled: false
+        playerCount: 4
+        reputationSystemEnabled: true
+        roundCount: 5
+        warrantEnabled: false
+    - name: Prove Me Wrong
+      desc: market place with warrant
+      factors:
+        accuracyNudgeEnabled: false
+        chatEnabled: false
+        playerCount: 4
+        reputationSystemEnabled: false
+        roundCount: 5
+        warrantEnabled: true
+    - name: All Enabled
+      desc: All features enabled except chat
+      factors:
+        accuracyNudgeEnabled: true
+        playerCount: 4
+        reputationSystemEnabled: true
+        roundCount: 5
+        warrantEnabled: true

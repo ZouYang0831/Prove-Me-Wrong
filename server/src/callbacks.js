@@ -9,7 +9,7 @@ Empirica.onGameStart(({ game }) => {
   for (let i = 0; i < roundCount; i++) {
     const round = game.addRound({ name: `Round ${i}` });
 
-    // Add Select Role stage in the beginning
+    // Add Select Role stage in the beginning only for the first round
     if (i === 0) {
       round.addStage({ name: "SelectRoles", duration: 10000 });
     }
@@ -18,31 +18,53 @@ Empirica.onGameStart(({ game }) => {
     round.addStage({ name: "ConsumerChoice", duration: 10000 });
     round.addStage({ name: "Feedback", duration: 10000 });
 
-    // Add Final Result stage in the end
+    // Add Final Result stage in the end only for the last round
     if (i === roundCount - 1) {
       round.addStage({ name: "FinalResult", duration: 10000 });
     }
   }
 
-  let players = game.players;
-
-  // Shuffle the array of players
-  players = [...players].sort(() => Math.random() - 0.5);
+  // Create a shuffled copy of the players array
+  const shuffledPlayers = shuffleArray([...game.players]);
 
   // Assign roles and initial values to players
-  players.forEach((player, index) => {
+  shuffledPlayers.forEach((player, index) => {
     // Set initial score
     player.set("score", 0);
 
     // Determine role and set initial wallet or capital accordingly
     const role = index < 2 ? "consumer" : "producer";
     player.set("role", role);
+
     if (role === "producer") {
       player.set("capital", 100);
+      const randomBrands = shuffleArray([
+        "Jazz",
+        "Empire",
+        "Akane",
+        "Honeycrisp",
+        "Fuji",
+        "Gala",
+      ]);
+
+      // Assign random brands to producers
+      player.set(
+        "randomBrands",
+        index === 2 ? randomBrands.slice(0, 3) : randomBrands.slice(3, 6)
+      );
     } else {
       player.set("wallet", 100);
     }
   });
+
+  // Fisher-Yates (aka Knuth) Shuffle Algorithm
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
 });
 
 Empirica.onRoundStart(({ round }) => {});
