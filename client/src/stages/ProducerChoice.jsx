@@ -1,10 +1,13 @@
-/*
+/**
  * Filename: ProducerChoice.jsx
- * Description: This file contains components related to the producer's choices in the game.
+
+ * Description: 
+ * This file contains components related to the producer's choices in the game.
  * Main Components include "Instruction, Choices, and LeaderBoard".
  * Component "Choices" include "BrandChoice, ProductionQualityChoice, AdvertisementQualityChoice, WarrantChoice, ProductImages"
+ * 
  * Author: Changxuan Fan
- * Date: 3/12/2024
+ * Created Date: 3/12/2024
  */
 
 import React, { useState } from "react";
@@ -317,7 +320,7 @@ function Choices() {
 
       {/* Submit Button */}
       <div className="flex justify-center mt-5">
-        <Button type="submit" handleClick={handleSubmit}>
+        <Button className="blue" handleClick={handleSubmit}>
           Submit
         </Button>
         {!allSelected && (
@@ -339,19 +342,19 @@ function ConfirmWindow({ confirmWindowEnabled, handleCancel, handleSubmit }) {
               Your choice to exaggerate the product quality in your
               advertisement
             </p>
-            <div className="flex justify-center mt-5">
-              <button
-                className="mr-10 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-                onClick={handleSubmit}
+            <div className="flex justify-center mt-6 mb-3 space-x-20">
+              <Button
+                className="green"
+                handleClick={handleSubmit}
               >
                 Submit
-              </button>
+              </Button>
+              <Button
+                className="red"
+                handleClick={handleCancel}
+              >
+                Cancel
+              </Button>
             </div>
           </div>
         </div>

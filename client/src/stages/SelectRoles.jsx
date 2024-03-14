@@ -24,7 +24,7 @@ export function SelectRoles() {
         You will play as a <b>{role}</b>!
       </p>
       {role === "consumer" ? <ConsumerInfo /> : <ProducerInfo />}
-      <Button handleClick={handleSubmit}>I'm ready!</Button>
+      <Button primary={true} handleClick={handleSubmit}>I'm ready!</Button>
     </div>
   );
 }
