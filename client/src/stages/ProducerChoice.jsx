@@ -13,17 +13,18 @@ import {
   usePlayer,
   usePlayers,
   useGame,
+  useRound,
 } from "@empirica/core/player/classic/react";
 
 // Component for displaying game instructions
 function Instruction() {
   return (
-    <div className="w-200 ml-20 mr-10 mb-8">
+    <div className="w-180 ml-20 mr-10 mb-8">
       {/* Title */}
       <h1 className="text-xl text-gray-600 font-bold mb-1">Instruction</h1>
       {/* Main Instruction */}
       <p className="text-gray-600 text-justify">
-        In this stage, you will choose the quality of toothpaste to produce and
+        In this stage, you will choose the quality of apple to produce and
         how you want to advertise it.
       </p>
       {/* Note */}
@@ -137,10 +138,13 @@ function AdvertisementQualityChoice({ setLow, setHigh }) {
 function WarrantChoice({ warrant, onShow }) {
   return (
     <div className="mb-2">
-      <h2 className="font-bold mb-2">
-        {/* Warranty level label */}
-        How much do you want to warrant your ads claim?
+      <h2 className="mb-2">
+        <span className="font-bold">
+          How much do you want to warrant your ads claim?
+        </span>{" "}
+        Your choice: {warrant}
       </h2>
+
       <div className="w-64 mx-auto">
         <input
           type="range"
@@ -158,7 +162,6 @@ function WarrantChoice({ warrant, onShow }) {
           <div className="w-1/4">3</div>
           <div>4</div>
         </div>
-        <div className="text-center">Your choice: {warrant}</div>
       </div>
     </div>
   );
@@ -167,25 +170,25 @@ function WarrantChoice({ warrant, onShow }) {
 // Component for displaying product images
 function ProductImages() {
   return (
-    <div className="flex items-center space-x-8">
+    <div className="flex justify-center space-x-30">
       <figure>
         <img
-          src="./images/toothpastestandard.jpg"
-          alt="Standard Toothpaste"
-          className="w-60 ml-20 mr-20"
+          src="./images/low_quality_apple.png"
+          alt="Low Quality Apple"
+          className="w-50 h-50"
         />
         <figcaption className="text-center text-base text-black font-bold">
-          Low Quality Toothpaste
+          Low Quality Apple
         </figcaption>
       </figure>
       <figure>
         <img
-          src="./images/toothpasteamazing.jpg"
-          alt="Amazing Toothpaste"
-          className="w-60"
+          src="./images/high_quality_apple.png"
+          alt="High Quality Apple"
+          className="w-50 h-50"
         />
         <figcaption className="text-center text-base text-black font-bold">
-          High Quality Toothpaste
+          High Quality Apple
         </figcaption>
       </figure>
     </div>
@@ -196,6 +199,7 @@ function ProductImages() {
 function Choices() {
   const player = usePlayer();
   const game = useGame();
+  const round = useRound();
 
   // Destructuring treatment options
   const { accuracyNudgeEnabled, reputationSystemEnabled, warrantEnabled } =
@@ -216,13 +220,16 @@ function Choices() {
     // Check if all required inputs are selected
     let isAllSelected = productionQuality && advertisementQuality;
 
+    // Include brand if reputation system is enabled
     if (reputationSystemEnabled) {
       isAllSelected = isAllSelected && brand;
     }
+
+    // Set the state using a different variable to avoid async issues
     setAllSelected(isAllSelected);
 
     if (isAllSelected) {
-      // Check if the confirm window needs to pop up
+      // Check if the player exaggerate the claim so confirm window should pop up
       if (
         accuracyNudgeEnabled &&
         !confirmWindowEnabled &&
@@ -230,15 +237,31 @@ function Choices() {
         advertisementQuality === "high"
       ) {
         setConfirmWindowEnabled(true);
-      } // else just submit it
-      else {
-        // player.stage.set("submit", true);
+
+        // If the player does not exaggerate the claim
+      } else {
+        // Get the round data for submitting
+        const roundName = round.get("name");
+        const roundData = {
+          brand: brand,
+          productQuality: productionQuality,
+          advertisementQuality: advertisementQuality,
+        };
+
+        // Include warrant data if enabled
+        if (warrantEnabled) {
+          roundData["warrant"] = warrant;
+        }
+
+        // Set player data and submit stage
+        player.set(roundName, roundData);
+        player.stage.set("submit", true);
       }
-    } // If not all selected, alert players
+    }
   };
 
   return (
-    <div className="w-200 ml-20 mr-10 mb-10">
+    <div className="w-180 ml-20 mr-10 mb-10">
       {/* Brand Selection */}
       {reputationSystemEnabled && (
         <BrandChoice
@@ -316,9 +339,9 @@ function ConfirmWindow({ confirmWindowEnabled, handleCancel, handleSubmit }) {
               Your choice to exaggerate the product quality in your
               advertisement
             </p>
-            <div className="flex justify-end mt-5">
+            <div className="flex justify-center mt-5">
               <button
-                className="mr-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="mr-10 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
                 onClick={handleCancel}
               >
                 Cancel
