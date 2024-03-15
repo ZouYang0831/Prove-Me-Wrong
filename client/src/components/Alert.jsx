@@ -1,34 +1,57 @@
-import React from "react";
-
-export function Alert({ children, title, kind = "normal" }) {
+/**
+ * Alert Component
+ *
+ * Description:
+ * This component renders an alert box with customizable styles based on the kind prop.
+ * It provides visual feedback to users based on different alert types such as warning, error, success, or default.
+ *
+ * @param {Object} props - Props object containing:
+ *   @param {string} children - Content to be displayed within the alert box.
+ *   @param {string} title - Title of the alert.
+ *   @param {string} kind - Specifies the type of alert. Options include "warn", "error", "success", or default.
+ * @returns {JSX.Element} - Returns JSX for the Alert component.
+ * 
+ * Author: Changxuan Fan
+ * Created Date: 3/14/2024
+ */
+export function Alert({ children, title, kind }) {
+  // Define variables to hold CSS classes based on the kind of alert
   let bg, icn, ttl, chld;
+
+  // Switch statement to determine the CSS classes based on the value of kind prop
   switch (kind) {
     case "warn":
       bg = "bg-yellow-50";
       icn = "text-yellow-400";
       ttl = "text-yellow-800";
       chld = "text-yellow-700";
+      break;
     case "error":
       bg = "bg-red-50";
       icn = "text-red-400";
       ttl = "text-red-800";
       chld = "text-red-700";
+      break;
     case "success":
       bg = "bg-green-50";
       icn = "text-green-400";
       ttl = "text-green-800";
       chld = "text-green-700";
+      break;
     default:
+      // Default case: for any unrecognized kind, use default styling
       bg = "bg-empirica-50";
       icn = "text-empirica-400";
       ttl = "text-empirica-800";
       chld = "text-empirica-700";
+      break;
   }
 
   return (
-    <div className={`rounded-md p-4 ${bg}`}>
+    // Render the alert box with appropriate styles based on the kind prop
+    <div className={`w-180 ml-20 my-4 p-4 rounded-lg ${bg}`}>
       <div className="flex">
-        <div className="flex-shrink-0">
+        <div>
           <svg
             className={`h-5 w-5 ${icn}`}
             xmlns="http://www.w3.org/2000/svg"
@@ -44,10 +67,8 @@ export function Alert({ children, title, kind = "normal" }) {
           </svg>
         </div>
         <div className="ml-3">
-          <h3 className={`text-sm font-medium ${ttl}`}>{title}</h3>
-          <div className={`mt-2 text-sm text-yellow-700 ${chld}`}>
-            {children}
-          </div>
+          <h3 className={`text-base font-medium ${ttl}`}>{title}</h3>
+          <div className={`text-base ${chld}`}>{children}</div>
         </div>
       </div>
     </div>

@@ -18,6 +18,7 @@ import {
   useGame,
   useRound,
 } from "@empirica/core/player/classic/react";
+import { ConfirmWindow } from "../components/ConfirmWindow";
 
 // Component for displaying game instructions
 function Instruction() {
@@ -27,11 +28,11 @@ function Instruction() {
       <h1 className="text-xl text-gray-600 font-bold mb-1">Instruction</h1>
       {/* Main Instruction */}
       <p className="text-gray-600 text-justify">
-        In this stage, you will choose the quality of apple to produce and
-        how you want to advertise it.
+        In this stage, you will choose the quality of apple to produce and how
+        you want to advertise it.
       </p>
       {/* Note */}
-      <p className="text-gray-600 font-bold text-justify">
+      <p className="text-gray-600 font-medium text-justify">
         Note: Your goal is to maximize your profit.
       </p>
     </div>
@@ -43,7 +44,7 @@ function BrandChoice({ brand, onShow, randomBrands }) {
   return (
     <div className="mb-2">
       <div className="flex">
-        <label className="font-bold">
+        <label className="font-medium">
           {/* Brand selection label */}
           Choose your brand name:
           <select
@@ -72,7 +73,7 @@ function BrandChoice({ brand, onShow, randomBrands }) {
 function ProductionQualityChoice({ setLow, setHigh }) {
   return (
     <div className="mb-2">
-      <h2 className="font-bold mb-2">Choose what quality to produce:</h2>
+      <h2 className="font-medium mb-2">Choose what quality to produce:</h2>
       <div className="flex flex-row">
         <label>
           {/* Low quality production option */}
@@ -105,7 +106,7 @@ function ProductionQualityChoice({ setLow, setHigh }) {
 function AdvertisementQualityChoice({ setLow, setHigh }) {
   return (
     <div className="mb-2">
-      <h2 className="font-bold mb-2">
+      <h2 className="font-medium mb-2">
         {/* Advertisement quality label */}
         Choose how you want to advertise your product:
       </h2>
@@ -142,7 +143,7 @@ function WarrantChoice({ warrant, onShow }) {
   return (
     <div className="mb-2">
       <h2 className="mb-2">
-        <span className="font-bold">
+        <span className="font-medium">
           How much do you want to warrant your ads claim?
         </span>{" "}
         Your choice: {warrant}
@@ -180,7 +181,7 @@ function ProductImages() {
           alt="Low Quality Apple"
           className="w-50 h-50"
         />
-        <figcaption className="text-center text-base text-black font-bold">
+        <figcaption className="text-center text-base text-black font-medium">
           Low Quality Apple
         </figcaption>
       </figure>
@@ -190,7 +191,7 @@ function ProductImages() {
           alt="High Quality Apple"
           className="w-50 h-50"
         />
-        <figcaption className="text-center text-base text-black font-bold">
+        <figcaption className="text-center text-base text-black font-medium">
           High Quality Apple
         </figcaption>
       </figure>
@@ -219,6 +220,13 @@ function Choices() {
   const randomBrands = player.get("randomBrands");
 
   // Handle form submission
+  // The Producer data that will submit:
+  //  producerData:
+  // {
+  //   brand: brand,
+  //   productQuality: productionQuality,
+  //   advertisementQuality: advertisementQuality,
+  // };
   const handleSubmit = () => {
     // Check if all required inputs are selected
     let isAllSelected = productionQuality && advertisementQuality;
@@ -243,9 +251,9 @@ function Choices() {
 
         // If the player does not exaggerate the claim
       } else {
-        // Get the round data for submitting
+        // Get the producer data for submitting
         const roundName = round.get("name");
-        const roundData = {
+        const producerData = {
           brand: brand,
           productQuality: productionQuality,
           advertisementQuality: advertisementQuality,
@@ -253,11 +261,11 @@ function Choices() {
 
         // Include warrant data if enabled
         if (warrantEnabled) {
-          roundData["warrant"] = warrant;
+          producerData["warrant"] = warrant;
         }
 
         // Set player data and submit stage
-        player.set(roundName, roundData);
+        player.set(roundName, producerData);
         player.stage.set("submit", true);
       }
     }
@@ -316,7 +324,9 @@ function Choices() {
           setConfirmWindowEnabled(false);
         }}
         handleSubmit={handleSubmit}
-      />
+      >
+        Your choice to exaggerate the product quality in your advertisement
+      </ConfirmWindow>
 
       {/* Submit Button */}
       <div className="flex justify-center mt-5">
@@ -328,38 +338,6 @@ function Choices() {
         )}
       </div>
     </div>
-  );
-}
-
-function ConfirmWindow({ confirmWindowEnabled, handleCancel, handleSubmit }) {
-  return (
-    <>
-      {confirmWindowEnabled && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
-          <div className="bg-white p-8 rounded-lg">
-            <p className="mb-4">Reminder:</p>
-            <p>
-              Your choice to exaggerate the product quality in your
-              advertisement
-            </p>
-            <div className="flex justify-center mt-6 mb-3 space-x-20">
-              <Button
-                className="green"
-                handleClick={handleSubmit}
-              >
-                Submit
-              </Button>
-              <Button
-                className="red"
-                handleClick={handleCancel}
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
   );
 }
 
