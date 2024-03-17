@@ -49,7 +49,7 @@ export function Alert({ children, title, kind }) {
 
   return (
     // Render the alert box with appropriate styles based on the kind prop
-    <div className={`w-180 ml-20 my-4 p-4 rounded-lg ${bg}`}>
+    <div className={`w-200 ml-20 my-4 p-4 rounded-lg ${bg}`}>
       <div className="flex">
         <div>
           <svg

@@ -7,8 +7,36 @@
  * Component "Choices" include "BrandChoice, ProductionQualityChoice, AdvertisementQualityChoice, WarrantChoice, ProductImages"
  * 
  * Author: Changxuan Fan
- * Created Date: 3/12/2024
+ * Date Created : 3/12/2024
+ *
  */
+
+/* 
+producerData: {
+  id: String,
+  role: String,
+  capital: int,
+  score: int,
+  randomBrands: Array,
+  round1: {
+    productQuality: int,
+    advertisementQuality: String,
+    brand: String,
+    warrant: int,
+    unitProduced: int,
+    unitTotalSold: int,
+    consumers: {
+      consumerId: {
+        unitsSold: int,
+        isChallenged: boolean
+      }
+    },
+    scoreChange: int,
+    choiceStartTime: Time,
+    choiceEndTime: Time,
+  }
+}
+*/
 
 import React, { useState } from "react";
 import { Button } from "../components/Button";
@@ -23,16 +51,16 @@ import { ConfirmWindow } from "../components/ConfirmWindow";
 // Component for displaying game instructions
 function Instruction() {
   return (
-    <div className="w-180 ml-20 mr-10 mb-8">
+    <div className="w-200 ml-20 mr-10 mb-4">
       {/* Title */}
-      <h1 className="text-xl text-gray-600 font-bold mb-1">Instruction</h1>
+      <h1 className="text-xl text-gray-600 font-bold">Instruction</h1>
       {/* Main Instruction */}
-      <p className="text-gray-600 text-justify">
+      <p className="text-gray-600 text-sm text-justify">
         In this stage, you will choose the quality of apple to produce and how
         you want to advertise it.
       </p>
       {/* Note */}
-      <p className="text-gray-600 font-medium text-justify">
+      <p className="text-gray-600 text-sm font-medium text-justify">
         Note: Your goal is to maximize your profit.
       </p>
     </div>
@@ -52,12 +80,12 @@ function BrandChoice({ brand, onShow, randomBrands }) {
             name="brand"
             value={brand}
             onChange={onShow}
-            className="border border-gray-300 ml-2 mb-2 rounded-md px-8 py-1"
+            className="border border-gray-300 ml-2 text-sm rounded-md px-8 py-0.5"
           >
             <option disabled value="">
               Select
             </option>
-            {randomBrands?.map((brand) => (
+            {randomBrands.map((brand) => (
               <option key={brand} value={brand}>
                 {brand}
               </option> /* key is required */
@@ -72,8 +100,8 @@ function BrandChoice({ brand, onShow, randomBrands }) {
 // Component for choosing production quality
 function ProductionQualityChoice({ setLow, setHigh }) {
   return (
-    <div className="mb-2">
-      <h2 className="font-medium mb-2">Choose what quality to produce:</h2>
+    <div className="mb-1">
+      <h2 className="font-medium mb-1">Choose what quality to produce:</h2>
       <div className="flex flex-row">
         <label>
           {/* Low quality production option */}
@@ -105,8 +133,8 @@ function ProductionQualityChoice({ setLow, setHigh }) {
 // Component for choosing advertisement quality
 function AdvertisementQualityChoice({ setLow, setHigh }) {
   return (
-    <div className="mb-2">
-      <h2 className="font-medium mb-2">
+    <div className="mb-1">
+      <h2 className="font-medium mb-1">
         {/* Advertisement quality label */}
         Choose how you want to advertise your product:
       </h2>
@@ -138,34 +166,75 @@ function AdvertisementQualityChoice({ setLow, setHigh }) {
   );
 }
 
-// Component for choosing warrant level
-function WarrantChoice({ warrant, onShow }) {
+// Component for choosing unit produced
+function UnitProducedChoice({ unitProduced, unitCap, onShow }) {
+  // Generate div elements for unit levels
+  const unitLevels = [];
+  for (let i = 0; i < unitCap; i++) {
+    unitLevels.push(
+      <div key={i} className={`w-1/${unitCap} text-left`}>
+        {i}
+      </div>
+    );
+  }
+  unitLevels.push(<div key={unitCap}>{unitCap}</div>); // last number without className
+
   return (
-    <div className="mb-2">
-      <h2 className="mb-2">
+    <div className="mb-1">
+      <h2 className="mb-1">
         <span className="font-medium">
-          How much do you want to warrant your ads claim?
+          How many units do you want to produce?
         </span>{" "}
-        Your choice: {warrant}
+        Your choice: {unitProduced}
       </h2>
 
-      <div className="w-64 mx-auto">
+      <div className="w-80 mx-auto flex flex-col">
         <input
           type="range"
           min="0"
-          max="4"
+          max={unitCap}
+          step="1"
+          value={unitProduced}
+          onChange={onShow}
+        />
+        <div className="flex text-sm">{unitLevels}</div>
+      </div>
+    </div>
+  );
+}
+
+// Component for choosing warrant level
+function WarrantChoice({ warrant, warrantCap, onShow }) {
+  // Generate div elements for warrant levels
+  const warrantLevels = [];
+  for (let i = 0; i <= warrantCap - 1; i++) {
+    warrantLevels.push(
+      <div key={i} className="w-1/4">
+        ${i}
+      </div>
+    );
+  }
+  warrantLevels.push(<div key={warrantCap}>${warrantCap}</div>); // last number without className
+
+  return (
+    <div className="mb-1">
+      <h2 className="mb-1">
+        <span className="font-medium">
+          How much do you want to warrant your ads claim?
+        </span>{" "}
+        Your choice: ${warrant}
+      </h2>
+
+      <div className="w-80 mx-auto flex flex-col">
+        <input
+          type="range"
+          min="0"
+          max={warrantCap}
           step="1"
           value={warrant}
           onChange={onShow}
-          className="w-full"
         />
-        <div className="flex">
-          <div className="w-1/4">0</div>
-          <div className="w-1/4">1</div>
-          <div className="w-1/4">2</div>
-          <div className="w-1/4">3</div>
-          <div>4</div>
-        </div>
+        <div className="flex text-sm">{warrantLevels}</div>
       </div>
     </div>
   );
@@ -179,9 +248,9 @@ function ProductImages() {
         <img
           src="./images/low_quality_apple.png"
           alt="Low Quality Apple"
-          className="w-50 h-50"
+          className="w-40 h-40"
         />
-        <figcaption className="text-center text-base text-black font-medium">
+        <figcaption className="text-center text-sm text-black font-medium">
           Low Quality Apple
         </figcaption>
       </figure>
@@ -189,9 +258,9 @@ function ProductImages() {
         <img
           src="./images/high_quality_apple.png"
           alt="High Quality Apple"
-          className="w-50 h-50"
+          className="w-40 h-40"
         />
-        <figcaption className="text-center text-base text-black font-medium">
+        <figcaption className="text-center text-sm text-black font-medium">
           High Quality Apple
         </figcaption>
       </figure>
@@ -206,27 +275,26 @@ function Choices() {
   const round = useRound();
 
   // Destructuring treatment options
-  const { accuracyNudgeEnabled, reputationSystemEnabled, warrantEnabled } =
-    game.get("treatment");
+  const {
+    accuracyNudgeEnabled,
+    reputationSystemEnabled,
+    warrantEnabled,
+    warrantCap,
+    unitCap,
+  } = game.get("treatment");
 
   // State variables
   const [brand, setBrand] = useState(""); // "a random brand name"
   const [productionQuality, setProductionQuality] = useState(""); // "low" or "high"
   const [advertisementQuality, setAdvertisementQuality] = useState(""); // "low" or "high"
-  const [warrant, setWarrant] = useState(0); // $0 - $4
+  const [unitProduced, setUnitProduced] = useState(0); // 0 - unitCap
+  const [warrant, setWarrant] = useState(0); // $0 - $warrantCap
   const [confirmWindowEnabled, setConfirmWindowEnabled] = useState(false);
   const [allSelected, setAllSelected] = useState(true);
 
   const randomBrands = player.get("randomBrands");
 
   // Handle form submission
-  // The Producer data that will submit:
-  //  producerData:
-  // {
-  //   brand: brand,
-  //   productQuality: productionQuality,
-  //   advertisementQuality: advertisementQuality,
-  // };
   const handleSubmit = () => {
     // Check if all required inputs are selected
     let isAllSelected = productionQuality && advertisementQuality;
@@ -254,10 +322,15 @@ function Choices() {
         // Get the producer data for submitting
         const roundName = round.get("name");
         const producerData = {
-          brand: brand,
           productQuality: productionQuality,
           advertisementQuality: advertisementQuality,
+          unitProduced: unitProduced,
         };
+
+        // Include brand data if enabled
+        if (reputationSystemEnabled) {
+          producerData["brand"] = brand;
+        }
 
         // Include warrant data if enabled
         if (warrantEnabled) {
@@ -272,7 +345,7 @@ function Choices() {
   };
 
   return (
-    <div className="w-180 ml-20 mr-10 mb-10">
+    <div className="w-200 ml-20 mr-10 mb-10">
       {/* Brand Selection */}
       {reputationSystemEnabled && (
         <BrandChoice
@@ -304,10 +377,22 @@ function Choices() {
         }}
       />
 
+      {/* UnitProduced */}
+      {warrantEnabled && (
+        <UnitProducedChoice
+          unitProduced={unitProduced}
+          unitCap={unitCap}
+          onShow={(e) => {
+            setUnitProduced(parseInt(e.target.value));
+          }}
+        />
+      )}
+
       {/* Warrant */}
       {warrantEnabled && (
         <WarrantChoice
           warrant={warrant}
+          warrantCap={warrantCap}
           onShow={(e) => {
             setWarrant(parseInt(e.target.value));
           }}

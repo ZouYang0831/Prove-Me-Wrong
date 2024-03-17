@@ -7,7 +7,7 @@ Empirica.onGameStart(({ game }) => {
 
   // Add rounds with stages
   for (let i = 0; i < roundCount; i++) {
-    const round = game.addRound({ name: `Round ${i}` });
+    const round = game.addRound({ name: `Round${i}` });
 
     // Add Select Role stage in the beginning only for the first round
     if (i === 0) {
@@ -26,6 +26,14 @@ Empirica.onGameStart(({ game }) => {
 
   // Create a shuffled copy of the players array
   const shuffledPlayers = shuffleArray([...game.players]);
+  const randomBrands = shuffleArray([
+    "Jazz",
+    "Empire",
+    "Akane",
+    "Pippin",
+    "Fuji",
+    "Gala",
+  ]);
 
   // Assign roles and initial values to players
   shuffledPlayers.forEach((player, index) => {
@@ -38,14 +46,6 @@ Empirica.onGameStart(({ game }) => {
 
     if (role === "producer") {
       player.set("capital", 100);
-      const randomBrands = shuffleArray([
-        "Jazz",
-        "Empire",
-        "Akane",
-        "Honeycrisp",
-        "Fuji",
-        "Gala",
-      ]);
 
       // Assign random brands to producers
       player.set(

@@ -1,77 +1,114 @@
+# Marketplace Configuration File
+
+# Description:
+# This YAML file serves as a comprehensive guide for configuring a virtual marketplace environment.
+# Factors include player count, round count, as well as the activation or deactivation of features.
+# Treatment presents a unique combination of factor settings, enabling versatile testing scenarios.
+
+# Author: Changxuan Fan
+# Date Created: 3/16/2024
+
+# Factors section defining various parameters affecting the marketplace simulation.
 factors:
-    - name: playerCount
-      desc: playerCount determines the number of Players are in a Game.
-      values:
-        - value: 4
-    - name: roundCount
-      desc: roundCount determines the number of rounds a game has
-      values:
-        - value: 2
-        - value: 5
-        - value: 10
-        - value: 20
-    - name: chatEnabled
-      desc: chatEnabled determines whether the chat box is enabled
-      values:
-        - value: true
-        - value: false
-    - name: accuracyNudgeEnabled
-      desc: accuracyNudgeEnabled determines whether reminder of players' choice is enabled
-      values:
-        - value: true
-        - value: false
-    - name: reputationSystemEnabled
-      desc: reputatonSystemEnabled determines whether brand name is enabled
-      values:
-        - value: true
-        - value: false
-    - name: warrantEnabled
-      desc: warrantEnabled determines whether warrant is enabled
-      values:
-        - value: true
-        - value: false
+  - name: playerCount
+    desc: Determines the number of players in a game.
+    values:
+      - value: 4
+  - name: roundCount
+    desc: Determines the number of rounds a game has.
+    values:
+      - value: 2
+      - value: 5
+      - value: 10
+      - value: 20
+  - name: chatEnabled
+    desc: Determines whether the chat box is enabled.
+    values:
+      - value: true
+      - value: false
+  - name: accuracyNudgeEnabled
+    desc: Determines whether reminders of players' choices are enabled.
+    values:
+      - value: true
+      - value: false
+  - name: reputationSystemEnabled
+    desc: Determines whether a reputation system is enabled.
+    values:
+      - value: true
+      - value: false
+  - name: warrantEnabled
+    desc: Determines whether warrants are enabled.
+    values:
+      - value: true
+      - value: false
+  - name: unitCap
+    desc: Determines the maximum number of units of the chosen product a producer can produce in one round.
+    values:
+      - value: 6
+      - value: 8
+      - value: 10
+  - name: warrantCap
+    desc: Determines the maximum amount of warrant a producer can put for the product.
+    values:
+      - value: 5
+
+# Treatments section specifying different configurations of the marketplace.
 treatments:
-    - name: Baseline
-      desc: The basic marketplace
-      factors:
-        accuracyNudgeEnabled: false
-        chatEnabled: false
-        playerCount: 4
-        reputationSystemEnabled: false
-        roundCount: 5
-        warrantEnabled: false
-    - name: Accuracy Nudge
-      desc: market place with accuracy nudge
-      factors:
-        accuracyNudgeEnabled: true
-        chatEnabled: false
-        playerCount: 4
-        reputationSystemEnabled: false
-        roundCount: 5
-        warrantEnabled: false
-    - name: Reputation System
-      desc: market place with reputation system
-      factors:
-        accuracyNudgeEnabled: false
-        chatEnabled: false
-        playerCount: 4
-        reputationSystemEnabled: true
-        roundCount: 5
-        warrantEnabled: false
-    - name: Prove Me Wrong
-      desc: market place with warrant
-      factors:
-        accuracyNudgeEnabled: false
-        chatEnabled: false
-        playerCount: 4
-        reputationSystemEnabled: false
-        roundCount: 5
-        warrantEnabled: true
-    - name: All Enabled
-      desc: All features enabled except chat
-      factors:
-        accuracyNudgeEnabled: true
-        playerCount: 4
-        reputationSystemEnabled: true
-        roundCount: 5
-        warrantEnabled: true
+  - name: Baseline
+    desc: The marketplace with essential features
+    factors:
+      accuracyNudgeEnabled: false
+      chatEnabled: false
+      playerCount: 4
+      reputationSystemEnabled: false
+      roundCount: 5
+      warrantEnabled: false
+      unitCap: 6
+      warrantCap: 5
+
+  - name: Accuracy Nudge
+    desc: The marketplace with accuracy nudging
+    factors:
+      accuracyNudgeEnabled: true
+      chatEnabled: false
+      playerCount: 4
+      reputationSystemEnabled: false
+      roundCount: 5
+      warrantEnabled: false
+      unitCap: 6
+      warrantCap: 5
+
+  - name: Reputation System
+    desc: The marketplace with a reputation system
+    factors:
+      accuracyNudgeEnabled: false
+      chatEnabled: false
+      playerCount: 4
+      reputationSystemEnabled: true
+      roundCount: 5
+      warrantEnabled: false
+      unitCap: 6
+      warrantCap: 5
+
+  - name: Warrant
+    desc: The marketplace with warrant system
+    factors:
+      accuracyNudgeEnabled: false
+      chatEnabled: false
+      playerCount: 4
+      reputationSystemEnabled: false
+      roundCount: 5
+      warrantEnabled: true
+      unitCap: 6
+      warrantCap: 5
+
+  - name: All Enabled
+    desc: The marketplace with all features except chat
+    factors:
+      accuracyNudgeEnabled: true
+      playerCount: 4
+      reputationSystemEnabled: true
+      roundCount: 5
+      warrantEnabled: true
+      unitCap: 6
+      warrantCap: 5

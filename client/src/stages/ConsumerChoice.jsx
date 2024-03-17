@@ -6,7 +6,32 @@
  * Main Components include 
  * 
  * Author: Changxuan Fan
- * Created Date: 3/14/2024
+ * Date Crated: 3/14/2024
+ */
+
+/* 
+consumerData: {
+  consumerId: String,
+  role: String,
+  wallet: int,
+  score: int,
+  round1Info: {
+    producers: {
+      producerId: {
+        productQuality: String,
+        advertisementQuality: String,
+        brand: String,
+        warrant: int
+        unitWanted: int,
+        unitPurchased: int,
+        isChallenged: boolean
+      }
+    },
+    scoreChange: int
+    choiceStartTime: Time,
+    choiceEndTime: Time,
+  }
+}
  */
 
 import React, { useState, useEffect } from "react";
@@ -21,7 +46,7 @@ import {
 // Component for displaying game instructions
 function Instruction() {
   return (
-    <div className="w-180 ml-20 mr-10 mb-8">
+    <div className="w-200 ml-20 mr-10 mb-8">
       {/* Title */}
       <h1 className="text-xl text-gray-600 font-bold mb-1">Instruction</h1>
       {/* Main Instruction */}
@@ -45,30 +70,76 @@ function shuffleArray(array) {
   return array;
 }
 
-function ProductCard({ title, image, warrant, focus, handleFocus }) {
+function ProductCard({
+  title,
+  image,
+  warrant,
+  unitProduced,
+  unitWanted,
+  handleUnitWanted,
+  focus,
+  handleFocus,
+}) {
   // Define CSS classes for the card
-  const cardClasses = `relative w-80 h-80 m-4 p-4 bg-gray-200 rounded-md duration-300 ${
-    focus ? "scale-110 bg-gray-400" : ""
+  const cardClasses = `relative w-60 h-100 p-4 bg-gray-200 rounded-md duration-300 ${
+    focus ? "scale-105 bg-gray-400" : ""
   }`;
+
+  // Generate div elements for unit levels
+  const unitLevels = [];
+  for (let i = 0; i < unitProduced; i++) {
+    unitLevels.push(
+      <div key={i} className={`text-left`}>
+        {i}
+      </div>
+    );
+  }
+  unitLevels.push(<div key={unitProduced}>{unitProduced}</div>); // last number without className
+
+  // Determine the sliderWith based on the range
+  const sliderWidth = (() => {
+    switch (unitProduced) {
+      case 1:
+        return 20;
+      case 2:
+        return 30;
+      case 3:
+        return 40;
+      default:
+        return 50;
+    }
+  })();
 
   return (
     <div className={cardClasses}>
       {/* Render the warrant tag if warrant is not equal to 0 */}
       {warrant !== 0 && (
-        <div className="absolute top-2 -right-5 bg-green-500 text-xl text-white px-2 py-1 rounded-md transform rotate-30">
+        <div className="absolute -top-1 -right-3 bg-green-500 z-1 text-xl text-white px-2 py-1 rounded-md transform rotate-25">
           <span>Warrant: ${warrant}</span> {/* Display the warrant value */}
         </div>
       )}
 
       {/* Product information */}
       <div className="text-center items-center flex flex-col">
-        <h2 className="text-lg font-bold">{title}</h2>
+        <h2 className="text-lg font-bold">{title} Quality</h2>
         <img
           src={image}
           onClick={handleFocus}
           alt="Product"
-          className="mt-2 w-50 h-50 rounded-md cursor-pointer"
+          className="my-2 w-50 h-50 rounded-md cursor-pointer"
         />
+
+        <div className={`w-${sliderWidth} flex flex-col`}>
+          <input
+            type="range"
+            min="0"
+            max={unitProduced}
+            step="1"
+            value={unitWanted}
+            onChange={handleUnitWanted}
+          />
+          <div className="flex flex-row text-sm justify-between">{unitLevels}</div>
+        </div>
       </div>
     </div>
   );
@@ -96,15 +167,20 @@ function Choices() {
   useEffect(() => {
     const products = players
       .filter((player) => player.get("role") === "producer") // get all producers
-      .map((producer) => ({ 
+      .map((producer) => ({
+        playerID: producer.id,
         title: producer.get(roundName)["advertisementQuality"],
         image:
           producer.get(roundName)["advertisementQuality"] === "low"
             ? lowQualityImage
             : highQualityImage,
         warrant: warrantEnabled ? producer.get(roundName)["warrant"] : 0,
+        unitProduced: producer.get(roundName)["unitProduced"],
         focus: false,
+        unitWanted: 0,
       }));
+
+    console.log(products);
 
     // Shuffle the array of products
     shuffleArray(products);
@@ -112,6 +188,18 @@ function Choices() {
     // Set all products
     setProducts(products);
   }, []);
+
+  // Function to handle unit Wanted
+  const handleUnitWanted = (index, e) => {
+    // Update the unitWanted of the selected product
+    setProducts((prevProducts) =>
+      prevProducts.map((product, i) =>
+        i === index
+          ? { ...product, unitWanted: parseInt(e.target.value) }
+          : product
+      )
+    );
+  };
 
   // Function to handle products focus when clicking on the image
   const handleProductFocus = (index) => {
@@ -134,14 +222,18 @@ function Choices() {
 
   // JSX
   return (
-    <div className="w-180 ml-20 mr-10 mb-10">
-      <div className="flex flex-row space-x-20">
+    <div className="w-200 ml-20 mr-10 mb-10">
+      <div className="flex flex-row  justify-around">
         {/* Display all products */}
         {products.map((product, index) => (
           <ProductCard
+            key={product.playerID}
             title={product.title}
             image={product.image}
             warrant={product.warrant}
+            unitProduced={product.unitProduced}
+            unitWanted={product.unitWanted}
+            handleUnitWanted={(e) => handleUnitWanted(index, e)}
             focus={product.focus}
             handleFocus={() => handleProductFocus(index)}
           />
