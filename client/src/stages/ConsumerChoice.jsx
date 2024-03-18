@@ -29,7 +29,7 @@ consumerData: {
         warrant: int,
         unitProduced: int,
         unitSelected: int,
-        unitPurchased: int,
+        unitReceived: int,
         confirmBuy: boolean,
         isChallenged: boolean
       }

@@ -228,7 +228,7 @@ Empirica.onStageEnded(({ stage }) => {
     }
 
     // Check if consumers buy more than the available stock;
-    // if they do, scale down unitedSelected for unitPurchased by each consumer accordingly.
+    // if they do, scale down unitedSelected for unitReceived by each consumer accordingly.
     for (const producer of players) {
       if (producer.get("role") === "producer") {
         // Collect unitSelected values for consumers
@@ -245,14 +245,14 @@ Empirica.onStageEnded(({ stage }) => {
         const unitProduced = producer.get(roundName)["unitProduced"];
         allUnitSelected = scaleUnits(allUnitSelected, unitProduced);
 
-        // Update unitPurchased values for consumers
+        // Update unitReceived values for consumers
         for (const consumer of players) {
           if (consumer.get("role") === "consumer") {
             for (const key in allUnitSelected) {
               // allUnitSelected is a dictionary, so use in
               if (consumer.id === key) {
                 const producers = consumer.get(roundName);
-                producers["producers"][producer.id]["unitPurchased"] =
+                producers["producers"][producer.id]["unitReceived"] =
                   allUnitSelected[key];
                 consumer.set(roundName, producers);
               }
@@ -265,22 +265,6 @@ Empirica.onStageEnded(({ stage }) => {
     // update scoreChange for consumers
     
   }
-  // const players = stage.currentGame.players;
-  // for (const player of players) {
-  //   const priceOfProduct = player.round.get("priceOfProduct");
-  //   const productionCost = player.round.get("productionCost");
-  //   const amountOfWarrant = player.round.get("amountOfWarrant") || 0;
-  //   const score = player.get("score") || 0; // , adQuality, points, salesCount, numBuyers
-  //   const min = 0;
-  //   const max = 100;
-  //   const numBuyers = Math.floor(Math.random() * (max - min) + min);
-  //   const salesCount =
-  //     numBuyers * (priceOfProduct - productionCost) - amountOfWarrant;
-  //   player.round.set("numBuyers", numBuyers);
-  //   player.round.set("salesCount", salesCount);
-  //   console.log(salesCount);
-  //   player.set("score", score + salesCount);
-  // }
 });
 
 Empirica.onRoundEnded(({ round }) => {});
