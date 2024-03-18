@@ -17,7 +17,7 @@ import React from "react";
 import { Button } from "../components/Button";
 
 export function ConfirmWindow({
-    children,
+  children,
   confirmWindowEnabled,
   handleCancel,
   handleSubmit,
@@ -27,10 +27,8 @@ export function ConfirmWindow({
       {confirmWindowEnabled && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
           <div className="bg-white p-8 rounded-lg">
-            <p className="mb-4">Warning:</p>
-            <p>
-              {children}
-            </p>
+            <p className="mb-4 text-center">Warning:</p>
+            <p>{children}</p>
             <div className="flex justify-center mt-6 mb-3 space-x-20">
               <Button className="green" handleClick={handleSubmit}>
                 Submit

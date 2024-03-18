@@ -1,9 +1,14 @@
 /**
  * Filename: ConsumerChoice.jsx
-
- * Description: 
- * This file contains components related to the consumer's choices in the game.
- * Main Components include 
+ * 
+ * 
+ * Description: This file contains React components for displaying game instructions and managing consumer choices in the game interface.
+ *
+ * Components:
+ * 1. Instruction: Component for displaying game instructions.
+ * 2. ProductCard: Component for displaying producers' product cards.
+ * 3. Choices: Component for managing consumer choices.
+ * 4. ConsumerChoice: Main component for the consumer's choices.
  * 
  * Author: Changxuan Fan
  * Date Crated: 3/14/2024
@@ -17,13 +22,15 @@ consumerData: {
   score: int,
   round1Info: {
     producers: {
-      producerId: {
+      producerID: {
         productQuality: String,
         advertisementQuality: String,
         brand: String,
-        warrant: int
-        unitWanted: int,
+        warrant: int,
+        unitProduced: int,
+        unitSelected: int,
         unitPurchased: int,
+        confirmBuy: boolean,
         isChallenged: boolean
       }
     },
@@ -43,6 +50,17 @@ import {
   useRound,
 } from "@empirica/core/player/classic/react";
 
+import { ConfirmWindow } from "../components/ConfirmWindow";
+
+// Fisher-Yates (aka Knuth) Shuffle Algorithm
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 // Component for displaying game instructions
 function Instruction() {
   return (
@@ -61,48 +79,55 @@ function Instruction() {
   );
 }
 
-// Fisher-Yates (aka Knuth) Shuffle Algorithm
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
+// Component for displaying producers' product card
 function ProductCard({
-  title,
-  image,
+  advertisementQuality,
   warrant,
+  brand,
   unitProduced,
-  unitWanted,
-  handleUnitWanted,
-  focus,
-  handleFocus,
+  unitSelected,
+  handleUnitSelected,
+  confirmBuy,
+  handleConfirmBuy,
 }) {
-  // Define CSS classes for the card
-  const cardClasses = `relative w-60 h-100 p-4 bg-gray-200 rounded-md duration-300 ${
-    focus ? "scale-105 bg-gray-400" : ""
-  }`;
+  // Render a message if no units are produced
+  if (unitProduced === 0) {
+    return (
+      <div
+        className={`w-60 px-5 py-6 bg-gray-200 rounded-md flex flex-col items-center text-gray-600 text-center ${
+          brand ? "h-115" : "h-108"
+        }`}
+      >
+        <span className="text-xl font-bold">No Production</span>
+        <span className="mt-2">
+          One of the producers did not produce anything
+        </span>
+      </div>
+    );
+  }
+
+  // Determine the image path based on advertisement quality
+  const lowQualityImagePath = "./images/low_quality_apple.png";
+  const highQualityImagePath = "./images/high_quality_apple.png";
+  const imagePath =
+    advertisementQuality === "low" ? lowQualityImagePath : highQualityImagePath;
 
   // Generate div elements for unit levels
   const unitLevels = [];
-  for (let i = 0; i < unitProduced; i++) {
+  for (let i = 0; i <= unitProduced; i++) {
     unitLevels.push(
-      <div key={i} className={`text-left`}>
+      <div key={i} className="text-left">
         {i}
       </div>
     );
   }
-  unitLevels.push(<div key={unitProduced}>{unitProduced}</div>); // last number without className
 
-  // Determine the sliderWith based on the range
+  // Determine the slider width based on the range
   const sliderWidth = (() => {
     switch (unitProduced) {
       case 1:
         return 20;
       case 2:
-        return 30;
       case 3:
         return 40;
       default:
@@ -111,34 +136,64 @@ function ProductCard({
   })();
 
   return (
-    <div className={cardClasses}>
-      {/* Render the warrant tag if warrant is not equal to 0 */}
-      {warrant !== 0 && (
-        <div className="absolute -top-1 -right-3 bg-green-500 z-1 text-xl text-white px-2 py-1 rounded-md transform rotate-25">
-          <span>Warrant: ${warrant}</span> {/* Display the warrant value */}
+    <div
+      className={`relative w-60 px-5 py-6 bg-gray-200 rounded-md duration-300 ${
+        confirmBuy ? "scale-105 bg-gray-400" : ""
+      } ${brand ? "h-115" : "h-108"}`}
+    >
+      {/* Render the warrant tag if warrant is larger than 0 */}
+      {warrant > 0 && (
+        <div className="absolute -top-1 -right-7 bg-green-500 z-1 text-xl text-white px-2 py-1 rounded-md transform rotate-25">
+          <span>Warrant: ${warrant}</span>
         </div>
       )}
 
       {/* Product information */}
       <div className="text-center items-center flex flex-col">
-        <h2 className="text-lg font-bold">{title} Quality</h2>
+        {brand && <h2 className="text-xl font-bold"> Brand: {brand}</h2>}
+        <h2 className="text-2xl font-medium">{advertisementQuality} Quality</h2>
         <img
-          src={image}
-          onClick={handleFocus}
+          src={imagePath}
+          onClick={handleConfirmBuy}
           alt="Product"
-          className="my-2 w-50 h-50 rounded-md cursor-pointer"
+          className="my-2 w-40 h-40 rounded-md cursor-pointer"
         />
 
+        <h2 className="text-3xl">${advertisementQuality === "low" ? 4 : 10}</h2>
+        <p>In Stock: {unitProduced}</p>
+        <h2 className="text-xl">Select units: {unitSelected}</h2>
+
+        {/* Slider for selecting unit quantity */}
         <div className={`w-${sliderWidth} flex flex-col`}>
           <input
             type="range"
             min="0"
             max={unitProduced}
             step="1"
-            value={unitWanted}
-            onChange={handleUnitWanted}
+            value={unitSelected}
+            onChange={handleUnitSelected}
+            className="cursor-pointer"
           />
-          <div className="flex flex-row text-sm justify-between">{unitLevels}</div>
+          <div className="flex flex-row text-sm justify-between">
+            {unitLevels}
+          </div>
+        </div>
+
+        {/* Toggle switch for confirming buy */}
+        <div className="flex mt-3 cursor-pointer " onClick={handleConfirmBuy}>
+          <p className="mr-2 text-2xl">Buy?</p>
+          <button
+            className={`w-14 rounded-full p-1 duration-300 ease-in-out ${
+              confirmBuy ? "bg-gray-300" : "bg-gray-400"
+            }`}
+          >
+            <div
+              className={`bg-white w-5 h-5 rounded-full shadow-md transform duration-300 ease-in-out ${
+                confirmBuy ? "translate-x-7" : "translate-x-0"
+              }`}
+            />
+          </button>
+          <p className="ml-2 text-2xl">{confirmBuy ? "On" : "Off"}</p>
         </div>
       </div>
     </div>
@@ -152,63 +207,65 @@ function Choices() {
   const player = usePlayer();
   const players = usePlayers();
 
-  // Image paths
-  const lowQualityImage = "./images/low_quality_apple.png";
-  const highQualityImage = "./images/high_quality_apple.png";
-
-  // State for products: products for all products
-  const [products, setProducts] = useState([]);
+  // State for producers: products from all producers
+  const [producers, setProducers] = useState({});
+  const [confirmWindowEnabled, setConfirmWindowEnabled] = useState(false);
 
   // Variables
-  const { accuracyNudgeEnabled, warrantEnabled } = game.get("treatment");
+  const { accuracyNudgeEnabled, warrantEnabled, reputationSystemEnabled } =
+    game.get("treatment");
   const roundName = round.get("name");
 
   // Effect to set all products' state from producers' data
   useEffect(() => {
-    const products = players
-      .filter((player) => player.get("role") === "producer") // get all producers
-      .map((producer) => ({
-        playerID: producer.id,
-        title: producer.get(roundName)["advertisementQuality"],
-        image:
-          producer.get(roundName)["advertisementQuality"] === "low"
-            ? lowQualityImage
-            : highQualityImage,
-        warrant: warrantEnabled ? producer.get(roundName)["warrant"] : 0,
-        unitProduced: producer.get(roundName)["unitProduced"],
-        focus: false,
-        unitWanted: 0,
-      }));
+    // Initialize producers information
+    const producersMap = players.reduce((acc, player) => {
+      if (player.get("role") === "producer") {
+        const producerID = player.id;
+        const producerData = {
+          advertisementQuality: player.get(roundName)["advertisementQuality"],
+          ...(reputationSystemEnabled && {
+            // Spread operator with objects
+            brand: player.get(roundName)["brand"],
+          }),
+          ...(warrantEnabled && { warrant: player.get(roundName)["warrant"] }),
+          unitProduced: player.get(roundName)["unitProduced"],
+          confirmBuy: false,
+          unitSelected: 0,
+        };
+        acc[producerID] = producerData;
+      }
+      return acc; // acc is the dictionary: producers
+    }, {}); // acc's initial value is {}
 
-    console.log(products);
+    // Shuffle the array of producers
+    shuffleArray(producersMap);
 
-    // Shuffle the array of products
-    shuffleArray(products);
-
-    // Set all products
-    setProducts(products);
+    // Set all producers' products
+    setProducers(producersMap);
   }, []);
 
   // Function to handle unit Wanted
-  const handleUnitWanted = (index, e) => {
-    // Update the unitWanted of the selected product
-    setProducts((prevProducts) =>
-      prevProducts.map((product, i) =>
-        i === index
-          ? { ...product, unitWanted: parseInt(e.target.value) }
-          : product
-      )
-    );
+  const handleUnitSelected = (producerID, e) => {
+    // Update the unitSelected of the selected producer
+    setProducers((prevProducers) => ({
+      ...prevProducers,
+      [producerID]: {
+        ...prevProducers[producerID],
+        unitSelected: parseInt(e.target.value),
+      },
+    }));
   };
 
-  // Function to handle products focus when clicking on the image
-  const handleProductFocus = (index) => {
-    // find and toggle selected product's focus state
-    setProducts((prevProducts) =>
-      prevProducts.map((product, i) =>
-        i === index ? { ...product, focus: !product.focus } : product
-      )
-    );
+  // Function to handle confirming to buy
+  const handleConfirmBuy = (producerID) => {
+    setProducers((prevProducers) => ({
+      ...prevProducers,
+      [producerID]: {
+        ...prevProducers[producerID],
+        confirmBuy: !prevProducers[producerID].confirmBuy,
+      },
+    }));
   };
 
   // Function to handle submission
@@ -216,6 +273,10 @@ function Choices() {
     if (accuracyNudgeEnabled && !confirmWindowEnabled) {
       setConfirmWindowEnabled(true);
     } else {
+      const roundName = round.get("name");
+
+      // Set player data and submit stage
+      player.set(roundName, { producers: producers });
       player.stage.set("submit", true);
     }
   };
@@ -224,21 +285,34 @@ function Choices() {
   return (
     <div className="w-200 ml-20 mr-10 mb-10">
       <div className="flex flex-row  justify-around">
-        {/* Display all products */}
-        {products.map((product, index) => (
+        {/* Display all prouducers' products */}
+        {/* Use the Optional Chaining Operator (?.) */}
+        {Object.entries(producers)?.map(([producerID, producer], index) => (
           <ProductCard
-            key={product.playerID}
-            title={product.title}
-            image={product.image}
-            warrant={product.warrant}
-            unitProduced={product.unitProduced}
-            unitWanted={product.unitWanted}
-            handleUnitWanted={(e) => handleUnitWanted(index, e)}
-            focus={product.focus}
-            handleFocus={() => handleProductFocus(index)}
+            key={producerID}
+            advertisementQuality={producer.advertisementQuality}
+            brand={producer.brand}
+            warrant={producer.warrant}
+            unitProduced={producer.unitProduced}
+            unitSelected={producer.unitSelected}
+            handleUnitSelected={(e) => handleUnitSelected(producerID, e)}
+            confirmBuy={producer.confirmBuy}
+            handleConfirmBuy={() => handleConfirmBuy(producerID)}
           />
         ))}
       </div>
+
+      {/* Confirm Window */}
+      <ConfirmWindow
+        confirmWindowEnabled={confirmWindowEnabled}
+        handleCancel={() => {
+          setConfirmWindowEnabled(false);
+        }}
+        handleSubmit={handleSubmit}
+      >
+        Advertisers may sometime exaggerate claims in their advertisements.
+      </ConfirmWindow>
+
       <div className="flex justify-center mt-5">
         <Button className="blue" handleClick={handleSubmit}>
           Submit

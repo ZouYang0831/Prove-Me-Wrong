@@ -3,7 +3,7 @@ export const Empirica = new ClassicListenersCollector();
 
 Empirica.onGameStart(({ game }) => {
   const treatment = game.get("treatment");
-  const { roundCount } = treatment;
+  const { roundCount, playerCount, brandCap } = treatment;
 
   // Add rounds with stages
   for (let i = 0; i < roundCount; i++) {
@@ -26,13 +26,32 @@ Empirica.onGameStart(({ game }) => {
 
   // Create a shuffled copy of the players array
   const shuffledPlayers = shuffleArray([...game.players]);
+
+  // Create random Brands for producers to choose
   const randomBrands = shuffleArray([
-    "Jazz",
-    "Empire",
     "Akane",
-    "Pippin",
+    "Baldwin",
+    "Blondee",
+    "Cameo",
+    "Davey",
+    "Empire",
     "Fuji",
     "Gala",
+    "Hokuto",
+    "Idared",
+    "Jazz",
+    "Jonathan",
+    "Jubilee",
+    "Lodi",
+    "Melrose",
+    "Opal",
+    "Pippin",
+    "Rome",
+    "Sansa",
+    "Winesap",
+    "Yates",
+    "York",
+    "Zestar",
   ]);
 
   // Assign roles and initial values to players
@@ -40,19 +59,17 @@ Empirica.onGameStart(({ game }) => {
     // Set initial score
     player.set("score", 0);
 
-    // Determine role and set initial wallet or capital accordingly
-    const role = index < 2 ? "consumer" : "producer";
-    player.set("role", role);
-
-    if (role === "producer") {
+    // Determine the player's role
+    if (index < playerCount / 2) {
+      player.set("role", "producer");
       player.set("capital", 100);
 
-      // Assign random brands to producers
-      player.set(
-        "randomBrands",
-        index === 2 ? randomBrands.slice(0, 3) : randomBrands.slice(3, 6)
-      );
+      // Assign a subset of random brands to the producer
+      const startIndex = index * brandCap;
+      const endIndex = (index + 1) * brandCap;
+      player.set("randomBrands", randomBrands.slice(startIndex, endIndex));
     } else {
+      player.set("role", "consumer");
       player.set("wallet", 100);
     }
   });

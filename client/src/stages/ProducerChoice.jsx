@@ -26,7 +26,7 @@ producerData: {
     unitProduced: int,
     unitTotalSold: int,
     consumers: {
-      consumerId: {
+      consumerID: {
         unitsSold: int,
         isChallenged: boolean
       }
@@ -42,7 +42,6 @@ import React, { useState } from "react";
 import { Button } from "../components/Button";
 import {
   usePlayer,
-  usePlayers,
   useGame,
   useRound,
 } from "@empirica/core/player/classic/react";
@@ -85,7 +84,7 @@ function BrandChoice({ brand, onShow, randomBrands }) {
             <option disabled value="">
               Select
             </option>
-            {randomBrands.map((brand) => (
+            {randomBrands?.map((brand) => (
               <option key={brand} value={brand}>
                 {brand}
               </option> /* key is required */
@@ -168,16 +167,34 @@ function AdvertisementQualityChoice({ setLow, setHigh }) {
 
 // Component for choosing unit produced
 function UnitProducedChoice({ unitProduced, unitCap, onShow }) {
+  // Determine the sliderWith based on the range
+  const sliderWidth = (() => {
+    switch (unitCap) {
+      case 1:
+        return "20";
+      case 2:
+      case 3:
+        return "40";
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+        return "60";
+      default:
+        return "80";
+    }
+  })();
+
   // Generate div elements for unit levels
   const unitLevels = [];
-  for (let i = 0; i < unitCap; i++) {
+  for (let i = 0; i <= unitCap; i++) {
+    // range is number of elements - 1
     unitLevels.push(
-      <div key={i} className={`w-1/${unitCap} text-left`}>
+      <div key={i} className="text-left">
         {i}
       </div>
     );
   }
-  unitLevels.push(<div key={unitCap}>{unitCap}</div>); // last number without className
 
   return (
     <div className="mb-1">
@@ -188,7 +205,7 @@ function UnitProducedChoice({ unitProduced, unitCap, onShow }) {
         Your choice: {unitProduced}
       </h2>
 
-      <div className="w-80 mx-auto flex flex-col">
+      <div className={`w-${sliderWidth} mx-auto flex flex-col justify-center`}>
         <input
           type="range"
           min="0"
@@ -196,8 +213,11 @@ function UnitProducedChoice({ unitProduced, unitCap, onShow }) {
           step="1"
           value={unitProduced}
           onChange={onShow}
+          className="cursor-pointer"
         />
-        <div className="flex text-sm">{unitLevels}</div>
+        <div className="flex flex-row text-sm justify-between">
+          {unitLevels}
+        </div>
       </div>
     </div>
   );
@@ -205,16 +225,35 @@ function UnitProducedChoice({ unitProduced, unitCap, onShow }) {
 
 // Component for choosing warrant level
 function WarrantChoice({ warrant, warrantCap, onShow }) {
+  // Determine the sliderWith based on the range
+  const sliderWidth = (() => {
+    //! There is a bug of tailwind css. The width can only be w-20, w-40, and w-60. Others will be full width
+    switch (warrantCap) {
+      case 1:
+        return "20";
+      case 2:
+      case 3:
+        return "40";
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+        return "60";
+      default:
+        return "80";
+    }
+  })();
+
   // Generate div elements for warrant levels
   const warrantLevels = [];
-  for (let i = 0; i <= warrantCap - 1; i++) {
+  for (let i = 0; i <= warrantCap; i++) {
+    // range is number of elements - 1
     warrantLevels.push(
-      <div key={i} className="w-1/4">
+      <div key={i} className="text-left">
         ${i}
       </div>
     );
   }
-  warrantLevels.push(<div key={warrantCap}>${warrantCap}</div>); // last number without className
 
   return (
     <div className="mb-1">
@@ -225,7 +264,7 @@ function WarrantChoice({ warrant, warrantCap, onShow }) {
         Your choice: ${warrant}
       </h2>
 
-      <div className="w-80 mx-auto flex flex-col">
+      <div className={`w-${sliderWidth} mx-auto flex flex-col`}>
         <input
           type="range"
           min="0"
@@ -233,8 +272,11 @@ function WarrantChoice({ warrant, warrantCap, onShow }) {
           step="1"
           value={warrant}
           onChange={onShow}
+          className="cursor-pointer"
         />
-        <div className="flex text-sm">{warrantLevels}</div>
+        <div className="flex flex-row text-sm justify-between">
+          {warrantLevels}
+        </div>
       </div>
     </div>
   );
@@ -325,17 +367,9 @@ function Choices() {
           productQuality: productionQuality,
           advertisementQuality: advertisementQuality,
           unitProduced: unitProduced,
+          ...(reputationSystemEnabled && { brand: brand }),
+          ...(warrantEnabled && { warrant: warrant }),
         };
-
-        // Include brand data if enabled
-        if (reputationSystemEnabled) {
-          producerData["brand"] = brand;
-        }
-
-        // Include warrant data if enabled
-        if (warrantEnabled) {
-          producerData["warrant"] = warrant;
-        }
 
         // Set player data and submit stage
         player.set(roundName, producerData);
@@ -410,7 +444,7 @@ function Choices() {
         }}
         handleSubmit={handleSubmit}
       >
-        Your choice to exaggerate the product quality in your advertisement
+        Your choose to exaggerate the product quality in your advertisement
       </ConfirmWindow>
 
       {/* Submit Button */}
@@ -426,42 +460,42 @@ function Choices() {
   );
 }
 
-// Component for displaying the leaderboard
-function LeaderBoard() {
-  const players = usePlayers();
+// // Component for displaying the leaderboard
+// function LeaderBoard() {
+//   const players = usePlayers();
 
-  // Assuming 'players' is an array of player objects with a 'get' method
-  const playerScores = players.map((player) => ({
-    score: player.get("score") || 0,
-    id: player.id || "Unknown", // Default to "Unknown" if id is not present
-  }));
+//   // Assuming 'players' is an array of player objects with a 'get' method
+//   const playerScores = players.map((player) => ({
+//     score: player.get("score") || 0,
+//     id: player.id || "Unknown", // Default to "Unknown" if id is not present
+//   }));
 
-  // Sorting the scores in descending order
-  const sortedPlayers = playerScores.sort((a, b) => b.score - a.score);
+//   // Sorting the scores in descending order
+//   const sortedPlayers = playerScores.sort((a, b) => b.score - a.score);
 
-  // Generating the table content
-  const tableContent = sortedPlayers.map((player, index) => (
-    <tr key={index} className="border-b">
-      <td className="p-2">{player.id}</td>
-      <td className="p-2">{player.score}</td>
-    </tr>
-  ));
+//   // Generating the table content
+//   const tableContent = sortedPlayers.map((player, index) => (
+//     <tr key={index} className="border-b">
+//       <td className="p-2">{player.id}</td>
+//       <td className="p-2">{player.score}</td>
+//     </tr>
+//   ));
 
-  return (
-    <div className="max-w-lg mx-auto my-8 p-4 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-semibold mb-4">Leaderboard</h2>
-      <table className="w-full">
-        <thead>
-          <tr>
-            <th className="py-2">Player</th>
-            <th className="py-2">Score</th>
-          </tr>
-        </thead>
-        <tbody>{tableContent}</tbody>
-      </table>
-    </div>
-  );
-}
+//   return (
+//     <div className="max-w-lg mx-auto my-8 p-4 bg-white rounded-lg shadow-lg">
+//       <h2 className="text-2xl font-semibold mb-4">Leaderboard</h2>
+//       <table className="w-full">
+//         <thead>
+//           <tr>
+//             <th className="py-2">Player</th>
+//             <th className="py-2">Score</th>
+//           </tr>
+//         </thead>
+//         <tbody>{tableContent}</tbody>
+//       </table>
+//     </div>
+//   );
+// }
 
 // Main component for the producer's choices
 export function ProducerChoice() {
@@ -478,7 +512,7 @@ export function ProducerChoice() {
         <Instruction />
         <Choices />
       </div>
-      <LeaderBoard />
+      {/* <LeaderBoard /> */}
     </div>
   );
 }
