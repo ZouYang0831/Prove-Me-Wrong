@@ -51,13 +51,15 @@ factors:
       - value: 10
   - name: brandCap
     desc: brandCap determines the number of available brand names for producers.
-      Producers are limited to choosing only one brand for each round.
+          Producers are limited to choosing only one brand for each round.
+          Have effect only if reputationSystemEnabled is set to true.
     values:
       - value: 2
       - value: 3
       - value: 4
   - name: warrantCap
     desc: Determines the maximum amount of warrant a producer can put for the product.
+          Have effect only if warrantEnabled is set to true.
     values:
       - value: 4
       - value: 5

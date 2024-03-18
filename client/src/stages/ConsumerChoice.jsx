@@ -92,6 +92,7 @@ function ProductCard({
 }) {
   // Render a message if no units are produced
   if (unitProduced === 0) {
+    //TODO submit some basic information
     return (
       <div
         className={`w-60 px-5 py-6 bg-gray-200 rounded-md flex flex-col items-center text-gray-600 text-center ${
