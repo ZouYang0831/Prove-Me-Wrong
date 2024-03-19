@@ -244,32 +244,37 @@ function Choices() {
 
   // Function to handle confirming to buy
   const handleConfirmBuy = (producerID) => {
+    const producer = producers[producerID];
+
+    // Ensure confirmBuy is true and unitSelected is not 0 before toggling
+    if (producer["confirmBuy"] && producer["unitSelected"] !== 0) {
+      setProducers((prevProducers) => ({
+        ...prevProducers,
+        [producerID]: {
+          ...producer,
+          unitSelected: 0,
+          confirmBuy: !producer.confirmBuy,
+        },
+      }));
+    }
+  };
+
+  // Function to handle unit Wanted
+  // Automatically switch witch confirmBuy based on the selected value
+  const handleUnitSelected = (producerID, e) => {
+    const unitSelected = parseInt(e.target.value);
+    const confirmBuy = unitSelected !== 0;
+
+    // Update the unitSelected and confirmBuy of the selected producer
     setProducers((prevProducers) => ({
       ...prevProducers,
       [producerID]: {
         ...prevProducers[producerID],
-        confirmBuy: !prevProducers[producerID].confirmBuy,
+        unitSelected: unitSelected,
+        confirmBuy: confirmBuy,
       },
     }));
   };
-
-// Function to handle unit Wanted
-// Automatically switch witch confirmBuy based on the selected value
-const handleUnitSelected = (producerID, e) => {
-  const unitSelected = parseInt(e.target.value);
-  const confirmBuy = unitSelected !== 0;
-
-  // Update the unitSelected and confirmBuy of the selected producer
-  setProducers((prevProducers) => ({
-    ...prevProducers,
-    [producerID]: {
-      ...prevProducers[producerID],
-      unitSelected: unitSelected,
-      confirmBuy: confirmBuy,
-    },
-  }));
-};
-
 
   // Function to handle submission
   const handleSubmit = () => {
