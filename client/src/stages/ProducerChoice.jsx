@@ -14,6 +14,7 @@
 /* 
 producerData: {
   id: String,
+  name: String,
   role: String,
   capital: int,
   score: int,
@@ -24,11 +25,12 @@ producerData: {
     brand: String,
     warrant: int,
     unitProduced: int,
-    unitTotalSold: int,
+    unitSold: int,
     consumers: {
       consumerID: {
-        unitsSold: int,
+        unitSoldByConsumer: int,
         isChallenged: boolean
+        scoreChangeByConsumer: int,
       }
     },
     scoreChange: int,
@@ -363,7 +365,7 @@ function Choices() {
       } else {
         // Get the producer data for submitting
         const roundName = round.get("name");
-        const producerData = {
+        const roundData = {
           productQuality: productionQuality,
           advertisementQuality: advertisementQuality,
           unitProduced: unitProduced,
@@ -372,7 +374,7 @@ function Choices() {
         };
 
         // Set player data and submit stage
-        player.set(roundName, producerData);
+        player.set(roundName, roundData);
         player.stage.set("submit", true);
       }
     }
@@ -412,15 +414,14 @@ function Choices() {
       />
 
       {/* UnitProduced */}
-      {warrantEnabled && (
-        <UnitProducedChoice
-          unitProduced={unitProduced}
-          unitCap={unitCap}
-          onShow={(e) => {
-            setUnitProduced(parseInt(e.target.value));
-          }}
-        />
-      )}
+
+      <UnitProducedChoice
+        unitProduced={unitProduced}
+        unitCap={unitCap}
+        onShow={(e) => {
+          setUnitProduced(parseInt(e.target.value));
+        }}
+      />
 
       {/* Warrant */}
       {warrantEnabled && (

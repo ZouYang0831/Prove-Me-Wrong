@@ -1,3 +1,15 @@
+/* 
+  File: callbacks.js
+
+  Description: 
+  This file contains game logic for an Empirica game.
+  It defines functions for initializing game rounds, stages,
+  assigning roles and values to players, and handling stage events.
+
+  Author: Changxuan Fan
+  Date Created: 03/19/2024
+*/
+
 import { ClassicListenersCollector } from "@empirica/core/admin/classic";
 export const Empirica = new ClassicListenersCollector();
 
@@ -209,21 +221,23 @@ Empirica.onStageStart(({ stage }) => {});
 
 Empirica.onStageEnded(({ stage }) => {
   if (stage.get("name") === "ConsumerChoice") {
-    const treatment = stage.currentGame.get("treatment");
     const players = stage.currentGame.players;
     const roundName = stage.round.get("name");
 
+    /*     
+      ConsumerData Update
+    */
     // Add productQuality to consumerData
     for (const consumer of players) {
       if (consumer.get("role") === "consumer") {
-        const producerData = consumer.get(roundName);
+        const consumerRoundData = consumer.get(roundName);
         for (const producer of players) {
           if (producer.get("role") === "producer") {
-            producerData["producers"][producer.id]["productQuality"] =
+            consumerRoundData["producers"][producer.id]["productQuality"] =
               producer.get(roundName)["productQuality"];
           }
         }
-        consumer.set(roundName, producerData);
+        consumer.set(roundName, consumerRoundData);
       }
     }
 
@@ -251,10 +265,10 @@ Empirica.onStageEnded(({ stage }) => {
             for (const key in allUnitSelected) {
               // allUnitSelected is a dictionary, so use in
               if (consumer.id === key) {
-                const producers = consumer.get(roundName);
-                producers["producers"][producer.id]["unitReceived"] =
+                const consuemrRoundData = consumer.get(roundName);
+                consuemrRoundData["producers"][producer.id]["unitReceived"] =
                   allUnitSelected[key];
-                consumer.set(roundName, producers);
+                consumer.set(roundName, consuemrRoundData);
               }
             }
           }
@@ -262,8 +276,103 @@ Empirica.onStageEnded(({ stage }) => {
       }
     }
 
-    // update scoreChange for consumers
+    // update scoreChangeByProducer and scoreChange for one round
+    for (const consumer of players) {
+      if (consumer.get("role") === "consumer") {
+        // Initialize score change for one round
+        let roundScoreChange = 0;
     
+        const consumerRoundData = consumer.get(roundName);
+    
+        // Loop through producers
+        for (const producer of players) {
+          if (producer.get("role") === "producer") {
+            const producerInfo = consumerRoundData["producers"][producer.id];
+            const productQuality = producerInfo["productQuality"];
+            const advertisementQuality = producerInfo["advertisementQuality"];
+            const unitReceived = producerInfo["unitReceived"];
+    
+            // Determine one unit's score change based on product and advertisement quality
+            let unitScoreChange = 0;
+            if (productQuality === "low") {
+              unitScoreChange = advertisementQuality === "low" ? 2 : -4;
+            } else {
+              unitScoreChange = advertisementQuality === "low" ? 10 : 4;
+            }
+    
+            // Calculate score change of each producer's product
+            const scoreChangeByProducer = unitReceived * unitScoreChange;
+            consumerRoundData["producers"][producer.id]["scoreChangeByProducer"] = scoreChangeByProducer;
+    
+            // Accumulate score change for this producer's product
+            roundScoreChange += scoreChangeByProducer;
+          }
+        }
+    
+        // Update the consumer's round score change
+        consumerRoundData["scoreChange"] = roundScoreChange;
+    
+        // Update the consumer's data for each producer's product and the whole round
+        consumer.set(roundName, consumerRoundData);
+      }
+    }
+    
+
+    /*
+      ProducerData Update
+    */
+    // Add consumers dictionary to producerData
+    // including attributes: scoreChange and totalScoreChange
+    for (const producer of players) {
+      if (producer.get("role") === "producer") {
+        const producerRoundData = producer.get(roundName);
+
+        // Initialize consumers dictionary
+        producerRoundData["consumers"] = {};
+
+        const productQuality = producerRoundData["productQuality"];
+        const advertisementQuality = producerRoundData["advertisementQuality"];
+
+        // Initialize unitSold and scoreChange
+        let unitSold = 0;
+        let scoreChange = 0;
+
+        // Determine unitScoreChange based on product and advertisement quality
+        let unitScoreChange = 0;
+        if (productQuality === "low") {
+          unitScoreChange = advertisementQuality === "low" ? 2 : -8;
+        } else {
+          unitScoreChange = advertisementQuality === "low" ? -2 : 4;
+        }
+
+        // Loop through consumers to update producerRoundData
+        for (const consumer of players) {
+          if (consumer.get("role") === "consumer") {
+            // Get unitSoldByConsumer and scoreChangeByConsumer
+            const unitSoldByConsumer =
+              consumer.get(roundName)["producers"][producer.id]["unitReceived"];
+            const scoreChangeByConsumer = unitScoreChange * unitSoldByConsumer;
+
+            // Update producerRoundData for each consumer
+            producerRoundData["consumers"][consumer.id] = {
+              unitSoldByConsumer: unitSoldByConsumer,
+              scoreChangeByConsumer: scoreChangeByConsumer,
+            };
+
+            // Update unitSold and scoreChange
+            unitSold += unitSoldByConsumer;
+            scoreChange += scoreChangeByConsumer;
+          }
+        }
+
+        // Update producerRoundData with total unitSold and scoreChange
+        producerRoundData["unitSold"] = unitSold;
+        producerRoundData["scoreChange"] = scoreChange;
+
+        producer.set(roundName, producerRoundData);
+      }
+    }
+
   }
 });
 

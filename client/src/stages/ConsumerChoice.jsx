@@ -17,10 +17,11 @@
 /* 
 consumerData: {
   consumerId: String,
+  name: String,
   role: String,
   wallet: int,
   score: int,
-  round1Info: {
+  round1: {
     producers: {
       producerID: {
         productQuality: String,
@@ -31,7 +32,8 @@ consumerData: {
         unitSelected: int,
         unitReceived: int,
         confirmBuy: boolean,
-        isChallenged: boolean
+        isChallenged: boolean,
+        scoreChangeByProducer: int
       }
     },
     scoreChange: int
@@ -219,7 +221,7 @@ function Choices() {
 
   // Effect to set all products' state from producers' data
   useEffect(() => {
-    // Initialize producers information
+    // producersMap will eventually be in setProducers()
     const producersMap = players.reduce((acc, player) => {
       if (player.get("role") === "producer") {
         const producerID = player.id;
@@ -277,7 +279,8 @@ function Choices() {
       const roundName = round.get("name");
 
       // Set player data and submit stage
-      player.set(roundName, { producers: producers });
+      const roundData = { "producers": producers };
+      player.set(roundName, roundData);
       player.stage.set("submit", true);
     }
   };
