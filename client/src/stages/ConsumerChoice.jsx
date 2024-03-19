@@ -98,7 +98,7 @@ function ProductCard({
     return (
       <div
         className={`w-60 px-5 py-6 bg-gray-200 rounded-md flex flex-col items-center text-gray-600 text-center ${
-          brand ? "h-115" : "h-108"
+          brand ? "h-113" : "h-106"
         }`}
       >
         <span className="text-xl font-bold">No Production</span>
@@ -139,7 +139,7 @@ function ProductCard({
     <div
       className={`relative w-60 px-5 py-6 bg-gray-200 rounded-md duration-300 ${
         confirmBuy ? "scale-105 bg-gray-400" : ""
-      } ${brand ? "h-115" : "h-108"}`}
+      } ${brand ? "h-113" : "h-106"}`}
     >
       {/* Render the warrant tag if warrant is larger than 0 */}
       {warrant > 0 && (
@@ -163,7 +163,7 @@ function ProductCard({
         <h2 className="text-xl">Select units: {unitSelected}</h2>
 
         {/* Slider for selecting unit quantity */}
-        <div className={`w-${sliderWidth} flex flex-col`}>
+        <div className={`w-${sliderWidth} flex flex-col  mb-1`}>
           <input
             type="range"
             min="0"
@@ -178,9 +178,11 @@ function ProductCard({
           </div>
         </div>
 
+        {/* Toggle Switch */}
         <ToggleSwitch
           color={"green"}
           disabled={false}
+          disabledWhenOff={true}
           checked={confirmBuy}
           onChange={handleConfirmBuy}
         />

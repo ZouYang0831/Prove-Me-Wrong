@@ -9,9 +9,9 @@
  *  @param {string} [props.color="green"] - The color of the toggle switch. Can be "green", "red", "blue".
  *  @param {boolean} [props.disabled=false] - Specifies whether the toggle switch is disabled or not.
  *  @param {boolean} [props.checked=false] - Specifies whether the toggle switch is checked (on) or not.
- *  @param {function} props.onChange - The event handler function called when the toggle switch is clicked. 
+ *  @param {function} props.onChange - The event handler function called when the toggle switch is clicked.
  *  @returns {JSX.Element} - Returns JSX for the ConfirmWindow component.
- * 
+ *
  * Author: Changxuan Fan
  * Created Date: 3/19/2024
  */
@@ -37,11 +37,11 @@ const colorOptions = {
   },
 };
 
-// Define the ToggleSwitch component
 export function ToggleSwitch({
   color = "green",
-  disabled = false,
   checked = false,
+  disabled = false,
+  disabledWhenOff = false,
   onChange,
 }) {
   // Destructure color options based on the provided color prop, fallback to default if color is not found
@@ -52,16 +52,20 @@ export function ToggleSwitch({
     <div className={`flex cursor-pointer`} onClick={onChange}>
       {/* Render the switch button */}
       <button
-        className={`rounded-full p-1 duration-300 ease-in-out w-14 h-7 ${
-          checked ? onColor : offColor
-        } ${disabled ? "cursor-not-allowed" : ""}`}
         disabled={disabled} // Set the disabled state of the button
+        className={`
+          rounded-full p-1 duration-300 ease-in-out w-14 h-7 
+          ${checked ? onColor : offColor} 
+          ${disabled ? "cursor-not-allowed" : ""} 
+          ${disabledWhenOff ? (checked ? "" : "cursor-not-allowed") : ""}
+        `}
       >
         {/* Render the switch thumb */}
         <div
-          className={`bg-white w-5 h-5 rounded-full shadow-md transform duration-300 ease-in-out ${
-            checked ? `translate-x-7` : "translate-x-0"
-          }`}
+          className={`
+            bg-white w-5 h-5 rounded-full shadow-md transform duration-300 ease-in-out 
+            ${checked ? `translate-x-7` : "translate-x-0"}
+          `}
         />
       </button>
     </div>
