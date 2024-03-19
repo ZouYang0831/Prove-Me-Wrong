@@ -1,11 +1,13 @@
 import React from "react";
 import { Timer } from "../components/Timer";
-import { useRound, useStage } from "@empirica/core/player/classic/react";
+import { useRound, useStage, usePlayer } from "@empirica/core/player/classic/react";
 
 // Navbar Component
-export function Navbar({ stageTitle, rightAction, onRightClick, showTimer = false, showRoundsStages = false }) {
+export function Navbar({ stageTitle, showTimer = false, showRoundsStages = false, showScore = false }) {
+  const player = usePlayer();
   const round = useRound();
   const stage = useStage();
+  const score = player.get("score");
 
   return (
     <nav className="flex justify-between items-center py-10 bg-black text-white" style={{ height: '16%' }}>
@@ -35,10 +37,11 @@ export function Navbar({ stageTitle, rightAction, onRightClick, showTimer = fals
 
       {/* Right Section */}
       <div className="flex-1 flex justify-end">
-        {rightAction && (
-          <button onClick={onRightClick} className="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded">
-            {rightAction}
-          </button>
+      {showScore && (
+          <div className="text-right mr-8">
+            <div className="text-3xl font-semibold">Score</div>
+            <div className="text-2xl font-semibold">{score}</div>
+          </div>
         )}
       </div>
     </nav>
