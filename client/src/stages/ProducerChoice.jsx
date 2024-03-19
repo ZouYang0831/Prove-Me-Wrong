@@ -48,6 +48,8 @@ import {
   useRound,
 } from "@empirica/core/player/classic/react";
 import { ConfirmWindow } from "../components/ConfirmWindow";
+import { Navbar } from "../components/Navbar";
+import { Footer } from "../components/Footer";
 
 // Component for displaying game instructions
 function Instruction() {
@@ -508,12 +510,13 @@ export function ProducerChoice() {
   }
 
   return (
-    <div className="flex">
-      <div className="flex flex-col  ">
+    <div className="flex flex-col min-h-screen">
+      <Navbar showTime={true} />
+      <div className="flex-grow">
         <Instruction />
         <Choices />
       </div>
-      {/* <LeaderBoard /> */}
+      <Footer />
     </div>
   );
 }
