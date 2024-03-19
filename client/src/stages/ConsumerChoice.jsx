@@ -1,7 +1,7 @@
 /**
  * Filename: ConsumerChoice.jsx
- * 
- * 
+ *
+ *
  * Description: This file contains React components for displaying game instructions and managing consumer choices in the game interface.
  *
  * Components:
@@ -9,7 +9,7 @@
  * 2. ProductCard: Component for displaying producers' product cards.
  * 3. Choices: Component for managing consumer choices.
  * 4. ConsumerChoice: Main component for the consumer's choices.
- * 
+ *
  * Author: Changxuan Fan
  * Date Crated: 3/14/2024
  */
@@ -94,7 +94,6 @@ function ProductCard({
 }) {
   // Render a message if no units are produced
   if (unitProduced === 0) {
-    //TODO submit some basic information
     return (
       <div
         className={`w-60 px-5 py-6 bg-gray-200 rounded-md flex flex-col items-center text-gray-600 text-center ${
@@ -130,11 +129,8 @@ function ProductCard({
     switch (unitProduced) {
       case 1:
         return 20;
-      case 2:
-      case 3:
-        return 40;
       default:
-        return 50;
+        return 40;
     }
   })();
 
@@ -157,7 +153,6 @@ function ProductCard({
         <h2 className="text-2xl font-medium">{advertisementQuality} Quality</h2>
         <img
           src={imagePath}
-          onClick={handleConfirmBuy}
           alt="Product"
           className="my-2 w-40 h-40 rounded-md cursor-pointer"
         />
@@ -196,7 +191,6 @@ function ProductCard({
               }`}
             />
           </button>
-          <p className="ml-2 text-2xl">{confirmBuy ? "On" : "Off"}</p>
         </div>
       </div>
     </div>
@@ -248,18 +242,6 @@ function Choices() {
     setProducers(producersMap);
   }, []);
 
-  // Function to handle unit Wanted
-  const handleUnitSelected = (producerID, e) => {
-    // Update the unitSelected of the selected producer
-    setProducers((prevProducers) => ({
-      ...prevProducers,
-      [producerID]: {
-        ...prevProducers[producerID],
-        unitSelected: parseInt(e.target.value),
-      },
-    }));
-  };
-
   // Function to handle confirming to buy
   const handleConfirmBuy = (producerID) => {
     setProducers((prevProducers) => ({
@@ -271,15 +253,33 @@ function Choices() {
     }));
   };
 
+// Function to handle unit Wanted
+// Automatically switch witch confirmBuy based on the selected value
+const handleUnitSelected = (producerID, e) => {
+  const unitSelected = parseInt(e.target.value);
+  const confirmBuy = unitSelected !== 0;
+
+  // Update the unitSelected and confirmBuy of the selected producer
+  setProducers((prevProducers) => ({
+    ...prevProducers,
+    [producerID]: {
+      ...prevProducers[producerID],
+      unitSelected: unitSelected,
+      confirmBuy: confirmBuy,
+    },
+  }));
+};
+
+
   // Function to handle submission
   const handleSubmit = () => {
     if (accuracyNudgeEnabled && !confirmWindowEnabled) {
-      setConfirmWindowEnabled(true);
+      setConfirmWindowEnabled(true); //! What if consumers did not choose to buy anything?
     } else {
       const roundName = round.get("name");
 
       // Set player data and submit stage
-      const roundData = { "producers": producers };
+      const roundData = { producers: producers };
       player.set(roundName, roundData);
       player.stage.set("submit", true);
     }
