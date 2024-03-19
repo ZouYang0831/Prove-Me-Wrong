@@ -178,24 +178,7 @@ function ProductCard({
           </div>
         </div>
 
-        {/* Toggle switch for confirming buy */}
-        {/* <div className="flex mt-3 cursor-pointer " onClick={handleConfirmBuy}>
-          <p className="mr-2 text-2xl">Buy?</p>
-          <button
-            className={`w-14 rounded-full p-1 duration-300 ease-in-out ${
-              confirmBuy ? "bg-gray-300" : "bg-gray-400"
-            }`}
-          >
-            <div
-              className={`bg-white w-5 h-5 rounded-full shadow-md transform duration-300 ease-in-out ${
-                confirmBuy ? "translate-x-7" : "translate-x-0"
-              }`}
-            />
-          </button>
-        </div> */}
-
         <ToggleSwitch
-          size={1}
           color={"green"}
           disabled={false}
           checked={confirmBuy}
