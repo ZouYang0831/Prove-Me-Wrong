@@ -511,7 +511,7 @@ export function ProducerChoice() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar showTime={true} />
+      <Navbar showTimer={true} showRoundsStages={true} />
       <div className="flex-grow">
         <Instruction />
         <Choices />

@@ -136,7 +136,7 @@ Empirica.onGameStart(({ game }) => {
 
   // Add rounds with stages
   for (let i = 0; i < roundCount; i++) {
-    const round = game.addRound({ name: `Round${i}` });
+    const round = game.addRound({ name: `Round ${i}` });
 
     // Add Select Role stage in the beginning only for the first round
     if (i === 0) {
