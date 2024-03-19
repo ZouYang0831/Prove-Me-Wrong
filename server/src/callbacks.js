@@ -281,9 +281,9 @@ Empirica.onStageEnded(({ stage }) => {
       if (consumer.get("role") === "consumer") {
         // Initialize score change for one round
         let roundScoreChange = 0;
-    
+
         const consumerRoundData = consumer.get(roundName);
-    
+
         // Loop through producers
         for (const producer of players) {
           if (producer.get("role") === "producer") {
@@ -291,7 +291,7 @@ Empirica.onStageEnded(({ stage }) => {
             const productQuality = producerInfo["productQuality"];
             const advertisementQuality = producerInfo["advertisementQuality"];
             const unitReceived = producerInfo["unitReceived"];
-    
+
             // Determine one unit's score change based on product and advertisement quality
             let unitScoreChange = 0;
             if (productQuality === "low") {
@@ -299,24 +299,28 @@ Empirica.onStageEnded(({ stage }) => {
             } else {
               unitScoreChange = advertisementQuality === "low" ? 10 : 4;
             }
-    
+
             // Calculate score change of each producer's product
             const scoreChangeByProducer = unitReceived * unitScoreChange;
-            consumerRoundData["producers"][producer.id]["scoreChangeByProducer"] = scoreChangeByProducer;
-    
+            consumerRoundData["producers"][producer.id][
+              "scoreChangeByProducer"
+            ] = scoreChangeByProducer;
+
             // Accumulate score change for this producer's product
             roundScoreChange += scoreChangeByProducer;
           }
         }
-    
+
         // Update the consumer's round score change
         consumerRoundData["scoreChange"] = roundScoreChange;
-    
+
         // Update the consumer's data for each producer's product and the whole round
         consumer.set(roundName, consumerRoundData);
+
+        // Update the score
+        consumer.set("score", consumer.get("score") + roundScoreChange);
       }
     }
-    
 
     /*
       ProducerData Update
@@ -370,9 +374,11 @@ Empirica.onStageEnded(({ stage }) => {
         producerRoundData["scoreChange"] = scoreChange;
 
         producer.set(roundName, producerRoundData);
+
+        // Update score
+        producer.set("score", producer.get("score") + scoreChange);
       }
     }
-
   }
 });
 
