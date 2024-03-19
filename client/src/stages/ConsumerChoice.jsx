@@ -45,6 +45,7 @@ consumerData: {
 
 import React, { useState, useEffect } from "react";
 import { Button } from "../components/Button";
+import { ToggleSwitch } from "../components/ToggleSwitch";
 import {
   usePlayer,
   usePlayers,
@@ -178,7 +179,7 @@ function ProductCard({
         </div>
 
         {/* Toggle switch for confirming buy */}
-        <div className="flex mt-3 cursor-pointer " onClick={handleConfirmBuy}>
+        {/* <div className="flex mt-3 cursor-pointer " onClick={handleConfirmBuy}>
           <p className="mr-2 text-2xl">Buy?</p>
           <button
             className={`w-14 rounded-full p-1 duration-300 ease-in-out ${
@@ -191,7 +192,15 @@ function ProductCard({
               }`}
             />
           </button>
-        </div>
+        </div> */}
+
+        <ToggleSwitch
+          size={1}
+          color={"green"}
+          disabled={false}
+          checked={confirmBuy}
+          onChange={handleConfirmBuy}
+        />
       </div>
     </div>
   );
