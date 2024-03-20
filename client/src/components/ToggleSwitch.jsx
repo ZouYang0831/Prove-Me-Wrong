@@ -7,8 +7,9 @@
  *
  * @param {Object} props - The props object containing configuration options for the ToggleSwitch component.
  *  @param {string} [props.color="green"] - The color of the toggle switch. Can be "green", "red", "blue".
- *  @param {boolean} [props.disabled=false] - Specifies whether the toggle switch is disabled or not.
- *  @param {boolean} [props.checked=false] - Specifies whether the toggle switch is checked (on) or not.
+ *  @param {boolean} [props.disabled=false] - Determine if toggle switch is disabled or not.
+ *  @param {boolean} [props.disabledWhenOff=false] - Determine if toggle switch is disabled or not only when swithc is off.
+ *  @param {boolean} [props.checked=false] - Determine if toggle switch is checked (on) or not.
  *  @param {function} props.onChange - The event handler function called when the toggle switch is clicked.
  *  @returns {JSX.Element} - Returns JSX for the ConfirmWindow component.
  *

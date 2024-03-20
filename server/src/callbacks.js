@@ -81,11 +81,17 @@ function scaleUnits(unitDict, limit) {
   // Calculate sum of unit values
   const unitSum = sumValues(unitDict);
 
+  // return the original unitDict
+  if (unitSum <= limit) {
+    return unitDict;
+  }
+
   // Randomly Scale Down value(s) one by one if the sum exceeds the limit
   if (unitSum > limit) {
     const scaleFactor = limit / unitSum;
 
     scaledDict = scaleValues(unitDict, scaleFactor);
+    console.log("scaledDict", scaledDict);
     const decimalDict = decimalParts(scaledDict);
 
     // Round the scaled values
@@ -93,10 +99,11 @@ function scaleUnits(unitDict, limit) {
 
     // Calculate the number of elements to adjust
     const numOfElements = sumValues(Object.values(scaledDict)) - limit;
+    console.log("numOfElements", numOfElements);
 
     if (numOfElements > 0) {
       const selectedKeys = getKeys(decimalDict, numOfElements, 0.5);
-
+      console.log("selectedKeys1", selectedKeys);
       // Adjust values down for selected keys
       selectedKeys.forEach((key) => {
         if (scaledDict.hasOwnProperty(key)) {
@@ -115,6 +122,7 @@ function scaleUnits(unitDict, limit) {
         Math.abs(numOfElements),
         largestElement
       );
+      console.log("selectedKeys2", selectedKeys);
 
       // Adjust values up for selected keys
       selectedKeys.forEach((key) => {
@@ -126,6 +134,7 @@ function scaleUnits(unitDict, limit) {
     // If numOfElements == 0, just return.
   }
 
+  console.log("scaledDict", scaledDict);
   // Return the scaled dictionary
   return scaledDict;
 }
@@ -237,6 +246,9 @@ Empirica.onStageEnded(({ stage }) => {
               producer.get(roundName)["productQuality"];
           }
         }
+        console.log("first", consumerRoundData);
+        console.log("skdfh", consumer.get("score"));
+        console.log();
         consumer.set(roundName, consumerRoundData);
       }
     }
@@ -257,20 +269,29 @@ Empirica.onStageEnded(({ stage }) => {
 
         // Scale down units based on unitProduced
         const unitProduced = producer.get(roundName)["unitProduced"];
+        console.log("allUnitSelected", allUnitSelected);
+        console.log("unitProduced", unitProduced);
         allUnitSelected = scaleUnits(allUnitSelected, unitProduced);
+        console.log();
+
+        console.log("second", allUnitSelected);
+        console.log();
 
         // Update unitReceived values for consumers
         for (const consumer of players) {
           if (consumer.get("role") === "consumer") {
+            const consuemrRoundData = consumer.get(roundName);
             for (const key in allUnitSelected) {
               // allUnitSelected is a dictionary, so use in
               if (consumer.id === key) {
-                const consuemrRoundData = consumer.get(roundName);
                 consuemrRoundData["producers"][producer.id]["unitReceived"] =
                   allUnitSelected[key];
-                consumer.set(roundName, consuemrRoundData);
               }
             }
+            console.log("third", consuemrRoundData);
+            console.log();
+
+            consumer.set(roundName, consuemrRoundData);
           }
         }
       }
@@ -280,7 +301,8 @@ Empirica.onStageEnded(({ stage }) => {
     for (const consumer of players) {
       if (consumer.get("role") === "consumer") {
         // Initialize score change for one round
-        let roundScoreChange = 0;
+        let scoreChange = 0;
+        let walletChange = 0;
 
         const consumerRoundData = consumer.get(roundName);
 
@@ -288,9 +310,8 @@ Empirica.onStageEnded(({ stage }) => {
         for (const producer of players) {
           if (producer.get("role") === "producer") {
             const producerInfo = consumerRoundData["producers"][producer.id];
-            const productQuality = producerInfo["productQuality"];
-            const advertisementQuality = producerInfo["advertisementQuality"];
-            const unitReceived = producerInfo["unitReceived"];
+            const { productQuality, advertisementQuality, unitReceived } =
+              producerInfo;
 
             // Determine one unit's score change based on product and advertisement quality
             let unitScoreChange = 0;
@@ -301,24 +322,34 @@ Empirica.onStageEnded(({ stage }) => {
             }
 
             // Calculate score change of each producer's product
-            const scoreChangeByProducer = unitReceived * unitScoreChange;
-            consumerRoundData["producers"][producer.id][
-              "scoreChangeByProducer"
-            ] = scoreChangeByProducer;
+            let scoreChangeByProducer;
+            if (unitReceived == 0) {
+              scoreChangeByProducer = 0;
+            } else {
+              scoreChangeByProducer = unitReceived * unitScoreChange;
+            }
+            producerInfo["scoreChangeByProducer"] = scoreChangeByProducer;
 
             // Accumulate score change for this producer's product
-            roundScoreChange += scoreChangeByProducer;
+            scoreChange += scoreChangeByProducer;
+
+            const price = productQuality === "low" ? 4 : 10;
+            walletChange += unitReceived * price;
           }
         }
 
         // Update the consumer's round score change
-        consumerRoundData["scoreChange"] = roundScoreChange;
+        consumerRoundData["scoreChange"] = scoreChange;
+        console.log("fourth", consumerRoundData);
+        console.log();
 
         // Update the consumer's data for each producer's product and the whole round
         consumer.set(roundName, consumerRoundData);
 
         // Update the score
-        consumer.set("score", consumer.get("score") + roundScoreChange);
+        consumer.set("score", consumer.get("score") + scoreChange);
+
+        consumer.set("wallet", consumer.get("wallet") - walletChange);
       }
     }
 
@@ -336,6 +367,7 @@ Empirica.onStageEnded(({ stage }) => {
 
         const productQuality = producerRoundData["productQuality"];
         const advertisementQuality = producerRoundData["advertisementQuality"];
+        const unitProduced = producerRoundData["unitProduced"];
 
         // Initialize unitSold and scoreChange
         let unitSold = 0;
@@ -344,9 +376,9 @@ Empirica.onStageEnded(({ stage }) => {
         // Determine unitScoreChange based on product and advertisement quality
         let unitScoreChange = 0;
         if (productQuality === "low") {
-          unitScoreChange = advertisementQuality === "low" ? 2 : -8;
+          unitScoreChange = advertisementQuality === "low" ? 2 : 8;
         } else {
-          unitScoreChange = advertisementQuality === "low" ? -2 : 4;
+          unitScoreChange = advertisementQuality === "low" ? -10 : 4;
         }
 
         // Loop through consumers to update producerRoundData
@@ -371,12 +403,27 @@ Empirica.onStageEnded(({ stage }) => {
 
         // Update producerRoundData with total unitSold and scoreChange
         producerRoundData["unitSold"] = unitSold;
+
+        // Delete scores for leftover products
+        const cost = productQuality === "low" ? 2 : 4;
+
+        const unitLeft = unitProduced - unitSold;
+        const scoreUnitLeftDeducted = unitLeft * cost;
+
+        scoreChange = scoreChange - scoreUnitLeftDeducted;
+
+        // Update scoreChnage
+        producerRoundData["unitLeft"] = unitLeft;
+        producerRoundData["scoreUnitLeftDeducted"] = scoreUnitLeftDeducted;
         producerRoundData["scoreChange"] = scoreChange;
 
+        // Update producerRoundData
         producer.set(roundName, producerRoundData);
 
         // Update score
         producer.set("score", producer.get("score") + scoreChange);
+
+        producer.set("capital", producer.get("capital") + scoreChange);
       }
     }
   }

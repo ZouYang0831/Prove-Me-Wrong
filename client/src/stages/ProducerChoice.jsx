@@ -33,6 +33,8 @@ producerData: {
         scoreChangeByConsumer: int,
       }
     },
+    unitLeft: int
+    scoreUnitLeftDeducted: int,
     scoreChange: int,
     choiceStartTime: Time,
     choiceEndTime: Time,
@@ -179,13 +181,8 @@ function UnitProducedChoice({ unitProduced, unitCap, onShow }) {
       case 2:
       case 3:
         return "40";
-      case 4:
-      case 5:
-      case 6:
-      case 7:
-        return "60";
       default:
-        return "80";
+        return "60";
     }
   })();
 
@@ -238,13 +235,8 @@ function WarrantChoice({ warrant, warrantCap, onShow }) {
       case 2:
       case 3:
         return "40";
-      case 4:
-      case 5:
-      case 6:
-      case 7:
-        return "60";
       default:
-        return "80";
+        return "60";
     }
   })();
 
