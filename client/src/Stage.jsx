@@ -11,7 +11,7 @@ import { ConsumerChoice } from "./stages/ConsumerChoice";
 import { ProducerChoice } from "./stages/ProducerChoice";
 import { Navbar } from "./components/Navbar"; 
 import { Footer } from "./components/Footer"; 
-// import { Feedback } from "./stages/Feedback";
+import { Feedback } from "./stages/Feedback";
 // import { FinalResult } from "./stages/FinalResult";
 
 
