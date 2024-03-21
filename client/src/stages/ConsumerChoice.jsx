@@ -52,6 +52,8 @@ import {
   useGame,
   useRound,
 } from "@empirica/core/player/classic/react";
+import { Navbar } from "../components/Navbar";
+import { Footer } from "../components/Footer";
 
 import { ConfirmWindow } from "../components/ConfirmWindow";
 
@@ -372,11 +374,13 @@ export function ConsumerChoice() {
   }
 
   return (
-    <div className="flex">
-      <div className="flex flex-col  ">
+    <div className="flex flex-col min-h-screen">
+      <Navbar showTimer={true} showRoundsStages={true} showScore={true}/>
+      <div className="flex-grow">
         <Instruction />
         <Choices />
       </div>
+      <Footer />
       {/* <LeaderBoard /> */}
     </div>
   );

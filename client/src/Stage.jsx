@@ -9,6 +9,8 @@ import React from "react";
 import { SelectRoles } from "./stages/SelectRoles";
 import { ConsumerChoice } from "./stages/ConsumerChoice";
 import { ProducerChoice } from "./stages/ProducerChoice";
+import { Navbar } from "./components/Navbar"; 
+import { Footer } from "./components/Footer"; 
 // import { Feedback } from "./stages/Feedback";
 // import { FinalResult } from "./stages/FinalResult";
 
@@ -24,9 +26,15 @@ export function Stage() {
     }
 
     return (
-      <div className="text-center text-gray-400 pointer-events-none">
-        Please wait for other player(s).
-      </div>
+      <>
+        <Navbar stageTitle="Waiting Room" showRoundsStages = {true}  showScore = {true}/>
+        <div className="flex-grow flex items-center justify-center">
+          <div className="text-center text-gray-400">
+            Please wait for other player(s).
+          </div>
+        </div>
+        <Footer />
+      </>
     );
   }
 

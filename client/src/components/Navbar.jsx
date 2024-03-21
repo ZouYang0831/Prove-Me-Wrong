@@ -24,7 +24,7 @@ export function Navbar({ stageTitle, showTimer = false, showRoundsStages = false
       </div>
 
       {/* Center Section */}
-      <div className="flex-1 flex justify-center items-center">
+      <div className="flex flex justify-center items-center">
         {showTimer ? (
           <>
             <span className="text-4xl font-semibold mr-2">Time:</span>
