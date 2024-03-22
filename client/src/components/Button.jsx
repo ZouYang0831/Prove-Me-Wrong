@@ -29,18 +29,20 @@ const styles = {
   green:
     "border-transparent shadow-sm text-white bg-green-600 hover:bg-green-700 focus:ring-green-500",
   red: "border-transparent shadow-sm text-white bg-red-600 hover:bg-red-700 focus:ring-red-500",
+  customGreen: "border-transparent shadow-sm text-white focus:ring-offset-2",
 };
 
 // Button component
 export function Button({
   children,
   handleClick = null,
-  className = "blue", // Default className is blue
+  className = "customGreen", // Default className is blue
   type = "button",
   autoFocus = false,
 }) {
   // Get the corresponding style for the given className, or an empty string if not found
   const buttonClass = `${base} ${styles[className] || ""}`;
+  const customStyle = className === "customGreen" ? { backgroundColor: '#A4CC7C', borderColor: '#A4CC7C' } : {};
 
   return (
     <button
@@ -48,6 +50,7 @@ export function Button({
       onClick={handleClick}
       autoFocus={autoFocus}
       className={buttonClass} // Apply the computed class here
+      style={customStyle}
     >
       {children}
     </button>
