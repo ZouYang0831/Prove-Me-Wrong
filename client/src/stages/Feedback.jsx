@@ -1,81 +1,32 @@
 import React from "react";
-import { usePlayer, useStage } from "@empirica/core/player/classic/react";
+import { usePlayer, useStage, usePlayers, useGame, useRound, } from "@empirica/core/player/classic/react";
 import { Button } from "../components/Button";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
-
-/* 
-consumerData: {
-  consumerId: String,
-  name: String,
-  role: String,
-  wallet: int,
-  score: int,
-  round1: {
-    producers: {
-      producerID: {
-        productQuality: String,
-        advertisementQuality: String,
-        brand: String,
-        warrant: int,
-        unitProduced: int,
-        unitSelected: int,
-        unitReceived: int,
-        confirmBuy: boolean,
-        isChallenged: boolean,
-        scoreChangeByProducer: int
-      }
-    },
-    scoreChange: int
-    choiceStartTime: Time,
-    choiceEndTime: Time,
-  }
-}
- */
-
-/* 
-producerData: {
-  id: String,
-  name: String,
-  role: String,
-  capital: int,
-  score: int,
-  randomBrands: Array,
-  round1: {
-    productQuality: int,
-    advertisementQuality: String,
-    brand: String,
-    warrant: int,
-    unitProduced: int,
-    unitSold: int,
-    consumers: {
-      consumerID: {
-        unitSoldByConsumer: int,
-        isChallenged: boolean
-        scoreChangeByConsumer: int,
-      }
-    },
-    unitLeft: int
-    scoreUnitLeftDeducted: int,
-    scoreChange: int,
-    choiceStartTime: Time,
-    choiceEndTime: Time,
-  }
-*/
+  
 
 
 export function Feedback() {
     const player = usePlayer();
     const role = player.get("role");
     const stage = useStage();
-  
+    const players = usePlayers();
+    const round = useRound();
+    
+
+    
   
     function handleSubmit() {
       player.stage.set("submit", true);
     }
   
     function ProducerInfo() {
+        const roundName = round.get("name");
+    const consumersInteracted = player.get(roundName)['consumers'];
+    const numConsumersBought = Object.values(consumersInteracted).filter(details => details.unitSoldByConsumer > 0).length;
+        console.log(numConsumersBought)
         return (
+            
             <div className="flex flex-row w-full p-4">
             <div
               style={{
@@ -88,7 +39,7 @@ export function Feedback() {
                 overflow: "auto",
               }}
             >
-              <p>Producer specific content goes here.</p>
+              <p>Producer specific content goes here.{numConsumersBought}</p>
               <p>Producer specific content goes here.</p>
               <p>Producer specific content goes here.</p>
             </div>
