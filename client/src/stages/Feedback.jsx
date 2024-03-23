@@ -12,11 +12,24 @@ export function Feedback() {
     const stage = useStage();
     const players = usePlayers();
     const round = useRound();
+    const playerScores = players.map(player => ({
+        id: player.id,
+        name: player.get("name"),
+        score: player.get("score")
+    }));
+    const consumerScores = playerScores.filter(player => player.name.includes("Consumer"));
+    consumerScores.sort((a, b) => b.score - a.score);
+    const producerScores = playerScores.filter(player => player.name.includes("Producer"));
+    producerScores.sort((a, b) => b.score - a.score);
+    console.log(consumerScores)
+    console.log(producerScores[0]['id'])
     
   
     function handleSubmit() {
       player.stage.set("submit", true);
     }
+
+
   
     function ProducerInfo() {
         const roundName = round.get("name");
@@ -58,7 +71,10 @@ export function Feedback() {
 
         const numProductsSold = Object.values(consumersInteracted).filter(details => details.unitSoldByConsumer > 0)
         //console.log(consumersInteracted)
-        //console.log(totalUnitsSold)
+        //const players = stage.currentGame.players;
+
+        //const players = game.players;
+        //console.log(consumersInteracted)
 
 
         return (
@@ -160,14 +176,15 @@ export function Feedback() {
     }
 
     const tableDataTop = [
-        { rank: 1, name: "Player 1", score: 100 },
-        { rank: 2, name: "Player 2", score: 95 }
+        { rank: 1, name: producerScores[0]['id'], score: producerScores[0]['score'] },
+        { rank: 2, name: producerScores[1]['id'], score: producerScores[1]['score'] }
     ];
 
     const tableDataBottom = [
-        { rank: 1, name: "Player 3", score: 90 },
-        { rank: 2, name: "Player 4", score: 85 }
+        { rank: 1, name: consumerScores[0]['id'], score: consumerScores[0]['score'] },
+        { rank: 2, name: consumerScores[1]['id'], score: consumerScores[1]['score'] }
     ];
+
       
   
     function ConsumerInfo() {
