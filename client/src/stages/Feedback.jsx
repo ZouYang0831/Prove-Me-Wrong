@@ -13,8 +13,6 @@ export function Feedback() {
     const players = usePlayers();
     const round = useRound();
     
-
-    
   
     function handleSubmit() {
       player.stage.set("submit", true);
@@ -26,7 +24,24 @@ export function Feedback() {
         //const unitSoldByConsumer = player.get("capital");
         const consumersInteracted = player.get(roundName)['consumers'];
         const numConsumersBought = Object.values(consumersInteracted).filter(details => details.unitSoldByConsumer > 0).length;
-        console.log(numConsumersBought)
+        const producer = player.get(roundName)
+        const prodQuality = producer['productQuality']
+        const adsQuality = producer['advertisementQuality']
+        const unitProduced = producer['unitProduced']
+        const scoreChange = producer['scoreChange']
+        let scorechangewithsign;
+        if (scoreChange >= 0){
+            scorechangewithsign = '+'+scoreChange
+        }else{
+            scorechangewithsign = scoreChange
+        }
+        const totalUnitsSold = Object.values(consumersInteracted).reduce((sum, consumer) => {
+            return sum + (consumer.unitSoldByConsumer || 0); // Add the unitSoldByConsumer to the sum, defaulting to 0 if undefined
+        }, 0);
+
+        //console.log(consumersInteracted)
+        //productQuality: int,
+        //advertisementQuality
 
         let message, headlineColor;
         if (numConsumersBought === 0) {
@@ -39,7 +54,13 @@ export function Feedback() {
             message = <span><strong>Congratulations,</strong> {numConsumersBought} consumers bought your product!</span>;
             headlineColor = "#A4CC7C"; 
         }
-        console.log()
+        //console.log(player.get('Round 0')['scoreChange'])
+
+        const numProductsSold = Object.values(consumersInteracted).filter(details => details.unitSoldByConsumer > 0)
+        //console.log(consumersInteracted)
+        //console.log(totalUnitsSold)
+
+
         return (
             
             <div className="flex flex-row w-full p-4">
@@ -71,10 +92,10 @@ export function Feedback() {
                         </thead>
                         <tbody>
                         <tr>
-                            <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>High</td>
-                            <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>High</td>
-                            <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>2</td>
-                            <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>4</td>
+                            <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>{prodQuality}</td>
+                            <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>{adsQuality}</td>
+                            <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>{unitProduced}</td>
+                            <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>{scorechangewithsign}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -91,7 +112,7 @@ export function Feedback() {
                             color: '#A4CC7C',
                             fontSize: "2em",
                             zIndex: 1,
-                        }}>{currentcapital}</span>
+                        }}>{totalUnitsSold}</span>
                         <div style={{
                             clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
                             backgroundColor: "#D9D9D9",
@@ -104,13 +125,49 @@ export function Feedback() {
                     </div>
                 </div>
             </div>
-            <div style={{ width: "36.2%" }}>
+            <div style={{ width: "36.2%", margin: "1%", flexDirection: "column"}}>
               {/* This is the right container, adjust as needed */}
-              <p>Other content goes here.</p>
+              <p style={{textAlign: 'center', fontWeight: 'bold', fontSize: '24px', marginBottom: '20px', marginTop: '20px'}}>Producer Leaderboard</p>
+              {renderTable(tableDataTop)}
+              <p style={{textAlign: 'center', fontWeight: 'bold', fontSize: '24px', marginBottom: '20px', marginTop: '20px'}}>Consumer Leaderboard</p>
+              {renderTable(tableDataBottom)}
             </div>
           </div>
         );
     }
+
+    function renderTable(data) {
+        return (
+            <table style={{ width: "100%", marginBottom: "20px" }}>
+                <thead>
+                    <tr>
+                        <th style={{ textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black' }}>Rank</th>
+                        <th style={{ textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black' }}>Player's Name</th>
+                        <th style={{ textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black' }}>Scores</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.map((row, index) => (
+                        <tr key={index}>
+                            <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>{row.rank}</td>
+                            <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>{row.name}</td>
+                            <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>{row.score}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        );
+    }
+
+    const tableDataTop = [
+        { rank: 1, name: "Player 1", score: 100 },
+        { rank: 2, name: "Player 2", score: 95 }
+    ];
+
+    const tableDataBottom = [
+        { rank: 1, name: "Player 3", score: 90 },
+        { rank: 2, name: "Player 4", score: 85 }
+    ];
       
   
     function ConsumerInfo() {
