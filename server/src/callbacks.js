@@ -167,29 +167,26 @@ Empirica.onGameStart(({ game }) => {
 
   // Create random Brands for producers to choose
   const randomBrands = shuffleArray([
-    "Akane",
-    "Baldwin",
-    "Blondee",
-    "Cameo",
-    "Davey",
-    "Empire",
-    "Fuji",
-    "Gala",
-    "Hokuto",
-    "Idared",
-    "Jazz",
-    "Jonathan",
-    "Jubilee",
-    "Lodi",
-    "Melrose",
-    "Opal",
-    "Pippin",
-    "Rome",
-    "Sansa",
-    "Winesap",
-    "Yates",
-    "York",
-    "Zestar",
+    "BeanVoyage",
+    "PeakBrew",
+    "MysticMocha",
+    "EcoSip",
+    "AuroraBeans",
+    "VintageCoffee",
+    "BrewEssence",
+    "ZenithRoast",
+    "HarmonyBrews",
+    "Cup of Cosmos",
+    "SilentWhisper Coffee",
+    "Golden Grinds",
+    "TwilightTales",
+    "RusticRoast",
+    "LighthouseBrews",
+    "PioneerPerk",
+    "MorningMist Brews",
+    "Elemental Espresso",
+    "CaffeineCanvas",
+    "InfiniteBeans",
   ]);
 
   // Assign roles and initial values to players
@@ -341,7 +338,6 @@ Empirica.onStageEnded(({ stage }) => {
 
             const producerid = producer.id;
             producerInfo["producerid"] = producerid;
-
           }
         }
 
