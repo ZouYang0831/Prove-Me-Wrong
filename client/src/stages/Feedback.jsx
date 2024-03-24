@@ -5,6 +5,8 @@ import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { ToggleSwitch } from "../components/ToggleSwitch";
 import { useState, useEffect } from "react";
+import { Loading } from "@empirica/core/player/react";
+
   
 
 
@@ -24,12 +26,14 @@ export function Feedback() {
     consumerScores.sort((a, b) => b.score - a.score);
     const producerScores = playerScores.filter(player => player.name.includes("Producer"));
     producerScores.sort((a, b) => b.score - a.score);
+    const allChallengesSubmitted = round.get("allChallengesSubmitted");
     //console.log(consumerScores)
     //console.log(producerScores[0]['id'])
     
   
     function handleSubmit() {
       player.stage.set("submit", true);
+      
     }
 
 
@@ -179,13 +183,13 @@ export function Feedback() {
     }
 
     const tableDataTop = [
-        { rank: 1, name: producerScores[0]['id'], score: producerScores[0]['score'] },
-        { rank: 2, name: producerScores[1]['id'], score: producerScores[1]['score'] }
+        { rank: 1, name: producerScores[0].id, score: producerScores[0].score },
+        { rank: 2, name: producerScores[1].id, score: producerScores[1].score }
     ];
 
     const tableDataBottom = [
-        { rank: 1, name: consumerScores[0]['id'], score: consumerScores[0]['score'] },
-        { rank: 2, name: consumerScores[1]['id'], score: consumerScores[1]['score'] }
+        { rank: 1, name: consumerScores[0].id, score: consumerScores[0].score },
+        { rank: 2, name: consumerScores[1].id, score: consumerScores[1].score }
     ];
 
     const {
@@ -195,6 +199,7 @@ export function Feedback() {
         warrantCap,
         unitCap,
     } = game.get("treatment");
+    
 
       
   
@@ -207,13 +212,11 @@ export function Feedback() {
         const scoreChange = consumer['scoreChange']
         const numCheatedByProducer = Object.values(producersInteracted).filter(details =>
             details.advertisementQuality === 'high' && details.productQuality === "low" && details.confirmBuy === true).length;
-
+        
         const numProducersBoughtFrom = Object.values(producersInteracted).filter(details =>
             details.confirmBuy === true).length;
 
         let message, headlineColor;
-        
-
         if (numCheatedByProducer === 0) {
             message = <span><strong>Congratulations,</strong> you did not get tricked!</span>;
             headlineColor = "#A4CC7C"; 
@@ -260,7 +263,14 @@ export function Feedback() {
             const updatedProducers = { ...currentProducers };
             const warrant = updatedProducers[producerID].warrant
             const unitReceived = updatedProducers[producerID].unitReceived
-            //console.log(playerScores)
+
+            //const players = players.get(roundName);
+            //for (const player in players) {
+                //console.log(player[producerID].get("role"));
+            //}
+            //console.log(players[producerID].get("role"));
+            
+            
             
             //const score = player.get("score")
             //const scoreChangeByProducer = updatedProducers[producerID].scoreChangeByProducer
@@ -277,9 +287,10 @@ export function Feedback() {
                         //console.log(player.get("role"))
                         //console.log(player.get("score"))
                         if (producer["id"] === producerID) {
-                            producer["score"] = producer["score"] - scoreupdate;
-                            producer["wallet"] =  producer["wallet"] - scoreupdate;
-                            console.log(producerScores)
+                            console.log(producer.score)
+                            //producer["score"] = producer["score"] + scoreupdate;
+                            //producer["wallet"] =  producer["wallet"] + scoreupdate;
+                            //console.log(producerScores)
                         }
                     }
                 } else if (updatedProducers[producerID].isChallenged === true && updatedProducers[producerID].productQuality === 'low' && updatedProducers[producerID].advertisementQuality === 'high'){
@@ -288,12 +299,16 @@ export function Feedback() {
                     player.set("wallet", player.get("wallet") + scoreupdate);
                     //console.log(playerScores)
                     for (const producer of producerScores) {
-                        //console.log(player.get("role"))
                         //console.log(player.get("score"))
                         if (producer["id"] === producerID) {
-                            //producer["score"] = producer["score"] + scoreupdate;
-                            //producer["wallet"] =  producer["wallet"] + scoreupdate;
-                            console.log(producerScores)
+                            
+                            //producer.set("score", producer.get("score") - scoreupdate);
+                            const newscore = producer.score - scoreupdate;
+                            producer.score = newscore;
+                            console.log(producer.score)
+                            console.log(producerScores[0].score)
+                            //producer["captital"] =  producer["capital"] - scoreupdate;
+                            console.log(producer)
                         }
                     }
                     
