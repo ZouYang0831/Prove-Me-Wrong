@@ -335,6 +335,13 @@ Empirica.onStageEnded(({ stage }) => {
 
             const price = productQuality === "low" ? 4 : 10;
             walletChange += unitReceived * price;
+
+            const isChallenged = false;
+            producerInfo["isChallenged"] = isChallenged;
+
+            const producerid = producer.id;
+            producerInfo["producerid"] = producerid;
+
           }
         }
 
@@ -398,6 +405,8 @@ Empirica.onStageEnded(({ stage }) => {
             // Update unitSold and scoreChange
             unitSold += unitSoldByConsumer;
             scoreChange += scoreChangeByConsumer;
+
+            //const isChallenged = false;
           }
         }
 

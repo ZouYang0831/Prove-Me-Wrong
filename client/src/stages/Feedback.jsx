@@ -3,11 +3,14 @@ import { usePlayer, useStage, usePlayers, useGame, useRound, } from "@empirica/c
 import { Button } from "../components/Button";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
+import { ToggleSwitch } from "../components/ToggleSwitch";
+import { useState, useEffect } from "react";
   
 
 
 export function Feedback() {
     const player = usePlayer();
+    const game = useGame();
     const role = player.get("role");
     const stage = useStage();
     const players = usePlayers();
@@ -21,8 +24,8 @@ export function Feedback() {
     consumerScores.sort((a, b) => b.score - a.score);
     const producerScores = playerScores.filter(player => player.name.includes("Producer"));
     producerScores.sort((a, b) => b.score - a.score);
-    console.log(consumerScores)
-    console.log(producerScores[0]['id'])
+    //console.log(consumerScores)
+    //console.log(producerScores[0]['id'])
     
   
     function handleSubmit() {
@@ -59,7 +62,7 @@ export function Feedback() {
         let message, headlineColor;
         if (numConsumersBought === 0) {
             message = <span><strong>Unfortunately,</strong> no consumers bought your product.</span>;
-            headlineColor = "red"; 
+            headlineColor = "#E57C50"; 
         } else if (numConsumersBought === 1) {
             message = <span><strong>Congratulations,</strong> 1 consumer bought your product!</span>;
             headlineColor = "#A4CC7C"; 
@@ -185,44 +188,125 @@ export function Feedback() {
         { rank: 2, name: consumerScores[1]['id'], score: consumerScores[1]['score'] }
     ];
 
+    const {
+        accuracyNudgeEnabled,
+        reputationSystemEnabled,
+        warrantEnabled,
+        warrantCap,
+        unitCap,
+    } = game.get("treatment");
+
       
   
     function ConsumerInfo() {
         const roundName = round.get("name");
-        //const currentcapital = player.get("capital");
-        //const unitSoldByConsumer = player.get("capital");
-        //const consumersInteracted = player.get(roundName)['consumers'];
+        const wallet = player.get("wallet");
+        const producersInteracted = player.get(roundName)['producers'];
         //const numConsumersBought = Object.values(consumersInteracted).filter(details => details.unitSoldByConsumer > 0).length;
         const consumer = player.get(roundName)
-        //const prodQuality = producer['productQuality']
-        //const adsQuality = producer['advertisementQuality']
-        //const unitProduced = producer['unitProduced']
-        //const scoreChange = producer['scoreChange']
-        //let scorechangewithsign;
-        // if (scoreChange >= 0){
-        //     scorechangewithsign = '+'+scoreChange
-        // }else{
-        //     scorechangewithsign = scoreChange
-        // }
-        // const totalUnitsSold = Object.values(consumersInteracted).reduce((sum, consumer) => {
-        //     return sum + (consumer.unitSoldByConsumer || 0); // Add the unitSoldByConsumer to the sum, defaulting to 0 if undefined
-        // }, 0);
+        const scoreChange = consumer['scoreChange']
+        const numCheatedByProducer = Object.values(producersInteracted).filter(details =>
+            details.advertisementQuality === 'high' && details.productQuality === "low" && details.confirmBuy === true).length;
 
-        //console.log(consumersInteracted)
-        //productQuality: int,
-        //advertisementQuality
+        const numProducersBoughtFrom = Object.values(producersInteracted).filter(details =>
+            details.confirmBuy === true).length;
 
-        // let message, headlineColor;
-        // if (numConsumersBought === 0) {
-        //     message = <span><strong>Unfortunately,</strong> no consumers bought your product.</span>;
-        //     headlineColor = "red"; 
-        // } else if (numConsumersBought === 1) {
-        //     message = <span><strong>Congratulations,</strong> 1 consumer bought your product!</span>;
-        //     headlineColor = "#A4CC7C"; 
-        // } else {
-        //     message = <span><strong>Congratulations,</strong> {numConsumersBought} consumers bought your product!</span>;
-        //     headlineColor = "#A4CC7C"; 
-        // }
+        let message, headlineColor;
+        
+
+        if (numCheatedByProducer === 0) {
+            message = <span><strong>Congratulations,</strong> you did not get tricked!</span>;
+            headlineColor = "#A4CC7C"; 
+        } else if (numCheatedByProducer === 1) {
+            message = <span><strong>Opps,</strong> you got tricked by 1 producer!</span>;
+            headlineColor = "#E57C50"; 
+        } else {
+            message = <span><strong>Opps,,</strong> you got tricked by {numConsumersBought} producers!</span>;
+            headlineColor = "#E57C50"; 
+        }
+
+        const unitsBoughtFromProducer = Object.entries(producersInteracted)
+        .filter(([_, details]) => details.unitReceived > 0)
+        .map(([_, details]) => ({
+            advertisementQuality: details.advertisementQuality,
+            productQuality: details.productQuality,
+            unitReceived: details.unitReceived,
+            scoreChangeByProducer: details.scoreChangeByProducer, 
+            isChallenged: details.isChallenged,
+            producerid: details.producerid,
+            warrant: details.warrant,
+        }));
+
+        //console.log(consumer['producers']['01HSQ9PE7SZAHAK5SKKJQEZ4K4']['isChallenged'])
+        //console.log(unitsBoughtFromProducer)
+
+        let noPurchaseMessage;
+        if (numProducersBoughtFrom === 0) {
+            noPurchaseMessage = (
+                <div style={{ marginTop: "10px"}}>
+                    <p style={{ color: "#E57C50", fontSize: "22px", fontWeight: "bold" }}>
+                        You did not purchase any products!
+                    </p>
+                </div>
+            );
+        }
+    
+
+        
+
+        const handleIsChallenge = (producerID) => {
+            //console.log(consumer["producers"][producerID])
+            const currentProducers = consumer["producers"];
+            const updatedProducers = { ...currentProducers };
+            const warrant = updatedProducers[producerID].warrant
+            const unitReceived = updatedProducers[producerID].unitReceived
+            //console.log(playerScores)
+            
+            //const score = player.get("score")
+            //const scoreChangeByProducer = updatedProducers[producerID].scoreChangeByProducer
+            //const scoreupdate = warrant*unitReceived;
+            
+            if (updatedProducers[producerID]) {
+                updatedProducers[producerID].isChallenged = !updatedProducers[producerID].isChallenged;
+                const scoreupdate = warrant*unitReceived;
+                if (updatedProducers[producerID].isChallenged === false && updatedProducers[producerID].productQuality === 'low' && updatedProducers[producerID].advertisementQuality === 'high') {
+                    updatedProducers[producerID].scoreChangeByProducer = updatedProducers[producerID].scoreChangeByProducer - scoreupdate;
+                    player.set("score", player.get("score") - scoreupdate);
+                    player.set("wallet", player.get("wallet") - scoreupdate);
+                    for (const producer of producerScores) {
+                        //console.log(player.get("role"))
+                        //console.log(player.get("score"))
+                        if (producer["id"] === producerID) {
+                            producer["score"] = producer["score"] - scoreupdate;
+                            producer["wallet"] =  producer["wallet"] - scoreupdate;
+                            console.log(producerScores)
+                        }
+                    }
+                } else if (updatedProducers[producerID].isChallenged === true && updatedProducers[producerID].productQuality === 'low' && updatedProducers[producerID].advertisementQuality === 'high'){
+                    updatedProducers[producerID].scoreChangeByProducer = updatedProducers[producerID].scoreChangeByProducer + scoreupdate;
+                    player.set("score", player.get("score") + scoreupdate);
+                    player.set("wallet", player.get("wallet") + scoreupdate);
+                    //console.log(playerScores)
+                    for (const producer of producerScores) {
+                        //console.log(player.get("role"))
+                        //console.log(player.get("score"))
+                        if (producer["id"] === producerID) {
+                            //producer["score"] = producer["score"] + scoreupdate;
+                            //producer["wallet"] =  producer["wallet"] + scoreupdate;
+                            console.log(producerScores)
+                        }
+                    }
+                    
+                }
+                
+                
+                player.set("producers", updatedProducers);
+                
+            }
+        };
+        //console.log(producersInteracted)
+    
+
 
         return (
             
@@ -238,64 +322,65 @@ export function Feedback() {
                 overflow: "auto",
               }}
             >
-              <p style={{ color: headlineColor, fontSize: "32px", fontWeight: "normal" }}>{message}</p>
-              <div style={{ marginTop: "35px", fontSize: "20px" }}> {/* Adjust margin as needed */}
+                <p style={{ color: headlineColor, fontSize: "32px", fontWeight: "normal" }}>{message}</p>
+                <div style={{ marginTop: "35px", fontSize: "20px" }}> {/* Adjust margin as needed */}
                     <p style={{ marginBottom: "13px" }}><b>This round:</b></p>
-                    <p>Current Captital: {currentcapital}</p>
+                    <p>Current Wallet: {wallet}</p>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "45px" }}>
-                    <table style={{ width: '70%', tableLayout: 'fixed' }}>
+                    <table style={{ width: '90%', tableLayout: 'fixed' }}>
                         <thead>
                         <tr>
-                            <th style={{ textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black' }}>Prod Quality</th>
                             <th style={{ textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black' }}>Ads Quality</th>
-                            <th style={{ textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black' }}>Units Produced</th>
+                            <th style={{ textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black' }}>True Quality</th>
+                            <th style={{ textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black' }}>Units Bought</th>
+                            {warrantEnabled && (
+                                <>
+                                    <th style={{ textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black' }}>Warrant</th>
+                                    <th style={{ textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black' }}>Challenge</th>
+                                </>
+                            )}
                             <th style={{ textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black' }}>Scores</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>{prodQuality}</td>
-                            <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>{adsQuality}</td>
-                            <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>{unitProduced}</td>
-                            <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>{scorechangewithsign}</td>
-                        </tr>
+                        {unitsBoughtFromProducer.map((detail, index) => (
+                            <tr key={index}>
+                                <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>{detail.advertisementQuality}</td>
+                                <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>{detail.productQuality}</td>
+                                <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>{detail.unitReceived}</td>
+                                {warrantEnabled && (
+                                    <>
+                                        <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>{detail.warrant}</td>
+                                        <td style={{ textAlign: 'center', borderBottom: '2px solid black', position: 'relative', left: '4%' }}>
+                                        
+                                        <ToggleSwitch
+                                            color={"orange"}
+                                            disabled={false}
+                                            disabledWhenOff={false}
+                                            checked={detail.isChallenged}
+                                            onChange={() => handleIsChallenge(detail.producerid)}
+                                        />
+                                        </td>
+                                    </>
+                                )}
+                                <td style={{ textAlign: 'center', borderBottom: '2px solid black' }}>
+                                    {detail.scoreChangeByProducer > 0 ? `+${detail.scoreChangeByProducer}` : detail.scoreChangeByProducer}
+                                </td>
+                            </tr>
+                        ))}
                         </tbody>
                     </table>
-                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center", fontWeight: "bold", marginLeft: "30px", }}>
-                        <span style={{fontSize: "1.4em", zIndex: 1,}}>Units sold:</span>
-                        <span style={{ 
-                            display: "inline-flex", 
-                            alignItems: "center", 
-                            justifyContent: "center", 
-                            width: "20px", 
-                            height: "20px", 
-                            borderRadius: "50%", 
-                            marginLeft: "30px", 
-                            color: '#A4CC7C',
-                            fontSize: "2em",
-                            zIndex: 1,
-                        }}>{totalUnitsSold}</span>
-                        <div style={{
-                            clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
-                            backgroundColor: "#D9D9D9",
-                            position: "absolute",
-                            width: "10%",
-                            height: "13%",
-                            zIndex: 0,
-                            marginLeft: "80px",
-                        }} />
-                    </div>
                 </div>
+                {noPurchaseMessage}
             </div>
-            <div style={{ width: "36.2%", margin: "1%", flexDirection: "column"}}>
-              {/* This is the right container, adjust as needed */}
-              <p style={{textAlign: 'center', fontWeight: 'bold', fontSize: '24px', marginBottom: '20px', marginTop: '20px'}}>Producer Leaderboard</p>
-              {renderTable(tableDataTop)}
-              <p style={{textAlign: 'center', fontWeight: 'bold', fontSize: '24px', marginBottom: '20px', marginTop: '20px'}}>Consumer Leaderboard</p>
-              {renderTable(tableDataBottom)}
+             <div style={{ width: "36.2%", margin: "1%", flexDirection: "column"}}>
+               <p style={{textAlign: 'center', fontWeight: 'bold', fontSize: '24px', marginBottom: '20px', marginTop: '20px'}}>Producer Leaderboard</p>
+               {renderTable(tableDataTop)}
+               <p style={{textAlign: 'center', fontWeight: 'bold', fontSize: '24px', marginBottom: '20px', marginTop: '20px'}}>Consumer Leaderboard</p>
+               {renderTable(tableDataBottom)}
+             </div>
             </div>
-          </div>
         );
     }
   

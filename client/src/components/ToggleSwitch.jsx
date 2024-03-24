@@ -36,6 +36,10 @@ const colorOptions = {
     onColor: "bg-gray-500",
     offColor: "bg-gray-300",
   },
+  orange:{
+    onColor: "bg-orange-400",
+    offColor: "bg-gray-300",
+  }
 };
 
 export function ToggleSwitch({
