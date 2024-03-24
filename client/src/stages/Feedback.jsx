@@ -50,7 +50,7 @@ export function Feedback() {
         const unitProduced = producer['unitProduced']
         const scoreChange = producer['scoreChange']
         let scorechangewithsign;
-        if (scoreChange >= 0){
+        if (scoreChange > 0){
             scorechangewithsign = '+'+scoreChange
         }else{
             scorechangewithsign = scoreChange
@@ -101,7 +101,7 @@ export function Feedback() {
               <p style={{ color: headlineColor, fontSize: "32px", fontWeight: "normal" }}>{message}</p>
               <div style={{ marginTop: "35px", fontSize: "20px" }}> {/* Adjust margin as needed */}
                     <p style={{ marginBottom: "13px" }}><b>This round:</b></p>
-                    <p>Current Captital: {currentcapital}</p>
+                    <p>Current Captital: ${currentcapital}</p>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "45px" }}>
                     <table style={{ width: '70%', tableLayout: 'fixed' }}>
@@ -183,13 +183,13 @@ export function Feedback() {
     }
 
     const tableDataTop = [
-        { rank: 1, name: producerScores[0].id, score: producerScores[0].score },
-        { rank: 2, name: producerScores[1].id, score: producerScores[1].score }
+        { rank: 1, name: producerScores[0].name, score: producerScores[0].score },
+        { rank: 2, name: producerScores[1].name, score: producerScores[1].score }
     ];
 
     const tableDataBottom = [
-        { rank: 1, name: consumerScores[0].id, score: consumerScores[0].score },
-        { rank: 2, name: consumerScores[1].id, score: consumerScores[1].score }
+        { rank: 1, name: consumerScores[0].name, score: consumerScores[0].score },
+        { rank: 2, name: consumerScores[1].name, score: consumerScores[1].score }
     ];
 
     const {
@@ -217,7 +217,10 @@ export function Feedback() {
             details.confirmBuy === true).length;
 
         let message, headlineColor;
-        if (numCheatedByProducer === 0) {
+        if (numCheatedByProducer === 0 && numProducersBoughtFrom === 0){
+            message = <span>You did not purchase any products.</span>;
+            headlineColor = "#E57C50"; 
+        }else if (numCheatedByProducer === 0 && numProducersBoughtFrom > 0) {
             message = <span><strong>Congratulations,</strong> you did not get tricked!</span>;
             headlineColor = "#A4CC7C"; 
         } else if (numCheatedByProducer === 1) {
@@ -248,7 +251,7 @@ export function Feedback() {
             noPurchaseMessage = (
                 <div style={{ marginTop: "10px"}}>
                     <p style={{ color: "#E57C50", fontSize: "22px", fontWeight: "bold" }}>
-                        You did not purchase any products!
+                        N/A
                     </p>
                 </div>
             );
@@ -305,8 +308,8 @@ export function Feedback() {
                             //producer.set("score", producer.get("score") - scoreupdate);
                             const newscore = producer.score - scoreupdate;
                             producer.score = newscore;
-                            console.log(producer.score)
-                            console.log(producerScores[0].score)
+                            //console.log(producer.scoreChangeByProducer)
+                            //console.log(producerScores[0].scoreChangeByProducer)
                             //producer["captital"] =  producer["capital"] - scoreupdate;
                             console.log(producer)
                         }
@@ -340,7 +343,7 @@ export function Feedback() {
                 <p style={{ color: headlineColor, fontSize: "32px", fontWeight: "normal" }}>{message}</p>
                 <div style={{ marginTop: "35px", fontSize: "20px" }}> {/* Adjust margin as needed */}
                     <p style={{ marginBottom: "13px" }}><b>This round:</b></p>
-                    <p>Current Wallet: {wallet}</p>
+                    <p>Current Wallet: ${wallet}</p>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "45px" }}>
                     <table style={{ width: '90%', tableLayout: 'fixed' }}>
@@ -387,7 +390,7 @@ export function Feedback() {
                         </tbody>
                     </table>
                 </div>
-                {noPurchaseMessage}
+                
             </div>
              <div style={{ width: "36.2%", margin: "1%", flexDirection: "column"}}>
                <p style={{textAlign: 'center', fontWeight: 'bold', fontSize: '24px', marginBottom: '20px', marginTop: '20px'}}>Producer Leaderboard</p>

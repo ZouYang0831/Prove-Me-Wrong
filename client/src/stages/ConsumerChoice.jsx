@@ -80,6 +80,12 @@ function Instruction() {
       <p className="text-gray-600 font-medium text-justify">
         Note: Your goal is to purchase product with maximum utilities.
       </p>
+      <p className="text-gray-600 font-medium text-justify">
+      If there is no prove-me-wrong bond, which means there is no bond.
+      </p>
+      <p className="text-gray-600 font-medium text-justify">
+      Choose what product you want to purchase:
+      </p>
     </div>
   );
 }
@@ -145,8 +151,8 @@ function ProductCard({
     >
       {/* Render the warrant tag if warrant is larger than 0 */}
       {warrant > 0 && (
-        <div className="absolute -top-1 -right-7 bg-green-500 z-1 text-xl text-white px-2 py-1 rounded-md transform rotate-25">
-          <span>Warrant: ${warrant}</span>
+        <div className="absolute -top-4 left-0 bg-green-500 z-1 text-white w-60 px-5  ">
+          <span>Prove-Me-Wrong Bond: ${warrant}</span>
         </div>
       )}
 
