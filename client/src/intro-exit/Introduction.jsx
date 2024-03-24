@@ -14,23 +14,16 @@ export function Introduction({ next }) {
           className="text-lg leading-6 font-large text-gray-900"
           style={{ fontSize: "30px" }}
         >
-          Marketplace Instructions
-        </h1>
-        <div className="text-lg mt-10 mb-6">
+          🌟 Welcome to Marketplace Game! 🌟
+        </h1><br/>
+        <div className="text-lg mt-10 mb-6" style={{ fontSize: "20px" }}>
           <p>
-            In this marketplace, you will have to choose what your priorities are
-            as a producer of toothpaste. You will be shown multiple products.
+          In this game, you'll be playing alongside three other participants, assuming one of two roles: consumers or producers. The objective for all players is the same: to achieve the highest scores possible!
           </p>
           <br />
-          In <strong>each round of the game</strong>, you will:
-          <br />
           <p>
-            (a) choose the quality of the product you produce. Choose how to
-            advertise them. Choose what price you want to sell the product for.
-          </p>
-          <p>
-            (b) obtain the results, gains and losses, based on the sales from the
-            product you chose to advertise.
+          Each round, producers will decide on the quality of products they wish to produce and strategize on how to market their quality. On the other side, consumers are tasked with discerning the true quality of these products based on the information available to them, both before and after making a purchase.
+          Let's explore the strategies for winning points!
           </p>
         </div>
         <Button handleClick={next} autoFocus>

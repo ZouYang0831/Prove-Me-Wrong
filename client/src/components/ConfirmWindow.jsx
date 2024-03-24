@@ -30,11 +30,11 @@ export function ConfirmWindow({
             <p className="mb-4 text-center">Warning:</p>
             <p>{children}</p>
             <div className="flex justify-center mt-6 mb-3 space-x-20">
-              <Button className="green" handleClick={handleSubmit}>
-                Submit
+              <Button className="red" handleClick={handleSubmit}>
+                Proceed
               </Button>
-              <Button className="red" handleClick={handleCancel}>
-                Cancel
+              <Button className="green" handleClick={handleCancel}>
+                Back to Choice
               </Button>
             </div>
           </div>

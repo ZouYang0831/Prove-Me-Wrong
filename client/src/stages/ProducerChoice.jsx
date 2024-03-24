@@ -26,7 +26,7 @@ producerData: {
     warrant: int,
     unitProduced: int,
     unitSold: int,
-    consumers: {
+    consumers: { 
       consumerID: {
         unitSoldByConsumer: int,
         isChallenged: boolean
@@ -255,9 +255,10 @@ function WarrantChoice({ warrant, warrantCap, onShow }) {
     <div className="mb-1">
       <h2 className="mb-1">
         <span className="font-medium">
-          How much do you want to warrant your ads claim?
-        </span>{" "}
-        Your choice: ${warrant}
+        Warrant:<br/>
+        Are you willing to certify your quality claim is true?
+        </span>{"                "}
+        {warrant === 0 ? "No" : "$"+warrant} Prove-Me-Wrong Bond
       </h2>
 
       <div className={`w-${sliderWidth} mx-auto flex flex-col`}>

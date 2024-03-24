@@ -143,6 +143,8 @@ function ProductCard({
     }
   })();
 
+  
+
   return (
     <div
       className={`relative w-60 px-5 py-6 bg-gray-200 rounded-md duration-300 ${
@@ -159,7 +161,7 @@ function ProductCard({
       {/* Product information */}
       <div className="text-center items-center flex flex-col">
         {brand && <h2 className="text-xl font-bold"> Brand: {brand}</h2>}
-        <h2 className="text-2xl font-medium">{advertisementQuality} Quality</h2>
+        <h2 className="text-2xl font-medium">{advertisementQuality === "low" ? "Low" : "High"} Quality</h2>
         <img
           src={imagePath}
           alt="Product"
