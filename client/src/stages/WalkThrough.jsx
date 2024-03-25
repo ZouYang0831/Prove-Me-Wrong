@@ -14,6 +14,11 @@ export function WalkThrough() {
     const role = player.get("role");
     const stage = useStage();
     const game = useGame();
+    const baselineConsumer = "./images/walkthrough_consumer.png"
+    const baselineProducer = "./images/walkthrough_producer.png"
+    const RSProducer = "./images/RSProducer.png"
+    const RSConsumer = "./images/RSConsumer.png"
+    const warrantConsumer = "./images/warrantConsumer.png"
 
     const {
         accuracyNudgeEnabled,
@@ -21,26 +26,74 @@ export function WalkThrough() {
         warrantEnabled,
     } = game.get("treatment");
 
+    let pathConsumer, pathProducer;
+    if (reputationSystemEnabled) {
+        pathConsumer = RSConsumer
+        pathProducer = RSProducer
+    } else if (warrantEnabled) {
+        pathConsumer = warrantConsumer 
+        pathProducer = RSProducer
+    } else {
+        pathConsumer = baselineConsumer 
+        pathProducer = baselineProducer
+    }
+
 
     function handleSubmit() {
         player.stage.set("submit", true);
     }
 
     function ProducerInfo() {
-        return <div>Producer walk through</div>;
+        return (
+            <div 
+              style={{
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                height: '65vh' // This makes the div take the full viewport height
+              }}
+            >
+              <img
+                src={pathProducer}
+                alt="Product"
+                style={{
+                  maxHeight: '100%', // Make image full height of its container
+                  maxWidth: '100%', // Ensure it also respects the width limit
+                  objectFit: 'contain' // This ensures the aspect ratio is maintained without cropping
+                }}
+              />
+            </div>
+        );
     }
 
     function ConsumerInfo() {
-        return <div>Consumer walk through</div>;
+        return (
+            <div 
+              style={{
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                height: '65vh' // This makes the div take the full viewport height
+              }}
+            >
+              <img
+                src={pathConsumer}
+                alt="Product"
+                style={{
+                  maxHeight: '100%', // Make image full height of its container
+                  maxWidth: '100%', // Ensure it also respects the width limit
+                  objectFit: 'contain' // This ensures the aspect ratio is maintained without cropping
+                }}
+              />
+            </div>
+        );
     }
+
 
     return (
         <div className="flex flex-col min-h-screen"> 
         <Navbar stageTitle="Welcome to Marketplace Game!" />
         <div className="flex-grow p-4">
-            <p className="text-start my-4">
-            You will play as a <b>{role}</b>!
-            </p>
             {role === "consumer" ? <ConsumerInfo /> : <ProducerInfo />}
             <div className="flex justify-center mt-4">
             <Button primary={true} handleClick={handleSubmit}>START!</Button>

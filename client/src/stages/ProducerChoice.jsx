@@ -61,7 +61,7 @@ function Instruction() {
       <h1 className="text-xl text-gray-600 font-bold">Instruction</h1>
       {/* Main Instruction */}
       <p className="text-gray-600 text-sm text-justify">
-        In this stage, you will choose the quality of apple to produce and how
+        In this stage, you will choose the quality of coffee to produce and how
         you want to advertise it.
       </p>
       {/* Note */}
@@ -288,21 +288,21 @@ function ProductImages() {
       <figure>
         <img
           src="./images/low_quality_apple.png"
-          alt="Low Quality Apple"
+          alt="Low Quality Coffee"
           className="w-40 h-40"
         />
         <figcaption className="text-center text-sm text-black font-medium">
-          Low Quality Apple
+          Low Quality Coffee
         </figcaption>
       </figure>
       <figure>
         <img
           src="./images/high_quality_apple.png"
-          alt="High Quality Apple"
+          alt="High Quality Coffee"
           className="w-40 h-40"
         />
         <figcaption className="text-center text-sm text-black font-medium">
-          High Quality Apple
+          High Quality Coffee
         </figcaption>
       </figure>
     </div>
@@ -412,6 +412,21 @@ function Choices() {
                 overflow: "auto",
               }}
             >
+      <div className="w-200 ml-20 mr-10 mb-4">
+      {/* Title */}
+      <h1 className="text-xl text-gray-600 font-bold">Instruction</h1>
+      {/* Main Instruction */}
+      <p className="text-gray-600 text-sm text-justify">
+        In this stage, you will choose the quality of apple to produce and how
+        you want to advertise it.
+      </p>
+      {/* Note */}
+      <p className="text-gray-600 text-sm font-medium text-justify">
+        Note: Your goal is to maximize your profit.
+      </p>
+    </div>
+
+
       {/* Brand Selection */}
       {reputationSystemEnabled && (
         <BrandChoice
@@ -604,7 +619,7 @@ export function ProducerChoice() {
     <div className="flex flex-col min-h-screen">
       <Navbar showTimer={true} showRoundsStages={true} showScore={true} />
       <div className="flex-grow">
-        <Instruction />
+      
         <Choices />
       </div>
       <Footer />

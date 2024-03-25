@@ -70,13 +70,10 @@ function shuffleArray(array) {
 function Instruction() {
   return (
     <div className="w-200 ml-20 mr-10 mb-8">
-      {/* Title */}
       <h1 className="text-xl text-gray-600 font-bold mb-1">Instruction</h1>
-      {/* Main Instruction */}
       <p className="text-gray-600 text-justify">
         In this stage, you will purchase the products with advertised quality.
       </p>
-      {/* Note */}
       <p className="text-gray-600 font-medium text-justify">
         Note: Your goal is to purchase product with maximum utilities.
       </p>
@@ -309,6 +306,23 @@ function Choices() {
                 overflow: "auto",
               }}
             >
+      <div className="w-200 ml-20 mr-10 mb-8">
+        <h1 className="text-xl text-gray-600 font-bold mb-1">Instruction</h1>
+        <p className="text-gray-600 text-justify">
+          In this stage, you will purchase the products with advertised quality.
+        </p>
+        <p className="text-gray-600 font-medium text-justify">
+          Note: Your goal is to purchase product with maximum utilities.
+        </p>
+        <p className="text-gray-600 font-medium text-justify">
+          If there is no prove-me-wrong bond, which means there is no bond.
+        </p>
+        <p className="text-gray-600 font-medium text-justify">
+          Choose what product you want to purchase:
+        </p>
+      </div>
+
+      
       <div className="flex flex-row  justify-around">
         {/* Display all prouducers' products */}
         {/* Use the Optional Chaining Operator (?.) */}
@@ -326,6 +340,7 @@ function Choices() {
           />
         ))}
       </div>
+      
 
       {/* Confirm Window */}
       <ConfirmWindow
@@ -452,7 +467,6 @@ export function ConsumerChoice() {
     <div className="flex flex-col min-h-screen">
       <Navbar showTimer={true} showRoundsStages={true} showScore={true} />
       <div className="flex-grow">
-        <Instruction />
         <Choices />
       </div>
       <Footer />
