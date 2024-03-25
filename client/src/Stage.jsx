@@ -29,7 +29,7 @@ export function Stage() {
 
     return (
       <>
-        <Navbar stageTitle="Waiting Room" showRoundsStages = {true}  showScore = {true}/>
+        <Navbar stageTitle="Waiting Room" showRoundsStages = {false}  showScore = {false}/>
         <div className="flex-grow flex items-center justify-center">
           <div className="text-center text-gray-400">
             Please wait for other player(s).

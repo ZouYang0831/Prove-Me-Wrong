@@ -31,81 +31,54 @@ factors:
       values:
         - value: true
         - value: false
-    - name: unitCap
-      desc: Determines the maximum number of units of the chosen product a producer can produce in one round.
-      values:
-        - value: 6
-        - value: 8
-        - value: 10
-    - name: brandCap
-      desc: brandCap determines the number of available brand names for producers. Producers are limited to choosing only one brand for each round. Have effect only if reputationSystemEnabled is set to true.
-      values:
-        - value: 5
     - name: warrantCap
       desc: Determines the maximum amount of warrant a producer can put for the product. Have effect only if warrantEnabled is set to true.
       values:
         - value: 4
         - value: 5
         - value: 6
+    - name: unitCap
+      desc: Determines the maximum number of units of the chosen product a producer can produce in one round.
+      values:
+        - value: 5
+        - value: 8
+        - value: 10
+    - name: brandCap
+      desc: brandCap determines the number of available brand names for producers. Producers are limited to choosing only one brand for each round. Have effect only if reputationSystemEnabled is set to true.
+      values:
+        - value: 5
+        - value: 2
 treatments:
     - name: Baseline
       desc: The marketplace with essential features
       factors:
-        accuracyNudgeEnabled: false
-        brandCap: 0
-        chatEnabled: false
         playerCount: 4
-        reputationSystemEnabled: false
         roundCount: 5
-        unitCap: 6
-        warrantCap: 0
-        warrantEnabled: false
+        unitCap: 5
     - name: Accuracy Nudge
       desc: The marketplace with accuracy nudging
       factors:
         accuracyNudgeEnabled: true
-        brandCap: 0
-        chatEnabled: false
         playerCount: 4
-        reputationSystemEnabled: false
         roundCount: 5
-        unitCap: 6
-        warrantCap: 0
-        warrantEnabled: false
-    - name: Warrant
-      desc: The marketplace with warrant system
-      factors:
-        accuracyNudgeEnabled: false
-        brandCap: 0
-        chatEnabled: false
-        playerCount: 4
-        reputationSystemEnabled: false
-        roundCount: 5
-        unitCap: 6
-        warrantCap: 5
-        warrantEnabled: true
+        unitCap: 5
     - name: All Enabled (4 players)
       desc: The marketplace with all features except chat
       factors:
         accuracyNudgeEnabled: true
         brandCap: 2
-        chatEnabled: false
         playerCount: 4
         reputationSystemEnabled: true
         roundCount: 5
-        unitCap: 6
+        unitCap: 5
         warrantCap: 5
         warrantEnabled: true
-    - name: All Enabled (6 players)
-      desc: The marketplace with all features except chat
+    - name: Warrant
+      desc: The marketplace with warrant system
       factors:
-        accuracyNudgeEnabled: true
-        brandCap: 2
-        chatEnabled: false
-        playerCount: 6
-        reputationSystemEnabled: true
+        playerCount: 4
         roundCount: 5
-        unitCap: 6
+        unitCap: 5
         warrantCap: 5
         warrantEnabled: true
     - name: Reputation System
@@ -115,4 +88,15 @@ treatments:
         playerCount: 4
         reputationSystemEnabled: true
         roundCount: 5
-        unitCap: 6
+        unitCap: 5
+    - name: All Enabled (6 players)
+      desc: The marketplace with all features except chat
+      factors:
+        accuracyNudgeEnabled: true
+        brandCap: 2
+        playerCount: 6
+        reputationSystemEnabled: true
+        roundCount: 5
+        unitCap: 5
+        warrantCap: 5
+        warrantEnabled: true

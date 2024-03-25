@@ -19,6 +19,7 @@ export function WalkThrough() {
     const RSProducer = "./images/RSProducer.png"
     const RSConsumer = "./images/RSConsumer.png"
     const warrantConsumer = "./images/warrantConsumer.png"
+    const warrantProducer = "./images/warrantProducer.png"
 
     const {
         accuracyNudgeEnabled,
@@ -32,7 +33,7 @@ export function WalkThrough() {
         pathProducer = RSProducer
     } else if (warrantEnabled) {
         pathConsumer = warrantConsumer 
-        pathProducer = RSProducer
+        pathProducer = warrantProducer
     } else {
         pathConsumer = baselineConsumer 
         pathProducer = baselineProducer

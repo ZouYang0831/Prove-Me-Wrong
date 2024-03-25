@@ -213,7 +213,7 @@ Empirica.onGameStart(({ game }) => {
     } else {
       // Consumer Setup
       player.set("role", "consumer");
-      player.set("wallet", 100);
+      player.set("wallet", 200);
 
       // Assigning names: A, then B, then C
       const consuemrName = "Consumer " + String.fromCharCode(65 + index); // A: 65, B: 66, C: 67, and so on...

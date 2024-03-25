@@ -227,7 +227,7 @@ export function Feedback() {
             message = <span><strong>Opps,</strong> you got tricked by 1 producer!</span>;
             headlineColor = "#E57C50"; 
         } else {
-            message = <span><strong>Opps,,</strong> you got tricked by {numConsumersBought} producers!</span>;
+            message = <span><strong>Opps,</strong> you got tricked by {numCheatedByProducer} producers!</span>;
             headlineColor = "#E57C50"; 
         }
 
@@ -392,7 +392,7 @@ export function Feedback() {
                 </div>
                 
             </div>
-             <div style={{ width: "36.2%", margin: "1%", flexDirection: "column"}}>
+            <div style={{ width: "36.2%", margin: "1%", flexDirection: "column"}}>
                <p style={{textAlign: 'center', fontWeight: 'bold', fontSize: '24px', marginBottom: '20px', marginTop: '20px'}}>Producer Leaderboard</p>
                {renderTable(tableDataTop)}
                <p style={{textAlign: 'center', fontWeight: 'bold', fontSize: '24px', marginBottom: '20px', marginTop: '20px'}}>Consumer Leaderboard</p>
