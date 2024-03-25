@@ -7,8 +7,10 @@ import {
 import { Loading } from "@empirica/core/player/react";
 import React from "react";
 import { SelectRoles } from "./stages/SelectRoles";
+import { WalkThrough } from "./stages/WalkThrough";
 import { ConsumerChoice } from "./stages/ConsumerChoice";
 import { ProducerChoice } from "./stages/ProducerChoice";
+
 import { Navbar } from "./components/Navbar"; 
 import { Footer } from "./components/Footer"; 
 import { Feedback } from "./stages/Feedback";
@@ -41,6 +43,8 @@ export function Stage() {
   switch (stage.get("name")) {
     case "SelectRoles":
       return <SelectRoles />;
+    case "WalkThrough":
+      return <WalkThrough />;
     case "ConsumerChoice":
       return <ConsumerChoice />;
     case "ProducerChoice":

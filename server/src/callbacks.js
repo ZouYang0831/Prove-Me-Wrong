@@ -150,6 +150,7 @@ Empirica.onGameStart(({ game }) => {
     // Add Select Role stage in the beginning only for the first round
     if (i === 0) {
       round.addStage({ name: "SelectRoles", duration: 10000 });
+      round.addStage({ name: "WalkThrough", duration: 10000 });
     }
 
     round.addStage({ name: "ProducerChoice", duration: 10000 });

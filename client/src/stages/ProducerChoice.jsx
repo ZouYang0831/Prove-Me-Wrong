@@ -471,14 +471,7 @@ function Choices() {
       ></ConfirmWindow>
 
       {/* Submit Button */}
-      <div className="flex justify-center mt-5">
-        <Button className="blue" handleClick={handleSubmit}>
-          Submit
-        </Button>
-        {!allSelected && (
-          <p className="text-red-600 ml-4 p-2">Please select all options!</p>
-        )}
-      </div>
+      
     </div>
   );
 }
@@ -535,6 +528,14 @@ export function ProducerChoice() {
       <div className="flex-grow">
         <Instruction />
         <Choices />
+      </div>
+      <div className="flex justify-center mt-5">
+        <Button className="blue" handleClick={handleSubmit}>
+          Submit
+        </Button>
+        {!allSelected && (
+          <p className="text-red-600 ml-4 p-2">Please select all options!</p>
+        )}
       </div>
       <Footer />
     </div>
