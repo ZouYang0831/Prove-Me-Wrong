@@ -332,6 +332,7 @@ function Choices() {
   const [allSelected, setAllSelected] = useState(true);
 
   const randomBrands = player.get("randomBrands");
+  let nudgemessage;
 
   // Handle form submission
   const handleSubmit = () => {
@@ -352,12 +353,20 @@ function Choices() {
         accuracyNudgeEnabled &&
         !confirmWindowEnabled &&
         productionQuality === "low" &&
-        advertisementQuality === "high"
+        advertisementQuality === "high" 
       ) {
         setConfirmWindowEnabled(true);
-
+        
         // If the player does not exaggerate the claim
-      } else {
+      } else if (
+        accuracyNudgeEnabled &&
+        !confirmWindowEnabled &&
+        productionQuality === "high" &&
+        advertisementQuality === "low"
+      ) {
+        setConfirmWindowEnabled(true);
+        nudgemessage = "Your choose to devalue the product quality in your advertisement";
+      }else {
         // Get the producer data for submitting
         const roundName = round.get("name");
         const roundData = {
@@ -440,7 +449,7 @@ function Choices() {
         }}
         handleSubmit={handleSubmit}
       >
-        Your choose to exaggerate the product quality in your advertisement
+        {nudgemessage}
       </ConfirmWindow>
 
       {/* Submit Button */}
