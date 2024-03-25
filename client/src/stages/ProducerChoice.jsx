@@ -255,10 +255,12 @@ function WarrantChoice({ warrant, warrantCap, onShow }) {
     <div className="mb-1">
       <h2 className="mb-1">
         <span className="font-medium">
-        Warrant:<br/>
-        Are you willing to certify your quality claim is true?
-        </span>{"                "}
-        {warrant === 0 ? "No" : "$"+warrant} Prove-Me-Wrong Bond
+          Warrant:
+          <br />
+          Are you willing to certify your quality claim is true?
+        </span>
+        {"                "}
+        {warrant === 0 ? "No" : "$" + warrant} Prove-Me-Wrong Bond
       </h2>
 
       <div className={`w-${sliderWidth} mx-auto flex flex-col`}>
@@ -329,57 +331,79 @@ function Choices() {
   const [unitProduced, setUnitProduced] = useState(0); // 0 - unitCap
   const [warrant, setWarrant] = useState(0); // $0 - $warrantCap
   const [confirmWindowEnabled, setConfirmWindowEnabled] = useState(false);
+  const [confirmWindowMessage, setConfirmWindowMessage] = useState("");
   const [allSelected, setAllSelected] = useState(true);
 
   const randomBrands = player.get("randomBrands");
-  let nudgemessage;
 
   // Handle form submission
   const handleSubmit = () => {
-    // Check if all required inputs are selected
-    let isAllSelected = productionQuality && advertisementQuality;
+    // If producer does not producer any units, submit it.
+    if (unitProduced == 0) {
+      // Get the producer data for submitting
+      const roundName = round.get("name");
+      const roundData = {
+        productQuality: "",
+        advertisementQuality: "",
+        unitProduced: 0,
+        ...(reputationSystemEnabled && { brand: "" }),
+        ...(warrantEnabled && { warrant: 0 }),
+      };
 
-    // Include brand if reputation system is enabled
-    if (reputationSystemEnabled) {
-      isAllSelected = isAllSelected && brand;
-    }
+      // Set player data and submit stage
+      player.set(roundName, roundData);
+      player.stage.set("submit", true);
 
-    // Set the state using a different variable to avoid async issues
-    setAllSelected(isAllSelected);
+      // If the producer produces any units, check if all selected
+    } else {
+      // Check if all required inputs are selected
+      let isAllSelected = productionQuality && advertisementQuality;
 
-    if (isAllSelected) {
-      // Check if the player exaggerate the claim so confirm window should pop up
-      if (
-        accuracyNudgeEnabled &&
-        !confirmWindowEnabled &&
-        productionQuality === "low" &&
-        advertisementQuality === "high" 
-      ) {
-        setConfirmWindowEnabled(true);
-        
-        // If the player does not exaggerate the claim
-      } else if (
-        accuracyNudgeEnabled &&
-        !confirmWindowEnabled &&
-        productionQuality === "high" &&
-        advertisementQuality === "low"
-      ) {
-        setConfirmWindowEnabled(true);
-        nudgemessage = "Your choose to devalue the product quality in your advertisement";
-      }else {
-        // Get the producer data for submitting
-        const roundName = round.get("name");
-        const roundData = {
-          productQuality: productionQuality,
-          advertisementQuality: advertisementQuality,
-          unitProduced: unitProduced,
-          ...(reputationSystemEnabled && { brand: brand }),
-          ...(warrantEnabled && { warrant: warrant }),
-        };
+      // Include brand if reputation system is enabled
+      if (reputationSystemEnabled) {
+        isAllSelected = isAllSelected && brand;
+      }
 
-        // Set player data and submit stage
-        player.set(roundName, roundData);
-        player.stage.set("submit", true);
+      // Set the state using a different variable to avoid async issues
+      setAllSelected(isAllSelected);
+
+      if (isAllSelected) {
+        // Check if the player exaggerate the claim so confirm window should pop up
+        if (
+          accuracyNudgeEnabled &&
+          !confirmWindowEnabled &&
+          productionQuality === "low" &&
+          advertisementQuality === "high"
+        ) {
+          const confirmWindowMessage = "You choose to exaggerate the product quality in your advertisement."
+          setConfirmWindowMessage(confirmWindowMessage);
+          setConfirmWindowEnabled(true);
+          // Check if the player devalue the claim
+        } else if (
+          accuracyNudgeEnabled &&
+          !confirmWindowEnabled &&
+          productionQuality === "high" &&
+          advertisementQuality === "low"
+        ) {
+          const confirmWindowMessage = "You choose to devalue the product quality in your advertisement."
+          setConfirmWindowMessage(confirmWindowMessage);
+          setConfirmWindowEnabled(true);
+          // If the player does not exaggerate the claim
+        } else {
+          // Get the producer data for submitting
+          const roundName = round.get("name");
+          const roundData = {
+            productQuality: productionQuality,
+            advertisementQuality: advertisementQuality,
+            unitProduced: unitProduced,
+            ...(reputationSystemEnabled && { brand: brand }),
+            ...(warrantEnabled && { warrant: warrant }),
+          };
+
+          // Set player data and submit stage
+          player.set(roundName, roundData);
+          player.stage.set("submit", true);
+        }
       }
     }
   };
@@ -448,8 +472,8 @@ function Choices() {
           setConfirmWindowEnabled(false);
         }}
         handleSubmit={handleSubmit}
+        children={confirmWindowMessage}
       >
-        {nudgemessage}
       </ConfirmWindow>
 
       {/* Submit Button */}
@@ -513,7 +537,7 @@ export function ProducerChoice() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar showTimer={true} showRoundsStages={true} showScore={true}/>
+      <Navbar showTimer={true} showRoundsStages={true} showScore={true} />
       <div className="flex-grow">
         <Instruction />
         <Choices />
