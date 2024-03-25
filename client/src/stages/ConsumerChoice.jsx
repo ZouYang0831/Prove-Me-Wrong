@@ -301,7 +301,14 @@ function Choices() {
 
   // JSX
   return (
-    <div className="w-200 ml-20 mr-10 mb-10">
+    <div className="flex flex-row w-full p-4">
+    <div
+              style={{
+                width: "61.8%",
+                margin: "1%", // Spacing between the two containers
+                overflow: "auto",
+              }}
+            >
       <div className="flex flex-row  justify-around">
         {/* Display all prouducers' products */}
         {/* Use the Optional Chaining Operator (?.) */}
@@ -336,6 +343,61 @@ function Choices() {
           Submit
         </Button>
       </div>
+    </div>
+    <div style={{
+      width: "38.2%", 
+      display: "flex", 
+      flexDirection: "column", 
+      borderLeft: "2px solid #ccc", // Vertical line
+      paddingLeft: "20px", // Spacing inside the right section
+    }}>
+        <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", }}>
+        <img 
+          src="./images/pay_off_matrix.png" 
+          style={{ width: "50%", height: "auto" }} 
+        />
+      </div>
+
+      {/* Table at the bottom */}
+      <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
+      <p style={{ textAlign: "center", fontWeight: "bold" }}>Choice History</p>
+        <table style={{ width: "100%" }}>
+          <thead>
+            <tr style = {{textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black', fontSize: "12px"}}>
+              <th>Round</th>
+              <th>Ads Quality</th>
+              <th>True Quality</th>
+              <th>Units Bought</th>
+              {reputationSystemEnabled && (
+                                <>
+                                    <th>Brand</th>
+                                </>
+                            )}
+              <th>Scores</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style={{ textAlign: 'center', borderBottom: '2px solid black' }}>
+              <td>Data 1</td>
+              <td>Data 2</td>
+              <td>Data 3</td>
+              <td>Data 1</td>
+              <td>Data 2</td>
+              <td>Data 3</td>
+            </tr>
+            <tr style={{ textAlign: 'center', borderBottom: '2px solid black' }}>
+              <td>Data 1</td>
+              <td>Data 2</td>
+              <td>Data 3</td>
+              <td>Data 1</td>
+              <td>Data 2</td>
+              <td>Data 3</td>
+            </tr>
+            {/* Add more rows as needed */}
+          </tbody>
+        </table>
+      </div>
+    </div>
     </div>
   );
 }

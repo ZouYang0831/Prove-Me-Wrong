@@ -404,7 +404,14 @@ function Choices() {
   };
 
   return (
-    <div className="w-200 ml-20 mr-10 mb-10">
+    <div className="flex flex-row w-full p-4">
+    <div
+              style={{
+                width: "61.8%",
+                margin: "1%", // Spacing between the two containers
+                overflow: "auto",
+              }}
+            >
       {/* Brand Selection */}
       {reputationSystemEnabled && (
         <BrandChoice
@@ -471,10 +478,79 @@ function Choices() {
       ></ConfirmWindow>
 
       {/* Submit Button */}
-      
+      <div className="flex justify-center mt-5">
+        <Button className="customGreen" handleClick={handleSubmit}>
+          Submit
+        </Button>
+        {!allSelected && (
+          <p className="text-red-600 ml-4 p-2">Please select all options!</p>
+        )}
+      </div>
     </div>
-  );
-}
+    <div style={{
+      width: "38.2%", 
+      display: "flex", 
+      flexDirection: "column", 
+      borderLeft: "2px solid #ccc", // Vertical line
+      paddingLeft: "20px", // Spacing inside the right section
+    }}>
+
+      {/* Image at the top */}
+      <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", }}>
+        <img 
+          src="./images/pay_off_matrix.png" 
+          style={{ width: "50%", height: "auto" }} 
+        />
+      </div>
+
+      {/* Table at the bottom */}
+      <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
+      <p style={{ textAlign: "center", fontWeight: "bold" }}>Choice History</p>
+        <table style={{ width: "100%" }}>
+          <thead>
+            <tr style = {{textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black', fontSize: "12px"}}>
+              <th>Round</th>
+              <th>Prod Quality</th>
+              <th>Ads Quality</th>
+              <th>Units Produced</th>
+              <th>Units Sold</th>
+              {reputationSystemEnabled && (
+                                <>
+                                    <th>Brand</th>
+                                </>
+                            )}
+              <th>Scores</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style={{ textAlign: 'center', borderBottom: '2px solid black' }}>
+              <td>Data 1</td>
+              <td>Data 2</td>
+              <td>Data 3</td>
+              <td>Data 1</td>
+              <td>Data 2</td>
+              <td>Data 3</td>
+              <td>Data 3</td>
+            </tr>
+            <tr style={{ textAlign: 'center', borderBottom: '2px solid black' }}>
+              <td>Data 1</td>
+              <td>Data 2</td>
+              <td>Data 3</td>
+              <td>Data 1</td>
+              <td>Data 2</td>
+              <td>Data 3</td>
+              <td>Data 3</td>
+            </tr>
+            {/* Add more rows as needed */}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+        </div>
+      );
+    }
 
 // // Component for displaying the leaderboard
 // function LeaderBoard() {
@@ -522,20 +598,14 @@ export function ProducerChoice() {
     player.stage.set("submit", true);
   }
 
+  
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar showTimer={true} showRoundsStages={true} showScore={true} />
       <div className="flex-grow">
         <Instruction />
         <Choices />
-      </div>
-      <div className="flex justify-center mt-5">
-        <Button className="blue" handleClick={handleSubmit}>
-          Submit
-        </Button>
-        {!allSelected && (
-          <p className="text-red-600 ml-4 p-2">Please select all options!</p>
-        )}
       </div>
       <Footer />
     </div>
