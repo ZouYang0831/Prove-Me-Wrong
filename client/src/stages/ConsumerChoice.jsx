@@ -81,10 +81,10 @@ function Instruction() {
         Note: Your goal is to purchase product with maximum utilities.
       </p>
       <p className="text-gray-600 font-medium text-justify">
-      If there is no prove-me-wrong bond, which means there is no bond.
+        If there is no prove-me-wrong bond, which means there is no bond.
       </p>
       <p className="text-gray-600 font-medium text-justify">
-      Choose what product you want to purchase:
+        Choose what product you want to purchase:
       </p>
     </div>
   );
@@ -143,8 +143,6 @@ function ProductCard({
     }
   })();
 
-  
-
   return (
     <div
       className={`relative w-60 px-5 py-6 bg-gray-200 rounded-md duration-300 ${
@@ -161,7 +159,9 @@ function ProductCard({
       {/* Product information */}
       <div className="text-center items-center flex flex-col">
         {brand && <h2 className="text-xl font-bold"> Brand: {brand}</h2>}
-        <h2 className="text-2xl font-medium">{advertisementQuality === "low" ? "Low" : "High"} Quality</h2>
+        <h2 className="text-2xl font-medium">
+          {advertisementQuality === "low" ? "Low" : "High"} Quality
+        </h2>
         <img
           src={imagePath}
           alt="Product"
@@ -282,15 +282,20 @@ function Choices() {
 
   // Function to handle submission
   const handleSubmit = () => {
-    if (accuracyNudgeEnabled && !confirmWindowEnabled) {
-      setConfirmWindowEnabled(true); //! What if consumers did not choose to buy anything?
-    } else {
-      const roundName = round.get("name");
+    // If consumer does not select any units, then simply submit
+    const allUnitSelectedZero = Object.values(producers).every(
+      (producer) => producer.unitSelected === 0
+    );
+    const roundName = round.get("name");
+    const roundData = { producers: producers };
 
+    if (allUnitSelectedZero || !accuracyNudgeEnabled || confirmWindowEnabled) {
       // Set player data and submit stage
-      const roundData = { producers: producers };
       player.set(roundName, roundData);
       player.stage.set("submit", true);
+    } else {
+      // Enable confirm window
+      setConfirmWindowEnabled(true);
     }
   };
 
@@ -383,7 +388,7 @@ export function ConsumerChoice() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar showTimer={true} showRoundsStages={true} showScore={true}/>
+      <Navbar showTimer={true} showRoundsStages={true} showScore={true} />
       <div className="flex-grow">
         <Instruction />
         <Choices />

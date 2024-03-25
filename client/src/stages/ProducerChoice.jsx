@@ -338,9 +338,8 @@ function Choices() {
 
   // Handle form submission
   const handleSubmit = () => {
-    // If producer does not producer any units, submit it.
-    if (unitProduced == 0) {
-      // Get the producer data for submitting
+    if (unitProduced === 0) {
+      // If producer does not produce any units, submit it.
       const roundName = round.get("name");
       const roundData = {
         productQuality: "",
@@ -349,46 +348,32 @@ function Choices() {
         ...(reputationSystemEnabled && { brand: "" }),
         ...(warrantEnabled && { warrant: 0 }),
       };
-
       // Set player data and submit stage
       player.set(roundName, roundData);
       player.stage.set("submit", true);
-
-      // If the producer produces any units, check if all selected
     } else {
-      // Check if all required inputs are selected
+      // If the producer produces any units, check if all required inputs are selected
       let isAllSelected = productionQuality && advertisementQuality;
-
-      // Include brand if reputation system is enabled
-      if (reputationSystemEnabled) {
-        isAllSelected = isAllSelected && brand;
-      }
+      isAllSelected = reputationSystemEnabled
+        ? isAllSelected && brand
+        : isAllSelected;
 
       // Set the state using a different variable to avoid async issues
       setAllSelected(isAllSelected);
 
       if (isAllSelected) {
-        // Check if the player exaggerate the claim so confirm window should pop up
+        // Check if the player exaggerates or devalues the claim
+        const confirmWindowMessage = getConfirmWindowMessage(
+          productionQuality,
+          advertisementQuality
+        );
         if (
           accuracyNudgeEnabled &&
           !confirmWindowEnabled &&
-          productionQuality === "low" &&
-          advertisementQuality === "high"
+          confirmWindowMessage
         ) {
-          const confirmWindowMessage = "You choose to exaggerate the product quality in your advertisement."
           setConfirmWindowMessage(confirmWindowMessage);
           setConfirmWindowEnabled(true);
-          // Check if the player devalue the claim
-        } else if (
-          accuracyNudgeEnabled &&
-          !confirmWindowEnabled &&
-          productionQuality === "high" &&
-          advertisementQuality === "low"
-        ) {
-          const confirmWindowMessage = "You choose to devalue the product quality in your advertisement."
-          setConfirmWindowMessage(confirmWindowMessage);
-          setConfirmWindowEnabled(true);
-          // If the player does not exaggerate the claim
         } else {
           // Get the producer data for submitting
           const roundName = round.get("name");
@@ -399,12 +384,22 @@ function Choices() {
             ...(reputationSystemEnabled && { brand: brand }),
             ...(warrantEnabled && { warrant: warrant }),
           };
-
           // Set player data and submit stage
           player.set(roundName, roundData);
           player.stage.set("submit", true);
         }
       }
+    }
+  };
+
+  // Function to get the confirm window message based on production and advertisement quality
+  const getConfirmWindowMessage = (productionQuality, advertisementQuality) => {
+    if (productionQuality === "low" && advertisementQuality === "high") {
+      return "You choose to exaggerate the product quality in your advertisement.";
+    } else if (productionQuality === "high" && advertisementQuality === "low") {
+      return "You choose to devalue the product quality in your advertisement.";
+    } else {
+      return null;
     }
   };
 
@@ -473,8 +468,7 @@ function Choices() {
         }}
         handleSubmit={handleSubmit}
         children={confirmWindowMessage}
-      >
-      </ConfirmWindow>
+      ></ConfirmWindow>
 
       {/* Submit Button */}
       <div className="flex justify-center mt-5">
