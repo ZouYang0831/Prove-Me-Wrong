@@ -10,12 +10,12 @@ import { Loading } from "@empirica/core/player/react";
   
 
 
-export function Feedback() {
+export function Feedback2() {
     const player = usePlayer();
 
 
   // Submit for Consumer to enter waiting interface. (Not sure if useEffect is needed)
-    if (player.get("role") === "producer") {
+    if (player.get("role") === "consumer") {
         player.stage.set("submit", true);
     }
 
@@ -39,12 +39,7 @@ export function Feedback() {
     //console.log(producerScores[0]['id'])
   
     function handleSubmit() {
-        const roundName = round.get("name");
-        const producersInteracted = player.get(roundName)['producers']; // Ensure this contains data
-        const roundData = player.get(roundName) || {};
-        roundData['challengeproducers'] = producersInteracted;
-        player.set(roundName, roundData);
-        player.stage.set("submit", true);
+      player.stage.set("submit", true);
     }
 
     let testdata = 0;
@@ -70,6 +65,7 @@ export function Feedback() {
             return sum + (consumer.unitSoldByConsumer || 0); // Add the unitSoldByConsumer to the sum, defaulting to 0 if undefined
         }, 0);
 
+
         //console.log(consumersInteracted)
         //productQuality: int,
         //advertisementQuality
@@ -93,8 +89,17 @@ export function Feedback() {
         //const players = stage.currentGame.players;
 
         //const players = game.players;
-        //console.log(consumersInteracted)
+        //const roundName = round.get("name"); // Make sure you have the correct round name
+        const roundData = player.get(roundName); // Retrieve the entire round data
+        console.log(roundData)
+        if (roundData['challengeproducers']) {
+            const challengeProducersData = roundData['challengeproducers']; // Access the 'challengeproducers' key
+            console.log("challengeProducersData", challengeProducersData);
+        } else {
+            console.log("Round data is undefined for", roundName);
+        }
 
+        console.log(roundData)
 
         return (
             
@@ -222,7 +227,6 @@ export function Feedback() {
         const producersInteracted = player.get(roundName)['producers'];
         //const numConsumersBought = Object.values(consumersInteracted).filter(details => details.unitSoldByConsumer > 0).length;
         const consumer = player.get(roundName)
-        console.log("consumer", consumer)
         const scoreChange = consumer['scoreChange']
         const numCheatedByProducer = Object.values(producersInteracted).filter(details =>
             details.advertisementQuality === 'high' && details.productQuality === "low" && details.confirmBuy === true).length;
@@ -274,8 +278,6 @@ export function Feedback() {
                     updatedProducers[producerID].scoreChangeByProducer = updatedProducers[producerID].scoreChangeByProducer - scoreupdate;
                     player.set("score", player.get("score") - scoreupdate);
                     player.set("wallet", player.get("wallet") - scoreupdate);
-                    //player.set("scoreChallenge", scoreupdate);
-                    console.log("scorechange", player.get(roundName))
                     for (const producer of producerScores) {
                         //console.log(player.get("role"))
                         //console.log(player.get("score"))
@@ -291,9 +293,6 @@ export function Feedback() {
                     updatedProducers[producerID].scoreChangeByProducer = updatedProducers[producerID].scoreChangeByProducer + scoreupdate;
                     player.set("score", player.get("score") + scoreupdate);
                     player.set("wallet", player.get("wallet") + scoreupdate);
-                    player.set("scoreChallenge", -scoreupdate);
-                    console.log(player)
-                    console.log("scoreChallenge", player.get("scoreChange"))
                     //console.log(playerScores)
                     for (const producer of producerScores) {
                         //console.log(player.get("score"))
@@ -316,14 +315,6 @@ export function Feedback() {
                             console.log("testdata on consuer:",testdata)
                             //console.log(producers)
                             testdata = 1;
-                            console.log(player.get("scoreChange"))
-                            const roundName = round.get("name");
-                            const producersInteracted = player.get(roundName)['producers'];
-                            console.log("producersInteracted",producersInteracted)
-                            const roundData = player.get(roundName) || {};
-                            roundData['challengeproducers'] = producersInteracted;
-                            player.set(roundName, roundData);
-                            console.log("testdad",roundData)
                         }
                     }
                     

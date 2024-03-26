@@ -156,6 +156,7 @@ Empirica.onGameStart(({ game }) => {
     round.addStage({ name: "ProducerChoice", duration: 10000 });
     round.addStage({ name: "ConsumerChoice", duration: 10000 });
     round.addStage({ name: "Feedback", duration: 10000 });
+    round.addStage({ name: "Feedback2", duration: 10000 });
 
     // Add Final Result stage in the end only for the last round
     if (i === roundCount - 1) {
@@ -227,10 +228,27 @@ Empirica.onRoundStart(({ round }) => {});
 Empirica.onStageStart(({ stage }) => {});
 
 Empirica.onStageEnded(({ stage }) => {
-  if (stage.get("name") === "ConsumerChoice") {
+  if (stage.get("name") === "Feedback") {
     const players = stage.currentGame.players;
     const roundName = stage.round.get("name");
 
+    for (const consumer of players) {
+      if (consumer.get("role") === "consumer") {
+        const consumerRoundData = consumer.get(roundName);
+        for (const producer of players) {
+          if (producer.get("role") === "producer") {
+            const producerRoundData = producer.get(roundName)
+            producerRoundData[producer.id]['challengeproducers'] = consumerRoundData["challengeproducers"]
+            console.log("callbacks", consumerRoundData["challengeproducers"])
+            //console.log(producersInteracted)
+          }
+        }
+      }
+    }
+  }
+  if (stage.get("name") === "ConsumerChoice") {
+    const players = stage.currentGame.players;
+    const roundName = stage.round.get("name");
     /*     
       ConsumerData Update
     */

@@ -54,23 +54,6 @@ import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 
 // Component for displaying game instructions
-function Instruction() {
-  return (
-    <div className="w-200 ml-20 mr-10 mb-4">
-      {/* Title */}
-      <h1 className="text-xl text-gray-600 font-bold">Instruction</h1>
-      {/* Main Instruction */}
-      <p className="text-gray-600 text-sm text-justify">
-        In this stage, you will choose the quality of coffee to produce and how
-        you want to advertise it.
-      </p>
-      {/* Note */}
-      <p className="text-gray-600 text-sm font-medium text-justify">
-        Note: Your goal is to maximize your profit.
-      </p>
-    </div>
-  );
-}
 
 // Component for choosing a brand
 function BrandChoice({ brand, onShow, randomBrands }) {

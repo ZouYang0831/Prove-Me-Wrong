@@ -14,6 +14,7 @@ import { ProducerChoice } from "./stages/ProducerChoice";
 import { Navbar } from "./components/Navbar"; 
 import { Footer } from "./components/Footer"; 
 import { Feedback } from "./stages/Feedback";
+import { Feedback2 } from "./stages/Feedback2";
 // import { FinalResult } from "./stages/FinalResult";
 
 
@@ -51,6 +52,8 @@ export function Stage() {
       return <ProducerChoice />;
     case "Feedback":
       return <Feedback />;
+    case "Feedback2":
+      return <Feedback2 />;
     case "FinalResult":
       return <FinalResult />
     default:
