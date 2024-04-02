@@ -78,9 +78,6 @@ function Instruction() {
         Note: Your goal is to purchase product with maximum utilities.
       </p>
       <p className="text-gray-600 font-medium text-justify">
-        If there is no prove-me-wrong bond, which means there is no bond.
-      </p>
-      <p className="text-gray-600 font-medium text-justify">
         Choose what product you want to purchase:
       </p>
     </div>
@@ -313,9 +310,6 @@ function Choices() {
         </p>
         <p className="text-gray-600 font-medium text-justify">
           Note: Your goal is to purchase product with maximum utilities.
-        </p>
-        <p className="text-gray-600 font-medium text-justify">
-          If there is no prove-me-wrong bond, which means there is no bond.
         </p>
         <p className="text-gray-600 font-medium text-justify">
           Choose what product you want to purchase:
