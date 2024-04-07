@@ -23,9 +23,8 @@ export function Feedback() {
     const role = player.get("role");
     const stage = useStage();
     const players = usePlayers();
-    players[1].set("score",players[1].get("score")+20)
+    //players[1].set("score",players[1].get("score")+20)
     const round = useRound();
-    //const [producerScores, setProducerScores] = useState(initialScores);
     const playerScores = players.map(player => ({
         id: player.id,
         name: player.get("name"),
@@ -35,9 +34,6 @@ export function Feedback() {
     consumerScores.sort((a, b) => b.score - a.score);
     const producerScores = playerScores.filter(player => player.name.includes("Producer"));
     producerScores.sort((a, b) => b.score - a.score);
-    const allChallengesSubmitted = round.get("allChallengesSubmitted");
-    //console.log(consumerScores)
-    //console.log(producerScores[0]['id'])
   
     function handleSubmit() {
         const roundName = round.get("name");
@@ -47,13 +43,10 @@ export function Feedback() {
         player.set(roundName, roundData);
         player.stage.set("submit", true);
     }
-
-    let testdata = 0;
   
     function ProducerInfo() {
         const roundName = round.get("name");
         const currentcapital = player.get("capital");
-        //const unitSoldByConsumer = player.get("capital");
         const consumersInteracted = player.get(roundName)['consumers'];
         const numConsumersBought = Object.values(consumersInteracted).filter(details => details.unitSoldByConsumer > 0).length;
         const producer = player.get(roundName)
@@ -71,9 +64,6 @@ export function Feedback() {
             return sum + (consumer.unitSoldByConsumer || 0); // Add the unitSoldByConsumer to the sum, defaulting to 0 if undefined
         }, 0);
 
-        //console.log(consumersInteracted)
-        //productQuality: int,
-        //advertisementQuality
 
         let message, headlineColor;
         if (numConsumersBought === 0) {
@@ -86,15 +76,6 @@ export function Feedback() {
             message = <span><strong>Congratulations,</strong> {numConsumersBought} consumers bought your product!</span>;
             headlineColor = "#A4CC7C"; 
         }
-        console.log("producer score", player.get("score"))
-        //console.log(player.get('Round 0')['scoreChange'])
-
-        //const numProductsSold = Object.values(consumersInteracted).filter(details => details.unitSoldByConsumer > 0)
-        //console.log(consumersInteracted)
-        //const players = stage.currentGame.players;
-
-        //const players = game.players;
-        //console.log(consumersInteracted)
 
 
         return (
@@ -221,7 +202,6 @@ export function Feedback() {
         const roundName = round.get("name");
         const wallet = player.get("wallet");
         const producersInteracted = player.get(roundName)['producers'];
-        //const numConsumersBought = Object.values(consumersInteracted).filter(details => details.unitSoldByConsumer > 0).length;
         const consumer = player.get(roundName)
         console.log("consumer", consumer)
         const scoreChange = consumer['scoreChange']
@@ -230,8 +210,6 @@ export function Feedback() {
         
         const numProducersBoughtFrom = Object.values(producersInteracted).filter(details =>
             details.confirmBuy === true).length;
-
-        //const [producers, setProducers] = useState({});
 
         let message, headlineColor;
         if (numCheatedByProducer === 0 && numProducersBoughtFrom === 0){
@@ -262,7 +240,6 @@ export function Feedback() {
         
 
         const handleIsChallenge = (producerID) => {
-            //console.log(consumer["producers"][producerID])
             const currentProducers = consumer["producers"];
             const updatedProducers = { ...currentProducers };
             const warrant = updatedProducers[producerID].warrant
@@ -272,61 +249,15 @@ export function Feedback() {
                 updatedProducers[producerID].isChallenged = !updatedProducers[producerID].isChallenged;
                 const scoreupdate = warrant*unitReceived;
                 if (updatedProducers[producerID].isChallenged === false && updatedProducers[producerID].productQuality === 'low' && updatedProducers[producerID].advertisementQuality === 'high') {
-                    updatedProducers[producerID].scoreChangeByProducer = updatedProducers[producerID].scoreChangeByProducer - scoreupdate;
+                    //updatedProducers[producerID].scoreChangeByProducer = updatedProducers[producerID].scoreChangeByProducer - scoreupdate;
                     player.set("score", player.get("score") - scoreupdate);
                     player.set("wallet", player.get("wallet") - scoreupdate);
-                    //player.set("scoreChallenge", scoreupdate);
-                    console.log("scorechange", player.get(roundName))
-                    for (const producer of producerScores) {
-                        //console.log(player.get("role"))
-                        //console.log(player.get("score"))
-                        if (producer["id"] === producerID) {
-                            console.log(producer.score)
-                            
-                            //producer["score"] = producer["score"] + scoreupdate;
-                            //producer["wallet"] =  producer["wallet"] + scoreupdate;
-                            //console.log(producerScores)
-                        }
-                    }
+
                 } else if (updatedProducers[producerID].isChallenged === true && updatedProducers[producerID].productQuality === 'low' && updatedProducers[producerID].advertisementQuality === 'high'){
-                    updatedProducers[producerID].scoreChangeByProducer = updatedProducers[producerID].scoreChangeByProducer + scoreupdate;
+                    //updatedProducers[producerID].scoreChangeByProducer = updatedProducers[producerID].scoreChangeByProducer + scoreupdate;
                     player.set("score", player.get("score") + scoreupdate);
                     player.set("wallet", player.get("wallet") + scoreupdate);
-                    player.set("scoreChallenge", -scoreupdate);
-                    console.log(player)
-                    console.log("scoreChallenge", player.get("scoreChange"))
-                    //console.log(playerScores)
-                    for (const producer of producerScores) {
-                        //console.log(player.get("score"))
-                        if (producer["id"] === producerID) {
-                            
-                            //producer.set("score", producer.get("score") - scoreupdate);
-                            const newscore = producer.score - scoreupdate;
-                            producer.score = newscore;
-                            
-                            //challengeProducer(producerID, warrant, unitReceived, stage);
-                            //console.log(producer.scoreChangeByProducer)
-                            //console.log(producerScores[0].scoreChangeByProducer)
-                            //producer["captital"] =  producer["capital"] - scoreupdate;
-                            console.log(producer)
-                            console.log(producerID)
-                            console.log(producer.score)
-                            console.log(producerScores[0].score)
-                            console.log(producerScores[0].id)
-                            //console.log(producer.get('role'))
-                            console.log("testdata on consuer:",testdata)
-                            //console.log(producers)
-                            testdata = 1;
-                            console.log(player.get("scoreChange"))
-                            const roundName = round.get("name");
-                            const producersInteracted = player.get(roundName)['producers'];
-                            console.log("producersInteracted",producersInteracted)
-                            const roundData = player.get(roundName) || {};
-                            roundData['challengeproducers'] = producersInteracted;
-                            player.set(roundName, roundData);
-                            console.log("testdad",roundData)
-                        }
-                    }
+                    //player.set("scoreChallenge", -scoreupdate);
                     
                 }
                 
@@ -334,9 +265,7 @@ export function Feedback() {
                 player.set("producers", updatedProducers);
                 
             }
-        };
-        //console.log(producersInteracted)
-    
+        };   
 
 
         return (

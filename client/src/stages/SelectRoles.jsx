@@ -45,10 +45,10 @@ export function SelectRoles() {
   return (
     <div className="flex flex-col min-h-screen"> 
       <Navbar stageTitle="Welcome to Marketplace Game!" />
-      <div className="flex-grow p-4" style={{ fontSize: '25px' }}>
+      <div className="flex-grow p-4" style={{ fontSize: '30px' }}>
         <p className="text-start my-4">
         🌟 Welcome, <b>{role}</b>! 🌟
-        </p>
+        </p><br/>
         {role === "consumer" ? <ConsumerInfo /> : <ProducerInfo />}
         <div className="flex justify-center mt-4">
           <Button primary={true} handleClick={handleSubmit}>I'm ready!</Button>
