@@ -23,6 +23,7 @@ export function Feedback() {
     const role = player.get("role");
     const stage = useStage();
     const players = usePlayers();
+    players[1].set("score",players[1].get("score")+20)
     const round = useRound();
     //const [producerScores, setProducerScores] = useState(initialScores);
     const playerScores = players.map(player => ({
