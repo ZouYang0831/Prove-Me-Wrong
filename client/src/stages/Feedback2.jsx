@@ -65,11 +65,6 @@ export function Feedback2() {
             return sum + (consumer.unitSoldByConsumer || 0); // Add the unitSoldByConsumer to the sum, defaulting to 0 if undefined
         }, 0);
 
-
-        //console.log(consumersInteracted)
-        //productQuality: int,
-        //advertisementQuality
-
         let message, headlineColor;
         if (numConsumersBought === 0) {
             message = <span><strong>Unfortunately,</strong> no consumers bought your product.</span>;
@@ -99,7 +94,7 @@ export function Feedback2() {
             console.log("Round data is undefined for", roundName);
         }
 
-        console.log(roundData)
+        console.log("olayer:", player)
 
         return (
             

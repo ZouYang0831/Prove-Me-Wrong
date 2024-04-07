@@ -275,6 +275,54 @@ function Choices() {
     }
   };
 
+  const totalRounds = game.get("totalRounds") || 5; // Example: Get total rounds from game state or set a fixed number
+
+  // Dynamically build the list of round data
+  const rounds = [];
+  for(let i = 0; i <= totalRounds; i++) {
+    const roundData = player.get(`Round ${i}`);
+    if(roundData) { // Check if the round data exists
+      rounds.push({
+        ...roundData,
+        roundName: `Round ${i}`,
+      });
+    }
+  }
+  console.log(player.get("Round 0"))
+
+  const renderRoundsTable = () => {
+    return (
+      <table style={{ width: "100%" }}>
+        <thead>
+          <tr style = {{textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black', fontSize: "12px"}}>
+            <th>Round</th>
+            <th>Ads Quality</th>
+            <th>True Quality</th>
+            <th>Units Bought</th>
+            {reputationSystemEnabled && <th>Brand</th>}
+            <th>Scores</th>
+          </tr>
+        </thead>
+        <tbody>
+        {rounds.flatMap((round, roundIndex) =>
+          Object.entries(round.producers)
+          .filter(([_, details]) => details.unitReceived > 0) 
+          .map(([producerId, details], index) => (
+            <tr key={`${roundIndex}-${producerId}-${index}`} style={{ textAlign: 'center', borderBottom: '2px solid black' }}>
+              <td>{round.roundName}</td>
+              <td>{details.advertisementQuality}</td>
+              <td>{details.productQuality}</td>
+              <td>{details.unitReceived}</td>
+              {reputationSystemEnabled && <td>{details.brand}</td>}
+              <td>{details.scoreChangeByProducer}</td>
+            </tr>
+          ))
+        )}
+      </tbody>
+      </table>
+    );
+  };
+
   // JSX
   return (
     <div className="flex flex-row w-full p-4">
@@ -355,41 +403,7 @@ function Choices() {
       {/* Table at the bottom */}
       <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
       <p style={{ textAlign: "center", fontWeight: "bold" }}>Choice History</p>
-        <table style={{ width: "100%" }}>
-          <thead>
-            <tr style = {{textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black', fontSize: "12px"}}>
-              <th>Round</th>
-              <th>Ads Quality</th>
-              <th>True Quality</th>
-              <th>Units Bought</th>
-              {reputationSystemEnabled && (
-                                <>
-                                    <th>Brand</th>
-                                </>
-                            )}
-              <th>Scores</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style={{ textAlign: 'center', borderBottom: '2px solid black' }}>
-              <td>Data 1</td>
-              <td>Data 2</td>
-              <td>Data 3</td>
-              <td>Data 1</td>
-              <td>Data 2</td>
-              <td>Data 3</td>
-            </tr>
-            <tr style={{ textAlign: 'center', borderBottom: '2px solid black' }}>
-              <td>Data 1</td>
-              <td>Data 2</td>
-              <td>Data 3</td>
-              <td>Data 1</td>
-              <td>Data 2</td>
-              <td>Data 3</td>
-            </tr>
-            {/* Add more rows as needed */}
-          </tbody>
-        </table>
+        {renderRoundsTable()}
       </div>
     </div>
     </div>

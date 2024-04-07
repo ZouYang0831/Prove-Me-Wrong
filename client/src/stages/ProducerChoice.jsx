@@ -318,6 +318,7 @@ function Choices() {
   const [allSelected, setAllSelected] = useState(true);
 
   const randomBrands = player.get("randomBrands");
+  const roundName = round.get("name");
 
   // Handle form submission
   const handleSubmit = () => {
@@ -385,6 +386,52 @@ function Choices() {
       return null;
     }
   };
+
+  const totalRounds = game.get("totalRounds") || 5; // Example: Get total rounds from game state or set a fixed number
+
+  // Dynamically build the list of round data
+  const rounds = [];
+  for(let i = 0; i <= totalRounds; i++) {
+    const roundData = player.get(`Round ${i}`);
+    if(roundData) { // Check if the round data exists
+      rounds.push({
+        ...roundData,
+        roundName: `Round ${i}`,
+      });
+    }
+  }
+  console.log(rounds)
+
+  const renderRoundsTable = () => {
+    return (
+      <table style={{ width: "100%" }}>
+        <thead>
+          <tr style = {{textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black', fontSize: "12px"}}>
+            <th>Round</th>
+            <th>Prod Quality</th>
+            <th>Ads Quality</th>
+            <th>Units Produced</th>
+            <th>Units Sold</th>
+            {reputationSystemEnabled && <th>Brand</th>}
+            <th>Scores</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rounds.map((round, index) => (
+            <tr key={index} style={{ textAlign: 'center', borderBottom: '2px solid black' }}>
+              <td>{round.roundName}</td>
+              <td>{round.productQuality}</td>
+              <td>{round.advertisementQuality}</td>
+              <td>{round.unitProduced}</td>
+              <td>{round.unitSold}</td>
+              {reputationSystemEnabled && <td>{round.brand}</td>}
+              <td>{round.scoreChange}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };  
 
   return (
     <div className="flex flex-row w-full p-4">
@@ -504,44 +551,7 @@ function Choices() {
       {/* Table at the bottom */}
       <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
       <p style={{ textAlign: "center", fontWeight: "bold" }}>Choice History</p>
-        <table style={{ width: "100%" }}>
-          <thead>
-            <tr style = {{textAlign: 'center', padding: '0 5px', borderBottom: '2px solid black', fontSize: "12px"}}>
-              <th>Round</th>
-              <th>Prod Quality</th>
-              <th>Ads Quality</th>
-              <th>Units Produced</th>
-              <th>Units Sold</th>
-              {reputationSystemEnabled && (
-                                <>
-                                    <th>Brand</th>
-                                </>
-                            )}
-              <th>Scores</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style={{ textAlign: 'center', borderBottom: '2px solid black' }}>
-              <td>Data 1</td>
-              <td>Data 2</td>
-              <td>Data 3</td>
-              <td>Data 1</td>
-              <td>Data 2</td>
-              <td>Data 3</td>
-              <td>Data 3</td>
-            </tr>
-            <tr style={{ textAlign: 'center', borderBottom: '2px solid black' }}>
-              <td>Data 1</td>
-              <td>Data 2</td>
-              <td>Data 3</td>
-              <td>Data 1</td>
-              <td>Data 2</td>
-              <td>Data 3</td>
-              <td>Data 3</td>
-            </tr>
-            {/* Add more rows as needed */}
-          </tbody>
-        </table>
+        {renderRoundsTable()}
       </div>
 
     </div>
@@ -549,6 +559,7 @@ function Choices() {
         </div>
       );
     }
+
 
 // // Component for displaying the leaderboard
 // function LeaderBoard() {

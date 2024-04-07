@@ -238,7 +238,7 @@ Empirica.onStageEnded(({ stage }) => {
         for (const producer of players) {
           if (producer.get("role") === "producer") {
             const producerRoundData = producer.get(roundName)
-            producerRoundData[producer.id]['challengeproducers'] = consumerRoundData["challengeproducers"]
+            //producerRoundData[producer.id]['challengeproducers'] = consumerRoundData["challengeproducers"]
             console.log("callbacks", consumerRoundData["challengeproducers"])
             //console.log(producersInteracted)
           }

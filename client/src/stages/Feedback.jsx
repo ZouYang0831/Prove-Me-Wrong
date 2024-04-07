@@ -249,16 +249,26 @@ export function Feedback() {
                 updatedProducers[producerID].isChallenged = !updatedProducers[producerID].isChallenged;
                 const scoreupdate = warrant*unitReceived;
                 if (updatedProducers[producerID].isChallenged === false && updatedProducers[producerID].productQuality === 'low' && updatedProducers[producerID].advertisementQuality === 'high') {
-                    //updatedProducers[producerID].scoreChangeByProducer = updatedProducers[producerID].scoreChangeByProducer - scoreupdate;
+                    updatedProducers[producerID].scoreChangeByProducer = updatedProducers[producerID].scoreChangeByProducer - scoreupdate;
                     player.set("score", player.get("score") - scoreupdate);
                     player.set("wallet", player.get("wallet") - scoreupdate);
+                    for (let i = 0; i < players.length; i++) {
+                        const checkproducer = players[i];
+                        if (checkproducer.id === producerID){
+                        checkproducer.set("score",checkproducer.get("score") + scoreupdate)}
+                    }
+
 
                 } else if (updatedProducers[producerID].isChallenged === true && updatedProducers[producerID].productQuality === 'low' && updatedProducers[producerID].advertisementQuality === 'high'){
-                    //updatedProducers[producerID].scoreChangeByProducer = updatedProducers[producerID].scoreChangeByProducer + scoreupdate;
+                    updatedProducers[producerID].scoreChangeByProducer = updatedProducers[producerID].scoreChangeByProducer + scoreupdate;
                     player.set("score", player.get("score") + scoreupdate);
                     player.set("wallet", player.get("wallet") + scoreupdate);
                     //player.set("scoreChallenge", -scoreupdate);
-                    
+                    for (let i = 0; i < players.length; i++) {
+                        const checkproducer = players[i];
+                        if (checkproducer.id === producerID){
+                        checkproducer.set("score",checkproducer.get("score") - scoreupdate)}
+                    }
                 }
                 
                 
