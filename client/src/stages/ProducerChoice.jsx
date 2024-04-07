@@ -238,6 +238,7 @@ function WarrantChoice({ warrant, warrantCap, onShow }) {
     <div className="mb-1">
       <h2 className="mb-1">
         <span className="font-medium">
+          Warrant:
           <br />
           Are you willing to certify your quality claim is true?
         </span>
