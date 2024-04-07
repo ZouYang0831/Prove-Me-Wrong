@@ -66,24 +66,6 @@ function shuffleArray(array) {
   return array;
 }
 
-// Component for displaying game instructions
-function Instruction() {
-  return (
-    <div className="w-200 ml-20 mr-10 mb-8">
-      <h1 className="text-xl text-gray-600 font-bold mb-1">Instruction</h1>
-      <p className="text-gray-600 text-justify">
-        In this stage, you will purchase the products with advertised quality.
-      </p>
-      <p className="text-gray-600 font-medium text-justify">
-        Note: Your goal is to purchase product with maximum utilities.
-      </p>
-      <p className="text-gray-600 font-medium text-justify">
-        Choose what product you want to purchase:
-      </p>
-    </div>
-  );
-}
-
 // Component for displaying producers' product card
 function ProductCard({
   advertisementQuality,
@@ -310,6 +292,9 @@ function Choices() {
         </p>
         <p className="text-gray-600 font-medium text-justify">
           Note: Your goal is to purchase product with maximum utilities.
+        </p>
+        <p className="text-gray-600 font-medium text-justify">
+          If there is no prove-me-wrong bond, which means there is no bond.
         </p>
         <p className="text-gray-600 font-medium text-justify">
           Choose what product you want to purchase:
