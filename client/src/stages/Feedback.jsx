@@ -12,6 +12,8 @@ import { Loading } from "@empirica/core/player/react";
 
 export function Feedback() {
     const player = usePlayer();
+    
+
 
 
   // Submit for Consumer to enter waiting interface. (Not sure if useEffect is needed)
@@ -25,6 +27,10 @@ export function Feedback() {
     const players = usePlayers();
     //players[1].set("score",players[1].get("score")+20)
     const round = useRound();
+    const roundName = round.get("name");
+    console.log(player.get("Round 0"))
+    console.log("players",players[0].get("Round 0")['producers'])
+    console.log("players role",players[0].get("role"))
     const playerScores = players.map(player => ({
         id: player.id,
         name: player.get("name"),
@@ -155,7 +161,7 @@ export function Feedback() {
 
     function renderTable(data) {
         return (
-            console.log(producerScores[0].score),
+            //console.log(producerScores[0].score),
             <table style={{ width: "100%", marginBottom: "20px" }}>
                 <thead>
                     <tr>
@@ -195,7 +201,7 @@ export function Feedback() {
         unitCap,
     } = game.get("treatment");
     
-
+    
       
   
     function ConsumerInfo() {
@@ -203,7 +209,7 @@ export function Feedback() {
         const wallet = player.get("wallet");
         const producersInteracted = player.get(roundName)['producers'];
         const consumer = player.get(roundName)
-        console.log("consumer", consumer)
+        //console.log("consumer", consumer)
         const scoreChange = consumer['scoreChange']
         const numCheatedByProducer = Object.values(producersInteracted).filter(details =>
             details.advertisementQuality === 'high' && details.productQuality === "low" && details.confirmBuy === true).length;
@@ -255,7 +261,19 @@ export function Feedback() {
                     for (let i = 0; i < players.length; i++) {
                         const checkproducer = players[i];
                         if (checkproducer.id === producerID){
-                        checkproducer.set("score",checkproducer.get("score") + scoreupdate)}
+                        checkproducer.set("score",checkproducer.get("score") + scoreupdate)
+                        checkproducer.set("capital",checkproducer.get("capital") + scoreupdate)
+                        console.log(player.id)
+                        console.log(updatedProducers[producerID])
+
+                        }
+
+                        if (checkproducer.id === player.id){
+                            //console.log("test yes sir")
+                            //checkproducer.set([roundName]['producers'][producerID].isChallenged, true)
+                            console.log("266",checkproducer.get("Round 0")['producers'][producerID].isChallenged)
+                            console.log("267",checkproducer.get("Round 0"))
+                        }
                     }
 
 
@@ -267,7 +285,14 @@ export function Feedback() {
                     for (let i = 0; i < players.length; i++) {
                         const checkproducer = players[i];
                         if (checkproducer.id === producerID){
-                        checkproducer.set("score",checkproducer.get("score") - scoreupdate)}
+                        checkproducer.set("score",checkproducer.get("score") - scoreupdate)
+                        checkproducer.set("capital",checkproducer.get("capital") - scoreupdate)}
+                        if (checkproducer.id === player.id){
+                            //console.log("test yes sir")
+                            //checkproducer.set([roundName]['producers'][producerID].isChallenged, true)
+                            console.log("290",checkproducer.get("Round 0")['producers'][producerID].isChallenged)
+                            
+                        }
                     }
                 }
                 

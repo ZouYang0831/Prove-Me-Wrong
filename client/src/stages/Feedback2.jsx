@@ -55,6 +55,7 @@ export function Feedback2() {
         const adsQuality = producer['advertisementQuality']
         const unitProduced = producer['unitProduced']
         const scoreChange = producer['scoreChange']
+        console.log("consumers data check:", player.get(roundName))
         let scorechangewithsign;
         if (scoreChange > 0){
             scorechangewithsign = '+'+scoreChange
