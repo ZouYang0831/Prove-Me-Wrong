@@ -28,9 +28,9 @@ export function Feedback() {
     //players[1].set("score",players[1].get("score")+20)
     const round = useRound();
     const roundName = round.get("name");
-    console.log(player.get("Round 0"))
-    console.log("players",players[0].get("Round 0")['producers'])
-    console.log("players role",players[0].get("role"))
+    //console.log(player.get("Round 0"))
+    //console.log("players",players[0].get("Round 0")['producers'])
+    //console.log("players role",players[0].get("role"))
     const playerScores = players.map(player => ({
         id: player.id,
         name: player.get("name"),
@@ -243,6 +243,8 @@ export function Feedback() {
             producerid: details.producerid,
             warrant: details.warrant,
         }));
+
+        
         
 
         const handleIsChallenge = (producerID) => {
@@ -250,6 +252,12 @@ export function Feedback() {
             const updatedProducers = { ...currentProducers };
             const warrant = updatedProducers[producerID].warrant
             const unitReceived = updatedProducers[producerID].unitReceived
+
+            // for (let i = 0; i < unitsBoughtFromProducer.length; i++) {
+            //     if (unitsBoughtFromProducer[i].id === producerID){
+            //         updatedProducers[producerID].scoreChangeByProducer = unitsBoughtFromProducer[i]['scoreChangeByProducer']
+            //     }
+            // }
             
             if (updatedProducers[producerID]) {
                 updatedProducers[producerID].isChallenged = !updatedProducers[producerID].isChallenged;
@@ -263,16 +271,18 @@ export function Feedback() {
                         if (checkproducer.id === producerID){
                         checkproducer.set("score",checkproducer.get("score") + scoreupdate)
                         checkproducer.set("capital",checkproducer.get("capital") + scoreupdate)
-                        console.log(player.id)
-                        console.log(updatedProducers[producerID])
+                        console.log(player)
+                        //console.log(updatedProducers[producerID])
 
                         }
 
                         if (checkproducer.id === player.id){
                             //console.log("test yes sir")
                             //checkproducer.set([roundName]['producers'][producerID].isChallenged, true)
-                            console.log("266",checkproducer.get("Round 0")['producers'][producerID].isChallenged)
-                            console.log("267",checkproducer.get("Round 0"))
+                            //console.log("266",checkproducer.get("Round 0")['producers'][producerID].isChallenged)
+                            //console.log("267",checkproducer.get("Round 0"))
+                            //console.log("295555",checkproducer.get("Round 1")['producers'][producerID].scoreChangeByProducer)
+                            console.log(updatedProducers)
                         }
                     }
 
@@ -290,7 +300,11 @@ export function Feedback() {
                         if (checkproducer.id === player.id){
                             //console.log("test yes sir")
                             //checkproducer.set([roundName]['producers'][producerID].isChallenged, true)
-                            console.log("290",checkproducer.get("Round 0")['producers'][producerID].isChallenged)
+                            //console.log("295555",checkproducer.get("Round 1")['producers'][producerID].scoreChangeByProducer)
+                            //console.log("unitsBoughtFromProducer",unitsBoughtFromProducer[0]['scoreChangeByProducer'])
+
+                            //checkproducer.get(roundName)['producers'][producerID].scoreChangeByProducer = 
+                            console.log(updatedProducers)
                             
                         }
                     }

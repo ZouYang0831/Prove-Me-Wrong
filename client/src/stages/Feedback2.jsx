@@ -54,8 +54,27 @@ export function Feedback2() {
         const prodQuality = producer['productQuality']
         const adsQuality = producer['advertisementQuality']
         const unitProduced = producer['unitProduced']
-        const scoreChange = producer['scoreChange']
-        console.log("consumers data check:", player.get(roundName))
+        let scoreChange = producer['scoreChange']
+        console.log("producer lala data check:", producer)
+
+        const updatedProducer = { ...producer };
+        console.log(scoreChange)
+
+        for (let i = 0; i < players.length; i++) {
+            let producerScoreUpdate = 0;
+            if (players[i].get("role") === "consumer"){
+                let thisplayer = players[i].get(roundName)['producers'][player.id]
+                if(thisplayer['isChallenged'] === true){
+                    producerScoreUpdate = thisplayer['warrant'] * thisplayer['unitReceived']
+                    console.log(producerScoreUpdate)
+                    updatedProducer['scoreChange'] -= producerScoreUpdate
+                }
+            }
+        }
+
+        scoreChange = updatedProducer['scoreChange']
+        
+
         let scorechangewithsign;
         if (scoreChange > 0){
             scorechangewithsign = '+'+scoreChange
@@ -77,7 +96,7 @@ export function Feedback2() {
             message = <span><strong>Congratulations,</strong> {numConsumersBought} consumers bought your product!</span>;
             headlineColor = "#A4CC7C"; 
         }
-        console.log("producer score", player.get("score"))
+        //console.log("producer score", player.get("score"))
         //console.log(player.get('Round 0')['scoreChange'])
 
         //const numProductsSold = Object.values(consumersInteracted).filter(details => details.unitSoldByConsumer > 0)
@@ -87,15 +106,26 @@ export function Feedback2() {
         //const players = game.players;
         //const roundName = round.get("name"); // Make sure you have the correct round name
         const roundData = player.get(roundName); // Retrieve the entire round data
-        console.log(roundData)
+        //console.log(roundData)
         if (roundData['challengeproducers']) {
             const challengeProducersData = roundData['challengeproducers']; // Access the 'challengeproducers' key
-            console.log("challengeProducersData", challengeProducersData);
+            //console.log("challengeProducersData", challengeProducersData);
         } else {
-            console.log("Round data is undefined for", roundName);
+            //console.log("Round data is undefined for", roundName);
         }
 
-        console.log("olayer:", player)
+        for (let i = 0; i < players.length; i++) {
+            //const id = player.get("id")
+            //console.log("checky", player.id)
+            // if (player.id === players[i].id){
+            //     console.log("checky", )
+            // }
+            if (players[i].get("role") === "consumer"){
+                console.log(players[i].get(roundName))
+            }
+        }
+
+    
 
         return (
             
@@ -174,7 +204,7 @@ export function Feedback2() {
 
     function renderTable(data) {
         return (
-            console.log(producerScores[0].score),
+            //console.log(producerScores[0].score),
             <table style={{ width: "100%", marginBottom: "20px" }}>
                 <thead>
                     <tr>
